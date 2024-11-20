@@ -32,8 +32,9 @@
 \usepackage{blindtext}                                      % 生成无意义文本
 \usepackage{metalogo}                                       % 软件标志
 \usepackage[binary-units=true]{siunitx}                     % 物理量单位
-\usepackage{amsmath}                                        % 基础数学库
-%\usepackage{bm}
+\usepackage{amsmath}    
+                                    % 基础数学库
+\usepackage{bm}
 %\usepackage{multirow}
 %\usepackage{bbm}
 %\usepackage{setspace}
@@ -138,7 +139,7 @@ A data-driven research on tethered hoisting \\ control of unmanned aerial vehicl
 
 系绳吊运载荷运输最初是为紧急响应、救援任务、民用和军事行动中的人力操作直升机而研究的\cite{2020A}。无人机绳系吊运载荷相比其它方法来说有着一系列的优越性，但随之而来的载荷也对无人机产生了一系列的影响。无人机绳系吊运系统是欠驱动和非线性耦合的，此外每个四旋翼无人机的动力学为载荷的摆动运动会引发无人机系统的不稳定性，同时给无人机系统增添了更多的自由度，使得此类系统的控制更具挑战性。
 
-在运输过程中，单无人机在利用吊装方式运输的时候载荷会存在摆动，且当需要运输的载荷重量与无人机系统的载荷重量相当时，任务可能会受到影响。为了解决这些问题，采用多个协作式的无人机绳系吊运系统是一个很有前途的替代方案，即将多架无人机按照期望的队形来分布，并使其在执行任务的过程中保持编队队形平稳飞行，从而圆满完成运输任务。多无人机绳系吊运系统通过根据有效载荷重量适当调整四旋翼无人机的数量，使这种悬挂式有效载荷配置能够实现最大的有效载荷输送效率，此外这种配置还可以有效控制载荷的姿态，解决了单无人机运输载荷出现摆动的问题，甚至在单无人机发生故障时仍可以完成任务需求。因此多无人机吊运负载具有可行性高、效率高以及扩展性强等单架无人机无法比拟的优势。但是，在依靠多无人机绳系吊运系统执行合作运输任务时，必须考虑一系列全新的因素。整个系统不仅受到载荷摆动的影响，而且还受到其它无人机运动的影响，如果单无人机的独立行动没有得到适当的协调，情况会变得更加复杂。
+在运输过程中，单无人机在利用吊装方式运输的时候载荷会存在摆动，且当需要运输的载荷重量与无人机系统的载荷重量相当时，任务可能会受到影响。为了解决这些问题，采用多个协作式的无人机绳系吊运系统是一个很有前途的替代方案，即将多架无人机按照期望的队形来分布，并使其在执行任务的过程中保持编队队形平稳飞行，从而圆满完成运输任务。多无人机绳系吊运系统通过根据有效载荷重量适当调整四旋翼无人机的数量，使这种悬挂式有效载荷配置能够实现最大的有效载荷输送效率，此外这种配置还可以有效控制载荷的姿态，解决了单无人机运输载荷出现摆动的问题，甚至在单无人机发生故障时仍可以完成任务需求。因此多无人机吊运载荷具有可行性高、效率高以及扩展性强等单架无人机无法比拟的优势。但是，在依靠多无人机绳系吊运系统执行合作运输任务时，必须考虑一系列全新的因素。整个系统不仅受到载荷摆动的影响，而且还受到其它无人机运动的影响，如果单无人机的独立行动没有得到适当的协调，情况会变得更加复杂。
 
 基于以上问题，本研究拟采用数据驱动方法来研究无人机绳系吊运系统，通过神经网络和无人机的动力学对整个系统进行动力学建模，提出了在线自适应神经元和模型预测控制相结合的控制算法对系绳的摆动进行抑制，在多无人机协同吊运中实现各个无人机功率消耗的均衡化，最终达到对搬运载荷的位姿的控制，有效提高系统的鲁棒性和安全性，为跨越峡谷、陡坡、滑坡体等障碍进行物资运输提供便捷、有效的手段，大大提高应急抢修作业效率，具有重要的应用价值。
 
@@ -148,7 +149,7 @@ A data-driven research on tethered hoisting \\ control of unmanned aerial vehicl
 
 对于无人机绳系吊装系统的建模方法，文献[13]假设系留综合缆绳的重力与所受风力作用于综合缆绳中心，且不考虑缆绳的拉伸变形，系留缆绳在自身重力、风的作用下呈现悬链线形状，可以求出无人机在不同位置时缆绳与机体的夹角。文献[14]基于珠点模型对水下系留无人机进行建模。文献[15]在假设缆绳不可拉伸、质量和阻尼可以忽略且具有零剪切刚度的前提下，通过分析二维平面上的无人机与系绳的运动学和动力学关系推导出系绳上的拉力。文献[16]在建立旋翼无人机的动力学模型之后，将系绳建模成无质量的，由一个阻尼单元和一个弹簧单元并联，这两个并联单元再与一个弹簧单元串联的结构。文献[17]将系绳建模为一系列通过非弹性杆连接的点质量块，通过分析这些杆件的动力学特性并进行仿真, 可以体现系绳的柔性。
 
-对于设计带有绳系吊装系统的无人机的控制器方法，卡耐基梅隆大学的Sceenath得到了定义在构型空间SE ( 3 ) × S2上的坐标自由动力学模型，并将其可以看作平坦输出的微分平坦混合系统，并给出了控制器设计的稳定性证明和仿真[18]。华盛顿大学的Lee团队提出了基于拉格朗日动力学在流形上的吊装负载，将柔性电缆用串行连接的链路进行建模，并用几何非线性控制渐近稳定无人机的位置[19]。墨西哥的Guerrero提出最小化吊装负载的摆动角度，以实现稳定[20]。香港科技大学的沈劭劼团队设计了一种具有分层扰动补偿策略的自适应NMPC来克服未知外部扰动和模型参数不准确的问题[21]。
+对于设计带有绳系吊装系统的无人机的控制器方法，卡耐基梅隆大学的Sceenath得到了定义在构型空间SE ( 3 ) × S2上的坐标自由动力学模型，并将其可以看作平坦输出的微分平坦混合系统，并给出了控制器设计的稳定性证明和仿真[18]。华盛顿大学的Lee团队提出了基于拉格朗日动力学在流形上的吊装载荷，将柔性电缆用串行连接的链路进行建模，并用几何非线性控制渐近稳定无人机的位置[19]。墨西哥的Guerrero提出最小化吊装载荷的摆动角度，以实现稳定[20]。香港科技大学的沈劭劼团队设计了一种具有分层扰动补偿策略的自适应NMPC来克服未知外部扰动和模型参数不准确的问题[21]。
 
 
 \subsection{多无人机绳系吊装载荷运输研究现状}
@@ -195,54 +196,324 @@ A data-driven research on tethered hoisting \\ control of unmanned aerial vehicl
 在本章中，将建立无人机绳系吊运系统的动力学模型。无人机绳系吊运系统由三个子系统构成：四旋翼、系绳以及吊运的载荷，系绳和吊运的载荷会对无人机自身造成一定的扰动。本章首先对四旋翼无人机的动力学模型进行推导，然后建立单无人机绳系吊运系统的动力学方程，进而将其推广到多无人机绳系吊运系统的动力学模型中，以此作为控制模型的基础。
 
 \section{单无人机绳系吊运系统的动力学模型}
-四旋翼无人机是一种基于旋翼的飞行器，由四个旋翼推动飞行。为了平衡扭矩，转子由两对对置的转子构成，一对正时针转动，一对反时针转动。四旋翼系统是高度非线性的，并且是一个欠驱动系统，有六个自由度和四个控制输入（即旋翼转速）。可以通过调整旋翼的转速来对四旋翼无人机进行控制，从而改变四旋翼无人机的扭矩和推力特性。如图 2-1 所示，四旋翼无人机设计为四个旋翼交叉共振。两个相对的旋翼沿同一方向旋转，通过改变旋翼的角速度可以控制四旋翼无人机的高度和位置。如果电机$T_1$、$T_2$、$T_3$和$T_4$产生的扭矩相同，则四旋翼无人机可以保持平衡位置而不旋转。
+四旋翼运输系统是一个复杂的系统，由四个旋翼组成，这些旋翼固定在刚性交叉体上。载荷通过绳系与四旋翼的主体连接，实现对载荷的精确控制和运输。
+四旋翼无人机是一种基于旋翼的飞行器，由四个旋翼推动飞行。为了平衡扭矩，转子由两对对置的转子构成，一对正时针转动，一对反时针转动。四旋翼系统是高度非线性的，并且是一个欠驱动系统，有六个自由度和四个控制输入（即旋翼转速）。可以通过调整旋翼的转速来对四旋翼无人机进行控制，从而改变四旋翼无人机的扭矩和推力特性。如图\ref{2_1}所示，四旋翼无人机设计为四个旋翼交叉共振。两个相对的旋翼沿同一方向旋转，通过改变旋翼的角速度可以控制四旋翼无人机的高度和位置。如果电机$T_1$、$T_2$、$T_3$和$T_4$产生的扭矩相同，则四旋翼无人机可以保持平衡位置而不旋转。
 
-\begin{figure}[htbp]
+\begin{figure}[hbt!]
 	\centering
-	\includegraphics[width=6 in]{picture/2_1.png}
-	\caption{四旋翼无人机动力学结构}
-	\label{fig-2_1}
+	\includegraphics[width=28pc]{picture/2_1.png} 
+	\caption{四旋翼无人机动力学结构} \label{2_1}
 \end{figure}
 
+
 对于四旋翼无人机的上升和下降，可以通过同时增加或减小电机$T_1$、$T_2$、$T_3$和$T_4$的转速来实现；滚转是四旋翼无人机通过向左或向右倾斜，以允许侧向移动的运动；俯仰是指四旋翼无人机通过前倾或后仰，向前或向后运动；偏航是指在与地面保持水平的情况下，以顺时针或逆时针的方式改变四旋翼无人机的方向。四旋翼无人机通过控制四个电机的转速，可以完成不同的飞行作业。本章根据四旋翼无人机的动力学特性建立数学模型，为下面章节控制器的设计奠定基础。
+
+
 \subsection{四旋翼无人机的坐标系}
+为了便于建模和描述，首先引入两个右手直角坐标系的定义，并给出两个坐标系之间的转换关系。
+\subsubsection{地面坐标系}
+地面坐标系$o_ex_ey_ez_e$用于研究四旋翼无人机相对于地面的运动状态，确定机体的三维位置。一般来说，在地面坐标系中，常用的局部坐标系统有 NED（North-East-Down）和ENU（East-North-Up）两种。NED坐标系$o_ex_e$轴指向正北，$o_ey_e$轴指向正东，$o_ez_e$轴垂直于地面向下。ENU坐标系 $o_ex_e$ 轴指向正东，
+$o_ey_e$ 轴指向正北，$o_ez_e$ 轴垂直向上，即指向天空的方向。NED 坐标系适合飞行器或船舶等需要考虑垂直下降的系统；而ENU 坐标系更直观，符合日常地理方向的习惯，常用于地面交通、测量和定位。本文使用NED坐标系，坐标原点选择在固连于地面的任意一点。
 
-\subsection{四旋翼无人机的动力学模型}
-四旋翼无人机模型分为动力学模型和运动学模型，动力学模型主要用于分析无人机的受力对无人机运动速度的影响，输入为无人机旋翼产生的拉力和力矩，输出为无人机的速度。运动学模型主要分析无人机速度对无人机位置变化产生的影响，输入为速度，输出为无人机的位置。四旋翼无人机的建模过程如下。
+\subsubsection{机体坐标系}
+本文的四旋翼无人机为“X”型气动布局结构，运动更加灵活。
+机体坐标系固连于四旋翼无人机，其原点取在四旋翼无人机的重心位置。$o_bx_b$轴在四旋翼无人机对称平面内指向机头。 $o_bz_b$轴在四旋翼无人机对称平面内，垂直轴向下。$o_by_b$轴按右手定则进行确定。机体坐标系与无人机固定连接，构成一个随四旋翼无人机运动的动坐标系。
+\subsubsection{地面坐标系与机体坐标系之间的转换关系}
+地面坐标系和机体坐标系的转换在无人机导航与控制中发挥着至关重要的作用。它可以帮助我们理解无人机在空间中的位置和姿态，同时实现精确的导航与控制。地面坐标系与机体坐标系之间的转换关系可以通过三个旋转矩阵来描述。具体来说，可以将地面坐标系依次沿机体坐标系进行旋转，即绕$z_b$轴旋转偏航角$\psi$，绕$y_b$旋转俯仰角$\theta$，绕$x_b$旋转滚转角$\phi$。对应的三个旋转矩阵$\boldsymbol{R}_\psi$、$\boldsymbol{R}_\theta$和$\boldsymbol{R}_\phi$分别为:
+$$
+\boldsymbol{R}_\psi=\begin{bmatrix}\cos\psi&-\sin\psi&0\\sin\psi&\cos\psi&0\\0&0&1\end{bmatrix} $$
+$$	\boldsymbol{R}_\theta=\begin{bmatrix}\cos\theta&0&\sin\theta\\0&1&0\\-\sin\theta&0&\cos\theta\end{bmatrix} $$
+$$\boldsymbol{R}_\phi=\begin{bmatrix}1&0&0\\0&\cos\phi&\sin\phi\\0&-\sin\phi&\cos\phi\end{bmatrix}
+$$
+
+因此，通过上述三个旋转矩阵，可以得到将任意矢量从地面坐标系转换到机体坐标系的转换矩阵为：
+$$\begin{aligned}\boldsymbol{R}_{e-b}&=\boldsymbol{R}_{\psi}\boldsymbol{R}_{\theta}\boldsymbol{R}_{\phi}\\&=\begin{bmatrix}\cos\theta\cos\psi&\cos\theta\cos\psi&-\sin\theta\\\sin\phi\sin\theta\cos\psi-\cos\phi\sin\psi&\sin\phi\sin\theta\sin\psi+\cos\phi\cos\psi&\sin\phi\cos\theta\\\cos\phi\sin\theta\cos\psi+\sin\phi\sin\psi&\cos\phi\sin\theta\sin\psi-\sin\phi\cos\psi&\cos\phi\cos\theta\end{bmatrix}\end{aligned}$$
+
+从机体坐标系到地面坐标系的转换矩阵为：
+$$\begin{aligned}\boldsymbol{R}_{b-e}&=\bm{R}_{e-b}^\mathrm{T}\\&=\begin{bmatrix}\cos\theta\cos\psi&\sin\phi\sin\theta\cos\psi-\cos\phi\sin\psi&\cos\phi\sin\theta\cos\psi+\sin\phi\sin\psi\\\cos\theta\cos\psi&\sin\phi\sin\theta\sin\psi+\cos\phi\cos\psi&\cos\phi\sin\theta\sin\psi-\sin\phi\cos\psi\\-\sin\theta&\sin\phi\cos\theta&\cos\phi\cos\theta\end{bmatrix}\end{aligned}$$
+
+\subsection{四旋翼无人机的模型}
+四旋翼无人机模型分为运动学模型、动力学模型和控制效率模型，动力学模型既涉及运动又涉及受力情况，与物体的质量和转动惯量相关，主要用于分析无人机的受力对无人机运动速度的影响，输入为无人机旋翼产生的拉力和力矩，输出为无人机的速度和角速度。运动学模型与质量和受力无关，主要分析无人机速度对无人机位置变化产生的影响，输入为速度和角速度，输出为无人机的位置和姿态。控制效率模型输入为螺旋桨转速，输出为拉力和力矩，当已知螺旋桨转速时，可以通过控制效率模型计算出拉力和力矩。
+
+为了简便，在对四旋翼无人机进行建模时，做了如下假设：
+
+(1)四旋翼无人机是刚体结构，没有内力，飞行时结构无形变；
+
+(2)四旋翼无人机的质量、螺旋桨阻力系数和转动惯量等基础参数默认不变；
+
+(3)四旋翼无人机总保持对称结构，其几何中心与重心位置一致；
+
+(4)四旋翼无人机只受重力和螺旋桨拉力影响，其中重力沿$o_ez_e$轴正方向，螺旋桨拉力沿$o_bz_b$轴负方向。
+
+运动学方程描述了无人机位置与速度以及速度和角速度之间的关系，其运动学方程可以表示为：
+
+\begin{equation}
+    \begin{aligned}
+	\dot{\boldsymbol{p}}_e &= \boldsymbol{v}_e = \bm{R}_{b-e} \bm{v}_b \\
+	\bm{\Theta}_e &= \bm{W}_{b-e} * \bm{\omega}_b
+\end{aligned}\label{2-1}
+\end{equation}
+其中，$\boldsymbol{p}_e=\left[x,y,z\right]^\mathrm{T}$为无人机在地面坐标系下的位置坐标，$\boldsymbol{v}_e=\left[v_{x},v_{y},v_{z}\right]^\mathrm{T}$为无人机在地面坐标系下的线速度，$\boldsymbol{v}_b=\left[u,v,w\right]^\mathrm{T}$表示无人机在机体坐标系下的线速度，$u$、$v$、$w$表示分别沿$x$、
+$y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上一小节定义的转换矩阵，$\bm{\Theta}_e=\left[\phi,\theta,\psi\right]^\mathrm{T}$表示无人机在地面坐标系下的姿态角度，$\bm{W}_{b-e}$表示地面坐标系下欧拉角速度变换到机体旋转角速度的旋转矩阵，$\boldsymbol{\omega}_b=\left[{\omega}_{xb},{\omega}_{yb},{\omega}_{zb}\right]^\mathrm{T}$ 为无人机机体坐标系下的角速度，可以得到姿态旋转矩阵具体形式如式(\ref{2-2})所示：
+\begin{equation}
+	\boldsymbol{\omega}_b=\begin{bmatrix}\omega_{xb}\\\omega_{yb}\\\omega_{zb}\end{bmatrix}=\begin{bmatrix}1&0&-\sin\theta\\0&\cos\phi&\cos\theta\sin\phi\\0&-\sin\phi&\cos\theta\cos\phi\end{bmatrix}\begin{bmatrix}\dot\phi\\\dot\theta\\\dot\psi\end{bmatrix}
+	\label{2-2}
+\end{equation}
+
+
+
+一般来说，四旋翼无人机飞行时其姿态角在小范围内运动，可以近似认为有下式成立：
+\begin{equation}
+	\boldsymbol{\omega}_b=\begin{bmatrix}{\omega}_x\\{\omega}_y\\{\omega}_z\end{bmatrix}=\begin{bmatrix}\dot{\phi}\\\dot{\theta}\\\dot{\psi}\end{bmatrix}
+	\label{2-3}
+\end{equation}
+
+以上详细描述了四旋翼无人机系统的运动学模型以及其在不同坐标系下的位置与线速度、角度与角速度之间的转换关系。接下来，将无人机整体视为一个刚体，将其分解为平移运动和旋转运动两个部分。通过牛顿法分析其平移运动，通过欧拉法分析其旋转运动，从而构建其动力学模型。其动力学的基本方程如式(\ref{2-4})所示：
+\begin{equation}
+	\begin{aligned}
+		m\dot{\boldsymbol{v}}_e&=mg\bm{e}_{3}-\boldsymbol{R}_{b-e}f\bm{e}_{3}\\
+		\boldsymbol{J}\dot{\boldsymbol{\omega}_b}&=-\bm \omega_b \times \bm J \bm \omega_b+\boldsymbol{\tau}
+	\end{aligned}\label{2-4}
+\end{equation}
+其中$m$为无人机的质量，$g\in\mathbb{R}_+$为重力加速度，$\bm{e_{3}}=\left[0,0,1\right]^\mathrm{T}$，$\boldsymbol{\tau}=\left[\tau_x,\tau_y,\tau_z\right]^\mathrm{T}$表示无人机四个螺旋桨产生的扭矩，$\boldsymbol{J}$为无人机的惯量矩阵，$f\in\mathbb{R}_+\cup\{0\}$表示无人机螺旋桨总拉力的大小，该拉力是单向的,其形式如式 (\ref{2-5})所示：
+\begin{equation}
+	f=\sum_{i=1}^4f_i=c_\mathrm{T}\Omega_i^2
+	\label{2-5}
+\end{equation}
+其中$f_i$表示表示一个旋翼在机体坐标系下旋转产生的升力，与旋翼的转速的平方正相关。$c_\mathrm{T}=1/4\pi^2\cdot\rho D_\mathrm{p}^4C_\mathrm{T}$为螺旋桨的升力系数，大小与其自身的材质、倾斜角等因素有关，$\Omega_i$为
+单个螺旋浆的旋转速度。由于本文采用“X”型气动布局，实际力臂长度是机臂长度的$\sqrt{2}/2$倍，可以得到无人机每个螺旋桨产生的力矩如式(\ref{2-6})所示：
+
+
+\begin{equation}
+	\left\{ \begin{array}{l}
+		\tau_x={\sqrt{2}}/{2}dc_\mathrm{T}\left(\Omega_1-\Omega_2-\Omega_3+\Omega_4\right)\\
+		\tau_y={\sqrt{2}}/{2}dc_\mathrm{T}\left(\Omega_1+\Omega_2-\Omega_3-\Omega_4\right)\\
+		\tau_z=c_\mathrm{M}\left(\Omega_1-\Omega_2+\Omega_3-\Omega_4\right)\\
+	\end{array} \right.
+		\label{2-6}
+\end{equation}
+其中$c_M$为螺旋桨的反扭力系数，其产生的力矩方向沿$z$轴方向。$d\in\mathbb{R}_+$为无人机重心和任一电机转动轴线之间的距离。为了能够对应控制器中的控制量，定义虚拟控制变量为$\bm{U}=\left[U_1,U_2,U_3,U_4\right]^\mathrm{T}=\left[f,\tau_x,\tau_y,\tau_z\right]^\mathrm{T}$，那么，将式(\ref{2-2})、(\ref{2-3})、(\ref{2-5})、(\ref{2-6})代入式(\ref{2-1})和(\ref{2-4})中，即可得到四旋翼无人机的控制模型：
+
+
+\begin{equation}
+		\left\{
+	\begin{aligned}
+		&\dot{x}=v_{x}\\
+		&\dot{y}=v_{y}\\
+		&\dot{z}=v_{z}\\
+		&\ddot{x}=\frac{U_{1}}{m}\left(\cos\phi\cos\psi\sin\theta+\sin\phi\sin\psi\right)\\
+		&\ddot{y}=\frac{U_{1}}{m}\left(\cos\phi\sin\psi\sin\theta-\cos\psi\sin\phi\right)\\
+		&\ddot{z}=\frac{U_{1}}{m}\left(\cos\phi\cos\theta\right)-g\\
+		&\dot{\phi}={\omega}_x+\tan\theta\left({\omega}_y\sin\phi+{\omega}_z\cos\phi\right)\\
+		&\dot{\theta}={\omega}_y\cos\phi-{\omega}_z\sin\phi\\
+		&\dot{\psi}=\frac{{\omega}_y\sin\phi+{\omega}_z\cos\phi}{\cos\theta}\\
+		&\ddot{\phi}=\frac{(I_{y}-I_{z})\cdot \dot{\theta}\dot{\psi}+U_{2}}{I_{x}}\\
+		&\ddot{\theta}=\frac{(I_{z}-I_{x})\cdot \dot{\phi}\dot{\psi}+U_{3}}{I_{y}}\\
+		&\ddot{\psi}=\frac{(I_{x}-I_{y})\cdot \dot{\phi}\dot{\theta}+U_{4}}{I_{z}}\end{aligned}
+	\right.
+	\label{2-7}
+\end{equation}
 \subsection{四旋翼无人机绳系吊运系统的动力学模型}
+在本文的吊装运输场景中，四旋翼无人机在满足自身飞行需求的同时，还会受到吊装载荷对其作用的拉力干扰，单无人机吊装载荷受力分析如图 \ref{2_2} 所示，其中$\bm{F}$表示无人机的升力，$\bm{G}$表示无人机自身的重力，$\bm{G_0}$表示无人机自身的重力，$\bm{T}$表示载荷对无人机产生的拉力，$\theta$表示系绳与垂直平面之间的夹角。
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=21pc]{picture/2_2.png} 
+	\caption{单无人机吊装载荷受力分析} \label{2_2}
+\end{figure}
+
+在推导对四旋翼无人机绳系吊运系统的动力学模型之前，先做了如下假设：
+
+(1)多无人机协同吊装系统所吊挂的载荷被视为刚体； 
+
+(2)无人机的姿态角不超过$\pi/2$；
+
+ 
+通过以上假设对系统的模型进行了简化，使得任务更合理。对于四旋翼无人机绳系吊运系统来说，在轨迹跟踪时其系绳并不一定总是保持绷直状态的，在无人机的高速移动中系绳上的张力可能为零。因此，本文建立四旋翼无人机绳系吊运系统的混合模型，考虑系绳上的张力不为零和张力为零这两种情况。
+
+\subsubsection{系绳张力不为零时的动力学模型}
+
+四旋翼无人机绳系吊运系统由载荷相对于地面坐标系的位置、载荷姿态和四旋翼飞行器的姿态来定义。当系绳拉紧时，该系统具有八个自由度，并存在四个自由度的欠驱动。四旋翼无人机和载荷的位置之间的关系为：
+
+\begin{equation}
+	p_Q=p_L-lq,
+\end{equation}
+其中$p_Q$、$p_L$分别为四旋翼无人机和载荷的位置，$l$为系绳的长度，$q$表示从四旋翼无人机指向载荷的单位向量。本文采用拉格朗日法来推导运动方程。系统的拉氏量 $\mathcal{L}:T\bar{Q}\to\mathbb{R}$ 定义为$\mathcal{L}=\mathcal{T}-\mathcal{U}$，其中$\mathcal{T}:TQ\to\mathbb{R}$和${\mathcal{U}}:Q\to\mathbb{R}$分别是机械系统的动能和势能，它们的定义如下：
+
+\begin{equation}
+		\begin{aligned}
+	\mathcal{T}=\frac{1}{2}m_{Q}v_{Q}\cdot v_{Q}+\frac{1}{2}m_{L}v_{L}\cdot v_{L}+\frac{1}{2}\langle\hat{\Omega},\widehat{J_{Q}\Omega}\rangle\\
+	\mathcal{U}=m_{Q}ge_{3}\cdot x_{Q}+m_{L}ge_{3}\cdot x_{L}
+		\end{aligned}
+	\label{2-8}
+\end{equation}
+其中$v_Q$、$v_L$分别为无人机和载荷的速度，$m_Q$、$m_L$分别为无人机和载荷的质量，$\langle\cdot,\cdot\rangle $表示内积，$\hat{.}$被定义为使得 $\hat{x}y=x\times y$对于所有$x,y\in\mathbb{R}^3$恒成立。在本文中，$\lambda_m(\cdot)$和 $\lambda_n(\cdot)$ 分别表示矩阵的最小和最大特征值。系统的动力学满足拉格朗日原理：
+\begin{equation}
+	\delta\int_0^\tau\mathcal{L} dt+\int_0^\tau\left(\langle W_1,\hat{\tau}\rangle+W_2\cdot f\bm{R}_{b-e}e_3\right) dt=0
+	\label{2-10}
+\end{equation}
+其中$W_{1}=R^{T}\delta R$， $ W_{2}=\delta x_{Q}=\delta x_{L}-l\delta q$是变分向量场，满足以下条件：
+\begin{equation}
+	\begin{aligned}
+		\delta q = \xi \times& q, \quad \xi \in \mathbb{R}^{3} \ \mathrm{s.t.} \ \xi \cdot q = 0 \\
+		\delta \dot{q} &= \dot{\xi} \times q + \xi \times \dot{q} \\
+		\delta R& = R \hat{\eta}, \quad \eta \in \mathbb{R}^{3} \\
+		&\delta \hat{\Omega} = \widehat{\hat{\Omega} \eta} + \hat{\dot{\eta}}
+	\end{aligned}
+\end{equation}
+其中$\delta q$为二维球面上的变分，$\delta R$为三维空间上的变分。
+由于(\ref{2-10})对所有可能的变化都是满足的，因此得到了带有系绳载荷的四旋翼无人机的运动方程为：
+
+\begin{equation}
+	\begin{aligned}
+		&\dot{x}_{L}=v_{L}, \\
+		(m_Q+m_L)(\dot{v}_L+ge_3)& =(q\cdot fRe_3-m_Ql(\dot{q}\cdot\dot{q}))q, \\
+		&\dot{q}=\omega\times q, \\
+		m_{Q}l \dot{\omega}&=-q\times fRe_{3}, \\
+		&\dot{R}=R\hat{\Omega}, \\
+		J_{Q}\dot{\Omega}+&\Omega\times J_{Q}\Omega=M.
+	\end{aligned}
+\end{equation}
+
+上述动力学可以写成标准形式$\dot{X}_n=f_n(X_n)+g_n(X_n)u$，其中$X_n = \{x_L,q,R,v_L,\omega,\Omega\}$是系统的状态，$u = { f，M }$是系统的输入。
+\subsubsection{系绳张力为零时的动力学模型}
+当缆绳张力趋于零时，四旋翼飞行器和吊挂载荷作为独立系统，载荷处于自由落体状态。这种情况下的动力学模型是：
+\begin{equation}
+	\begin{aligned}
+		&\dot{x}_{L}=v_{L}\\
+		\quad m_{L}(&\dot{v}_{L}+ge_{3})=0\\
+		&\dot{x}_{Q}=v_{Q}\\
+		\quad m_{Q}(\dot{v}_{Q}&+ge_{3})=fRe_{3}\\
+		&\dot{R}=R\hat{\Omega}\\
+		\quad J_{Q}\dot{\Omega}+&\Omega\times J_{Q}\Omega=M
+	\end{aligned}
+\end{equation}
+上述动力学也可以写成标准形式$\dot{X}_n=f_n(X_n)+g_n(X_n)u$，其中$X_n=\{x_L,x_Q,R,v_L,v_Q,\Omega\}$为状态。
+
+\subsubsection{混合系统的动力学模型}
+系绳悬挂载荷的四旋翼飞行器是一个混合系统，因为当缆索中的张力降为零或当张力恢复时松弛的缆索变得绷紧时，动力学会发生切换。混合模型可以写成，
+\begin{equation}
+	\left.\begin{aligned}&\Sigma_{n}\quad:\quad\left\{\begin{array}{ll}\dot{X_n}=f_n(X_n)+g_n(X_n)u,&X_n\notin S_z\\X_z^+=\Delta_{n\to z}(X_n^-),&X_n\in S_z\end{array}\right.\\&\Sigma_{z}\quad:\quad\left\{\begin{array}{ll}\dot{X_z}=f_z(X_z)+g_z(X_z)u,&X_z\notin S_n\\X_n^+=\Delta_{z\to n}(X_z^-),&X_z\in S_n,\end{array}\right.\end{aligned}\right.
+\end{equation}
+过渡映射∆n→z是恒等映射，∆z→n被建模为两个物体的非弹性碰撞，保证x ̇ + Q-x ̇ + L = 0。
+
 \section{多无人机绳系吊运系统的动力学模型}
+在本文中，我们采用三个无人机吊挂载荷的方式来运输载荷。该吊运系统
+由三个四旋翼无人机、三根绳索和一个需要被运输的重物组成。其吊运结构如图 \ref{2_3} 所示，三架无人机保持水平高度一致，无人机之间的相对距离为d。为建
+立多机吊运系统的动力学模型，本章采用了两个坐标系，即惯性坐标系和机体
+坐标系。
 
 
+基于以下几个假设条件对三机吊运系统进行动力学建模：
+（1）四旋翼无人机是一个刚体模型，有效载荷被视为一个质点；
+（2）连接无人机与有效载荷之间的绳索为无弹性绳索，且质量可忽略；
+（3）不考虑空气阻力等环境扰动。
+在多无人机吊挂载荷运输系统中，对四旋翼无人机进行受力分析，与单机
+模型相比不同的是，吊运无人机承受了额外的绳子拉力，因此其运动学和动力学模型表达式为：
 
+\begin{equation}
+	\begin{cases}{}^{e}\dot{\boldsymbol{p}}={}^{e}\boldsymbol{v}\\{}^{e}\dot{\boldsymbol{v}}=-g\boldsymbol{e}_{3}+\frac{f_{T}}{m}\boldsymbol{R}_{b}^{e}\boldsymbol{e}_{3}-\frac{f_{L}}{m}\\\dot{\boldsymbol{\Theta}}=\boldsymbol{W}\cdot^{b}\boldsymbol{\omega}\\\boldsymbol{J}\cdot^{b}\dot{\boldsymbol{\omega}}+^{b}\boldsymbol{\omega}\times(\boldsymbol{J}\cdot^{b}\boldsymbol{\omega})=\boldsymbol{\tau}+\boldsymbol{\tau}_{L}\end{cases}
+\end{equation}
 
-\section{本章小结}
+其中$f_{L}=[f_{L_{-}x},f_{L_{-}y},f_{L_{-}z}]^{\mathrm{T}}$表示惯性系下绳子产生的拉力向量。$\tau_{L}$表示绳子拉力对四旋翼无人机机体产生的力矩向量。
+
+在惯性坐标系下，载荷位置向量为$p_{l}=[p_{lx},p_{ly},p_{lz}]^{\mathrm{T}}$，三个无人机的位置向
+量分别用$p_{q1}$、$p_{q2}$、$p_{q3}$来表示，吊绳长度为$L$。对悬吊的载荷进行受力分析，由牛顿第二定律可得出：
+\begin{equation}
+	\begin{aligned}
+		&f_{Li}=\frac{1}{L}(p_{qi}-p_{l})T_{i} \\
+		&m_{1}\ddot{p}_{1}=-m_{1}ge_{3}+\sum_{i=1}^{3}f_{Li}
+	\end{aligned}
+\end{equation}
+其中$f_{Li}$表示第i根绳子在惯性坐标系下所提供的拉力向量；$T_{i}$表示第$i$根绳子提供的拉力值标量。
+
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=23pc]{picture/2_3.png} 
+	\caption{多无人机吊运系统} \label{2_3}
+\end{figure}
+
+\section{本章总结}
 
 \cleardoublepage
 
-\chapter{基于数据驱动的单无人机吊运控制}
-\chaptermark{基于数据驱动的单无人机吊运控制}
+\chapter{单无人机吊运控制}
+\chaptermark{单无人机吊运控制}
 
-\section{title}
-\section{title}
-\section{title}
-\section{title}
-\section{title}
-\section{title}
+许多学者都关注了单个无人机的控制问题，但是对于单个无人机搬运的控制问题，尤其是高精度跟踪控制问题比较难处理，再加上本文还有无人机搬运的载荷也会对无人机产生影响，所以本章考虑对载荷的精确位置跟踪控制问题。本章的任务是对无人机设计控制器，使得载荷能够跟踪指定的参考路径运动。 
+
+本文把载荷当成一种干扰，首先用干扰观测器把载荷对无人机外环和内环的影响估计出来，然后在所设计的控制器中将该干扰进行补偿，这样所设计的控制器可以消除干扰对系统的影响，从而提高无人机搬运载荷的控制精度。
+
+\section{问题描述}
+在第 2 章中，我们介绍了单无人机绳系吊运系统的动力学模型，并建立了系绳上张力为零和不为零这两种情况组成的混合模型，该模型需要考虑两种情况之间的切换过程，然而对于控制器来说，载荷的状态信息是难以直接进行获取的。因此，本章采用数据驱动的方法，将动力学模型表达式(2-26)改写成如下形式：
+\begin{equation}
+	\begin{aligned}
+		\dot{\boldsymbol{p}}_e = \boldsymbol{v}_e, \
+		\dot{\boldsymbol{v}}_e = m^{-1}\left(-mg\bm{e}_3+\boldsymbol{R}f\bm{e}_3+\bm{f}_p+\bm{f}_{\text{res}}\right) \\
+		\dot{\bm{R}} = \bm{R} \bm{\omega}_b^{\times}, \
+		\dot{\boldsymbol{\omega}}_b = \boldsymbol{J}^{-1}\left(-\bm{\omega}_b^{\times}\bm{J} \bm{\omega}_b+\boldsymbol{\tau}+ \bm{\tau}_p+ \bm{\tau}_{\text{res}}\right)
+	\end{aligned}\label{3-1}
+\end{equation}
+
+
+
+其中，$\bm{f}_p$和$\bm{\tau}_p$分别为有效载荷作用在无人机上的力和扭矩，$\bm{f}_\text{res}$和$\bm{\tau}_\text{res}$分别为无人机自身产生的残余力和扭矩。
+为完整起见，我们将无人机受到的有效载荷和残余力叠加到一起，当作未知的非线性项即$\bm f_e = \bm f_p+ \bm f_{\text{res}}$ 和 $\bm \tau_e = \bm \tau_p+\bm \tau_{\text{res}}$ 。
+	
+该动力学模型中，非线性项$\bm f_e$和$\bm \tau_e$都是动态时变函数，其与无人机和吊挂载荷的运动状态高度耦合。本章需要解决问题是使用基于数据驱动的方法学习单无人机绳系吊运系统未知的系绳和载荷模型，然后将学习到的模型用非线性项进行表示，并集成到控制器中，实现无人机对期望轨迹的准确跟踪。 
+
+
+
+\section{Koopman算子理论}
+本章中基于数据驱动的方法都采用了Koopman算子理论，因此，对Koopman算子理论做一个简单介绍。
+
+
+
+
+Koopman算子理论是分析复杂系统的强大而密切相关的方法。其可以利用从数值模拟、实验或历史记录中收集的数据，提取与预测、分析和参数优化相关的重要动态特征。
+Koopman算子是定义在任何非线性系统上的线性算子，这种线性算子的谱分析为分析非线性动力系统产生的流提供了一种分析和数值工具。
+Koopman算子可以用无限维线性系统全局捕捉非线性动力学，这为分析非线性系统提供了一种新的方法。
+	
+库普曼算子 在库普曼算子框架[37]中，非线性系统的行为可以通过一个无限维线性算子来捕捉，从而允许使用强大而全面的线性系统分析技术。这一特点使得非线性可观测性分析 [38]、状态观测器设计 [39]、[40] 和共享控制 [41] 等各种应用成为可能。在 [42] 和 [43] 中，研究人员将 Koopman 算子扩展到具有外生输入的动力系统。为便于阐述，我们暂时不考虑 (3) 中的因子 z，先回顾一下 Koopman 算子，然后介绍如何修改算法以确保其完整性。	
+	
+考虑一个离散非线性动力学系统：
+\begin{equation}
+		\bm{x}_{t+1}=\bm{f(x_t)}
+\end{equation}
+其中$f$为从$\mathcal{M}$到自身的映射，$k$ 为整数索引。对于大多数实际工程问题，我们认为我们的状态和流形是 x∈Rnx 。我们可以等价地描述连续时间系统的 Koopman 算子理论，但在这里，我们仅限于离散时间设置，因为大多数工程问题收集的都是离散时间数据。我们还定义了一组标量值可观测函数 g : H → R，它构成了一个无限维的希尔伯特空间。库普曼算子 K 作用于这组可观测函数：
+
+$\bm{x}\in\mathbb{R}^n$，$\bm{u}\in\mathbb{R}^p$
+	
+	
+\section{基于数据驱动的模型预测控制器的设计}
+\subsection{带提升线性系统的学习动力学}
+
+
+\subsection{基于学习的外力和力矩捕获方案}
+
+
+
+\subsection{约束嵌入函数的 Lipschitz 常数}
+
+\subsection{利用学习到的动力学实现控制器}
+
+
+\section{仿真验证}
+
+
+\section{本章总结}
+
+
+
 
 \cleardoublepage
 
-\chapter{基于数据驱动的多无人机吊运控制}
-\chaptermark{基于数据驱动的多无人机吊运控制}
+\chapter{多无人机吊运控制}
+\chaptermark{多无人机吊运控制}
 
 \section{引言}
 建立航天器间精确碰撞约束后，服务星极近距离消旋位姿轨迹的规划得以进行。本章根据消旋任务的特点，将其划分为不同的阶段，针对不同阶段的任务需求，基于引导优化的规划框架，结合第三章所提出的碰撞风险评估方法，给出了各阶段位姿轨迹的规划方法，并通过仿真算例验证了所提极近距离消旋位姿轨迹规划方法的有效性。
 
 \section{任务流程分析}
-如前所述，本文将极近距离消旋操作分为极近距离逼近和极近距离消旋两个阶段，采用上一章所提出的基于混合高斯模型的碰撞风险评估方法，来构建章动目标和服务星的精确安全区域与避撞约束。这使得避撞约束复杂非凸，且需对章动目标与服务星间的相对位置和姿态进行同步规划，直接优化求解法难以保证成功率，解析计算法则易陷入局部极小值中。考虑到章动目标采用了全运动周期型安全区域，可以视为静态的障碍物，故规划中的避撞部分和轨迹优化部分可以解耦，因此，本文采用引导优化的框架完成两阶段的轨迹规划。针对两阶段的不同特点，本节对其位姿轨迹规划方法的要求进行了分析。
-
-在极近距离逼近阶段，服务星还未逼近章动目标，磁场源未开启，章动目标所受外力可以忽略，其角惯量轴和章动角保持不变，故期望相对位姿恒定，逼近轨迹规划的时间较为充足。因此，极近距离逼近阶段可以采用随机搜索算法获得一条理想的参考路径，再对轨迹的可行性、平滑度、速度平滑度等进行优化。
-
-服务星逼近章动目标后，进入极近距离消旋阶段，章动目标受到服务星所施加的消旋力与消旋力矩，其角惯量轴和章动角逐渐变化。为避免发生碰撞并最大化消旋力矩，需对期望位姿进行更新，并给出转移轨迹。这一阶段对轨迹规划的实时性有一定要求，故极近距离消旋阶段应及时确定一条无碰撞的参考路径，并将消旋力矩作为指标之一对轨迹进行优化。
 
 
 
