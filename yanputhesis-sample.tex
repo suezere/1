@@ -448,8 +448,8 @@ $y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上�
 \begin{equation}
 	\begin{aligned}
 		\dot{\boldsymbol{p}}_e = \boldsymbol{v}_e, \
-		\dot{\boldsymbol{v}}_e = m^{-1}\left(-mg\bm{e}_3+\boldsymbol{R}f\bm{e}_3+\bm{f}_p+\bm{f}_{\text{res}}\right) \\
-		\dot{\bm{R}} = \bm{R} \bm{\omega}_b^{\times}, \
+		\dot{\boldsymbol{v}}_e = m^{-1}\left(-mg\bm{e}_3+\boldsymbol{R}_{b-e}f\bm{e}_3+\bm{f}_p+\bm{f}_{\text{res}}\right) \\
+		\dot{\bm{R}_{b-e}} = \bm{R}_{b-e} \bm{\omega}_b^{\times}, \
 		\dot{\boldsymbol{\omega}}_b = \boldsymbol{J}^{-1}\left(-\bm{\omega}_b^{\times}\bm{J} \bm{\omega}_b+\boldsymbol{\tau}+ \bm{\tau}_p+ \bm{\tau}_{\text{res}}\right)
 	\end{aligned}\label{3-1}
 \end{equation}
@@ -463,38 +463,439 @@ $y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上�
 
 
 
+
 \section{Koopman算子理论}
-本章中基于数据驱动的方法都采用了Koopman算子理论，因此，对Koopman算子理论做一个简单介绍。
 
+Koopman算子理论是一种用于分析和控制非线性动力系统的强大工具。该理论的核心思想是通过将非线性系统的状态空间映射到一个更高维的线性空间，从而将非线性系统转化为线性系统进行分析和控制。具体来说，Koopman算子理论通过引入一组称为“可观测量”的函数，将原始系统的非线性状态映射到一个线性状态空间中，从而使得原本复杂的非线性系统可以用线性系统的方法进行处理。
+Koopman算子理论的提出为建模方法以及模型线性化方法提供了新的思路，本章中基于数据驱动的方法使用了Koopman算子理论的思想，因此，在本小节先对Koopman算子理论进行一个简单的介绍。
 
+\subsection{经典Koopman算子理论}
 
+考虑一个离散时间动力系统，其状态向量 \( x \in \mathcal{X} \subseteq \mathbb{R}^{N_x} \)。系统的传播规则由非线性函数 \( T \) 表示（如图 \ref{3_1} 所示）。通过使用可观测函数 \( x \mapsto g(x) \) 将原始状态 \( x \) 提升到新的空间，系统的动力学可以在一个新空间中重新定义，其中线性算子，称为Koopman算子 \( \mathcal{K} \)，描述了系统的动力学。换句话说，尽管 \( T \) 和 \( \mathcal{K} \) 作用在不同的空间上，但它们封装了相同的动态特性。例如，给定当前状态 \( x \)，可以通过两种途径将其传播到下一个时间步并进行观测：要么使用 \( T \) 计算 \( T(x) \) 并观测结果状态（底部路径），要么使用可观测函数，应用 \( \mathcal{K} \) 并在 \( x \) 处进行评估（顶部路径）。这种“等价”或“替代”概念提供了几个优势：
 
-Koopman算子理论是分析复杂系统的强大而密切相关的方法。其可以利用从数值模拟、实验或历史记录中收集的数据，提取与预测、分析和参数优化相关的重要动态特征。
-Koopman算子是定义在任何非线性系统上的线性算子，这种线性算子的谱分析为分析非线性动力系统产生的流提供了一种分析和数值工具。
-Koopman算子可以用无限维线性系统全局捕捉非线性动力学，这为分析非线性系统提供了一种新的方法。
-	
-库普曼算子 在库普曼算子框架[37]中，非线性系统的行为可以通过一个无限维线性算子来捕捉，从而允许使用强大而全面的线性系统分析技术。这一特点使得非线性可观测性分析 [38]、状态观测器设计 [39]、[40] 和共享控制 [41] 等各种应用成为可能。在 [42] 和 [43] 中，研究人员将 Koopman 算子扩展到具有外生输入的动力系统。为便于阐述，我们暂时不考虑 (3) 中的因子 z，先回顾一下 Koopman 算子，然后介绍如何修改算法以确保其完整性。	
-	
-考虑一个离散非线性动力学系统：
+(1)它使得非线性动力学 \( T \) 能够全局线性表示，从而使得适用于线性系统的方法得以应用。
+
+(2)它通过实时学习线性算子来估计底层动力学，从而消除了对非线性函数进行最小二乘回归的需求，这在一般情况下需要大量数据。
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=28pc]{picture/3_1.png} 
+	\caption{Koopman算子理论} \label{3_1}
+\end{figure}
+\subsection{基于Koopman理论的数据驱动预测}
+
+考虑一个离散时间的动力学系统：
 \begin{equation}
-		\bm{x}_{t+1}=\bm{f(x_t)}
+	x_{t+1} = T(x_t)\label{3-2}
 \end{equation}
-其中$f$为从$\mathcal{M}$到自身的映射，$k$ 为整数索引。对于大多数实际工程问题，我们认为我们的状态和流形是 x∈Rnx 。我们可以等价地描述连续时间系统的 Koopman 算子理论，但在这里，我们仅限于离散时间设置，因为大多数工程问题收集的都是离散时间数据。我们还定义了一组标量值可观测函数 g : H → R，它构成了一个无限维的希尔伯特空间。库普曼算子 K 作用于这组可观测函数：
 
-$\bm{x}\in\mathbb{R}^n$，$\bm{u}\in\mathbb{R}^p$
+考虑一个复值函数（称为可观测量）的向量空间 \( \mathcal{F} \)，其定义域为系统的状态空间。可以将可观测量 \( g \in \mathcal{F} \) 视为映射或提升的状态。使用与式(\ref{3-2})相关的Koopman算子 \( \mathcal{K}: \mathcal{F} \to \mathcal{F} \) 对可观测量 \( g \) 的演化表示为：
+\begin{equation}
+	\mathcal{K}g = g \circ T, \quad \forall g \in \mathcal{F}
+	\label{3-3}
+\end{equation}
+其中 \( \circ \) 表示函数复合。为了确保 \( \mathcal{K} \) 是良定义的， \( \mathcal{F} \) 必须在 \( T \) 的复合下封闭。如果 \( \mathcal{F} \) 包含特定的预定义函数（如返回完整状态值的函数），这一条件可能迫使 \( \mathcal{F} \) 成为无限维的。Koopman算子根据以下规则将系统向前传播一步：
+\begin{equation}
+	\mathcal{K}g(x_t) = g \circ T(x_t) = g(T(x_t)) = g(x_{t+1})
+	\label{3-4}
+\end{equation}
+
+提升状态 \( g(x) \) 本质上将原始（非线性）系统转化为在Koopman空间中演化的线性系统，从而可以设计和实现各种线性控制器（如LQR）。为了避免处理无限维空间，可以使用Koopman算子的有限维表示。因此，在Koopman算子下不变的有限维子空间 \( \mathcal{S} \subset \mathcal{F} \) 起着至关重要的作用。形式上，设 \( \mathcal{S} \subset \mathcal{F} \) 是一个有限维Koopman不变子空间，并将Koopman算子的作用限制在 \( \mathcal{S} \) 上，即 \( \mathcal{K} \rvert_\mathcal{S}: \mathcal{S} \to \mathcal{S} \)。由于 \( \mathcal{S} \) 是有限维的，给定其基，可以将其表示为矩阵。形式上，设 \( \Psi \) 是一个向量值函数，其元素构成 \( \mathcal{S} \) 的基，则存在一个矩阵 \( \mathcal{K} \in \mathbb{C}^{\text{dim}(\mathcal{S}) \times \text{dim}(\mathcal{S})} \)，使得：
+\begin{equation}
+	\mathcal{K}\Psi = \Psi \circ T = \mathcal{K}\Psi
+	\label{3-5}
+\end{equation}
+
+结合(\ref{3-5})和(\ref{3-4})，可以得到系统轨迹的线性演化，从而使得(\ref{3-2})可以使用线性系统理论的方法，即：
+\begin{equation}
+	\Psi(x_{t+1}) = \mathcal{K}\Psi(x_t)\label{3-6}
+\end{equation}
+
+通过定义 \( z_t := \Psi(x_t) \)，(\ref{3-6})可以写成线性形式 \( z_{t+1} = \mathcal{K}z_t \)。如果空间 \( \mathcal{S} \) 包含状态可观测量 \( g_i(x) = x_i \)，其中 \( x_i \) 是状态 \( x \) 的第 \( i \) 个元素，则可以选择基 \( \Psi \) 使其包含 \( g_i \) 作为其元素。在这种情况下，提升的线性系统(\ref{3-6})捕获了原始非线性系统(\ref{3-2})的完整信息。此外，矩阵 \( \mathcal{K} \) 的特征分解允许识别Koopman特征函数和特征值。
+
+通常，找到包含所有状态可观测量的精确有限维不变子空间是具有挑战性的（有时是不可能的）。一个流行的解决方法是近似。假设空间 \( F \) 配备了内积，给定任意空间 \( \mathcal{S} \)（不一定是Koopman算子下的不变空间），可以考虑算子 \( P_\mathcal{S} \mathcal{K}: \mathcal{F} \to \mathcal{F} \)，其中 \( P_\mathcal{S} \) 是 \( \mathcal{S} \) 上的正交投影算子。对于这个算子，空间 \( \mathcal{S} \) 是通过构造不变的。因此，可以将这个算子的作用限制在 \( \mathcal{S} \) 上，即 \( P_\mathcal{S} \mathcal{K} \rvert_\mathcal{S}: \mathcal{S} \to \mathcal{S} \)，并给定 \( \mathcal{S} \) 的基 \( \Psi \)，该算子承认矩阵表示：
+\begin{equation}
+	P_\mathcal{S} \mathcal{K}\Psi = \hat{\mathcal{K}}\Psi
+	\label{3-7}
+\end{equation}
+其中 \( \hat{K} \in \mathbb{C}^{\text{dim}(\mathcal{S}) \times \text{dim}(\mathcal{S})} \)。在这种情况下，可以写出（4）的近似版本如下：
+\begin{equation}
+	\Psi(x_{t+1}) = [\mathcal{K}\Psi](x_t) \approx [P_\mathcal{S} K\Psi](x_t) = \hat{\mathcal{K}}\Psi(x_t)
+	\label{3-8}
+\end{equation}
+
+通过定义 \( z_t := \Psi(x_t) \)，前述方程可以写成近似线性形式 \( z_{t+1} \approx \hat{\mathcal{K}}z_t \)，从而可以使用高效的线性方法来近似系统的行为。在实践中，通常可以访问系统的离散采样测量数据。这可以用于获得无限维Koopman算子的有限维近似矩阵以及这些基于Koopman的组件。
+
+与标准状态空间模型不同，Koopman算子模型了由系统动力学 \( f \) 驱动的函数演化，并且其存在性对于前向完备系统是保证的。由于Koopman算子是作用在函数空间上的算子，因此它通常是无限维的，但关键在于即使动力学 \( f \) 是非线性的，Koopman算子仍然是线性的。因此，如果 \( \phi \) 是与特征值 \( \lambda \in \mathbb{C} \) 相关联的特征函数，则有 \( K\phi = \lambda\phi \)。由此可以看出，特征函数（或特征函数的线性组合）沿着非线性系统（5）的轨迹线性演化：
+\begin{equation}
+	\phi(x_{k+1}) = \phi(f(x_k)) = (K\phi)(x_k) = \lambda\phi(x_k)
+\end{equation}
+
+给定一组特征函数 \(\{\phi_i\}_{i=1}^{n_\phi}\)，任何位于这些特征函数张成的空间内的可观测量都可以分解为：
+\begin{equation}
+	\psi = \sum_i c_i(\psi)\phi_i
+\end{equation}
+其中 \( c_k(\psi) \) 称为 \( \psi \) 的Koopman模态。于是我们有：
+\begin{equation}
+	K\psi = \sum_i c_i(\psi)\lambda_i\phi_i
+\end{equation}
+其中 \( \lambda_i \) 表示 \( \phi_i \) 的特征值。
+
+在后续内容中，下标 \( u \) 用于表示与带有控制输入的系统相对应的组成部分。给定一个带有控制输入的非线性动力学：
+\begin{equation}
+	x_{k+1} = f_u(x_k, u_k)
+\end{equation}
+
+Koopman算子可以以不同的方式定义。在本工作中，我们考虑了文献[22]中的框架。具体来说，记无限控制序列 \( u := \{u_k\}_{\infty}^{k=0} \in l(U) \)，其中 \( l(U) \) 表示所有控制序列的空间。增广状态为：
+\begin{equation}
+	\chi=\begin{bmatrix}x\\u\end{bmatrix}
+\end{equation}
+
+系统的动力学被增广为：
+\begin{equation}
+	F(\chi_k)=\begin{bmatrix}f_u(x_k,u_k(0))\\Su_k\end{bmatrix}
+\end{equation}
+
+其中 \( S \) 是左移算子，定义为 \( Su(i) := u(i + 1) \)，且 \( u(i) \) 是 \( u \) 的第 \( i \) 个元素的值。在这种设置下，\( u \) 可以被视为从索引 \( i \) 到实际输出 \( u_i \) 的序列映射。值得注意的是，这个动力系统是无限维的但自治的。因此，上述Koopman算子的定义可以直接应用，并且相应的特征函数假设由以下基函数字典张成：
+\begin{equation}
+	\{\phi_u(x, u)\}_{i=1}^{n_{\phi_u} + n_u} := \{\phi_{u,1}(x), \ldots, \phi_{u,n_{\phi_u}}(x), u(0)\}
+\end{equation}
+
+如果这个基函数字典的演化在系统动力学下是封闭的，那么我们有：
+\begin{equation}
+\begin{aligned}
+	z_{k+1}=Az_k+&Bu_k(0)\\u_{k+1}(0)=&u_k(1)
+\end{aligned}
+\end{equation}
+其中 \( z_k := [\phi_{u,1}(x_k), \ldots, \phi_{u,n_{\phi_u}}(x_k)] \)，且 \( A \) 和 \( B \) 捕获了Koopman算子。类似地，这些基函数张成的空间内的任何函数都可以通过Koopman模态恢复为：
+\begin{equation}
+	\psi_u(x, u(0)) = c_u^T \begin{bmatrix} z \\ u(0) \end{bmatrix}
+\end{equation}
+其中 \( c := [c_{u,1}, c_{u,2}, \ldots, c_{u,n_{\phi_u} + n_u}] \) 是Koopman模态的向量。特别地，我们对系统输出的恒等函数评估的Koopman模态感兴趣。假设我们有 \( n_y \) 个输出，第 \( i \) 个输出的评估为 \( I_{y,i}(y_k) := y_{k,i} \)。通过一些符号的滥用，输出评估的Koopman模态分解为：
+\begin{equation}
+	y_k = \begin{bmatrix} I_{y,1}(y_k) \\ I_{y,2}(y_k) \\ \vdots \\ I_{y,n_y}(y_k) \end{bmatrix} = \begin{bmatrix} c_{u,1}^T \\ c_{u,2}^T \\ \vdots \\ c_{u,n_y}^T \end{bmatrix} \begin{bmatrix} z \\ u(0) \end{bmatrix} := C_u \begin{bmatrix} z \\ u(0) \end{bmatrix}
+\end{equation}
+其中 \( C_u \) 堆叠了输出评估的Koopman模态。
+
+总之，Koopman算子理论通过将非线性系统提升到更高维的线性空间，使得复杂的非线性控制问题可以用线性方法进行处理，从而为非线性系统的控制设计提供了一种有效的工具。
+
+\section{模型预测控制方法}
+
+本小节重点阐述模型预测控制（Model Predictive Control，简称MPC）的基本原理及其应用流程，结合鲁棒非线性控制方法和离散化建模，形成适用于四旋翼无人机系统的完整设计框架。从预测模型建立到代价函数设计，再到优化问题求解，MPC为复杂控制问题提供了一种系统化、灵活性强的解决方案。通过系统状态的预测、滚动优化与反馈修正的有机结合，MPC方法在应对系统非线性、不确定性和外部扰动方面表现出显著的优势。
+
+
+模型预测控制的核心思想是利用系统的数学模型预测未来的动态行为，并通过在线求解优化问题生成控制输入。其主要特性包括：
+
+(1)预测与滚动优化：通过预测系统在未来一段时间内的行为，寻找最优的控制输入序列；仅执行最优序列中的首个输入，并滚动更新预测区间。
+
+(2) 反馈矫正：实时采集反馈信息，用于修正模型误差和外部扰动的影响。
+
+(3)优化问题求解：将控制问题转化为约束优化问题，通过数值算法在线求解。
+
+
+以一般形式的二阶非线性系统为例，其状态方程和输出方程为：
+\begin{equation}
+\begin{aligned}
+	\dot{x} = f(x, u&)\\
+	\quad y = g(x)&
+\end{aligned}
+ \label{3-19}
+\end{equation}
+其中，状态变量 $x \in \mathbb{R}^2$，输入变量 $u$，输出变量 $y \in \mathbb{R}^2$。以下按照参考轨迹生成、系统建模和迭代优化三个步骤对控制器设计流程展开说明。
+
+\subsection{参考轨迹}
+在实际应用中，控制系统并不总是追求状态快速收敛。例如在进行轨迹追踪任务中，过快的状态变化可能导致跟踪不收敛。类似PID、
+滑模控制、反步法等经典控制方法难以实现对预先设计的追踪，而MPC控制方
+法可以比较方便地实现这一点。因此，需要为系统设计合理的参考轨迹 $x_\text{ref}$ 和 $u_\text{ref}$ ，使得目标状态 $x_\text{ref}$ 满足以下动态方程：
+\begin{equation}
+	\dot{x}_\text{ref} = f(x_\text{ref}, u_\text{ref})
+	\label{aa}
+\end{equation}
+参考轨迹的设计不仅依赖于系统动态特性，还需要综合考虑实际任务需求。
+
+\subsection{名义系统建模}
+
+为便于计算和预测，引入名义系统作为实际系统的线性化近似模型。名义系统亦称标称系统，是实际物理系统的近似描述模型，通常用于预测系统在未来一段时间内的动态行为。针对非线性系统，常以平衡点附近的线性化模型作为其近似表达形式，对非线性函数 $f(x, u)$ 进行泰勒展开得：
+\begin{equation}
+	\dot{x} = f(x_\text{ref}, u_\text{ref}) + A_\text{con} (x - x_\text{ref}) + B_\text{con} (u - u_\text{ref})
+	\label{a}
+\end{equation}
+其中，矩阵 $A_\text{con}$ 和 $B_\text{con}$ 分别为系统的状态和输入的偏导数矩阵：
+\begin{equation}
+	A_\text{con} = \frac{\partial f(x, u)}{\partial x} \bigg|_{x = x_\text{ref}, u = u_\text{ref}}, \quad B_\text{con} = \frac{\partial f(x, u)}{\partial u} \bigg|_{x = x_\text{ref}, u = u_\text{ref}}
+\end{equation}
+定义误差变量 $\tilde{x} = x - x_\text{ref}$，$\tilde{u} = u - u_\text{ref}$，将公式(\ref{a})与公式(\ref{aa})相减，可以得到误差动态方程为：
+\begin{equation}
+	\dot{\tilde{x}} = A_\text{con} \tilde{x} + B_\text{con} \tilde{u}
+\end{equation}
+
+在嵌入式控制应用中，系统需离散化以适应数字控制器的计算能力。假设采样周期为 $T$，利用欧拉法对连续时间系统进行离散化处理得到：
+\begin{equation}
+	\tilde{x}(k+1) = A_\text{dis} \tilde{x}(k) + B_\text{dis} \tilde{u}(k)
+\end{equation}
+其中$	A_\text{dis} = I + T A_\text{con}$，$ \quad B_\text{dis} = T B_\text{con}$，$T$为采样周期。
+进一步构造增广状态向量，令$\varrho(k|t)=\left[\tilde{x}(k|t),\tilde{u}(k-1|t)\right]^\mathrm{T}$，可以得到：
+\begin{equation}
+	\begin{aligned}\varrho(k+1|&t)=A\varrho(k|t)+B\Delta u(k|t)\\&\sigma(k|t)=C\varrho(k|t)\end{aligned}
+\end{equation}
+其中
+$$A_0=\begin{bmatrix}A_{dis}&B_{dis}\\0&I\end{bmatrix},B_0=\begin{bmatrix}B_{dis}\\I\end{bmatrix},C_0=\begin{bmatrix}C_{dis}&0\end{bmatrix}$$
+
+假设$N_p$为预测周期，$N_c$为控制周期，通过迭代扩展预测模型可得未来 $N_p$ 步的输出序列：
+\begin{equation}
+	Y=\psi\varrho(k|t)+\kappa\Delta U
+\end{equation}
+其中$$
+\boldsymbol{Y} = 
+\left[
+	\boldsymbol{\sigma}(k+1|t) , \boldsymbol{\sigma}(k+2|t) , \boldsymbol{\sigma}(k+3|t) , \cdots , \boldsymbol{\sigma}(k+N_p|t)
+\right]^\mathrm{T}$$
+$$\boldsymbol{\Psi} = 
+\left[
+	\boldsymbol{C}_0\boldsymbol{A}_0 , \boldsymbol{C}_0\boldsymbol{A}_0^2 , \boldsymbol{C}_0\boldsymbol{A}_0^3 , \cdots , \boldsymbol{C}_0\boldsymbol{A}_0^{N_p}
+\right]^\mathrm{T}$$
+$$\boldsymbol{\Delta U} = 
+\left[
+	\Delta u(k|t) , \Delta u(k+1|t) , \Delta u(k+2|t) , \cdots , \Delta u(k+N_c-1|t)
+\right]^\mathrm{T}$$
+$$\left.\kappa=\left[\begin{array}{ccccc}{C_{0}B_{0}}&{0}&{0}&{\cdots}&{0}\\{C_{0}A_{0}B_{0}}&{C_{0}B_{0}}&{0}&{\cdots}&{0}\\{C_{0}A_{0}^{2}B_{0}}&{C_{0}A_{0}B_{0}}&{C_{0}B_{0}}&{\cdots}&{0}\\{\vdots}&{\vdots}&{\vdots}&{\ddots}&{0,}\\{C_{0}A_{0}^{Np-1}B_{0}}&{C_{0}A_{0}^{Np-2}B_{0}}&{C_{0}A_{0}^{Np-3}B_{0}}&{\cdots}&{C_{0}A_{0}^{Np-Nc}B_{0}}\\\end{array}\right.\right]$$
+
+
+\subsection{迭代优化}
+模型预测控制的核心在于将控制问题转化为优化问题，并利用先进的计算机技术进行实时求解。对于一般非线性系统 (\ref{3-19})，其代价函数通常定义为：
+\begin{equation}
+	J = (Y - Y_\text{ref})^T Q (Y - Y_\text{ref}) + \Delta U^T R \Delta U + \rho \epsilon^2
+\end{equation}
+其中 $Q$ 和 $R$ 分别为输出权重矩阵和输入权重矩阵，$\rho$ 为松弛因子。代价函数中的三项分别对应参考轨迹的跟踪性能、对控制输入量进行约束，以及通过松弛因子方便对优化问题的求解。
+
+令 $E = \Psi \xi - Y_{\text{ref}}$，则有：
+\begin{equation}
+	\begin{aligned}
+		Y - Y_{\text{ref}} &= \Psi \xi + \Theta \Delta U + E - \Theta \Delta U 
+		\\&= E + \Theta \Delta U
+	\end{aligned}
+\end{equation}
+
+通过进一步整理，优化问题最终可以将代价函数表示为具有标准形式的二次规划问题：
+\begin{equation}
+	J_0 = \frac{1}{2} X^T H X + f^T X
+\end{equation}
+
+结合约束条件，将优化问题转化为标准形式的二次规划问题：
+
+\begin{equation}
+\begin{aligned}
+	&\operatorname*{minimize}_{\Delta U,\varepsilon}&& \frac{1}{2}x^{\mathrm{T}}Hx+f^{\mathrm{T}}x  \\
+	&\text{subject to}&& \begin{aligned}&Ax\leq b\\
+		&A_{eq}x=b_{eq}\end{aligned}  \\
+	&&&lb\leq x\leq ub\
+\end{aligned}
+\label{3-30}
+\end{equation}
+
+模型预测控制就是求解形如公式(\ref{3-30})的优化问题来得到控制量,利用快速二次规划算法可在线计算最优控制输入。
+
+
+
+
+\section{基于数据驱动的非线性模型预测控制器设计}
+本节详细阐述了所提出框架的原理与实现方法。核心思想是将外力 $\bm{f}_e$ 和力矩 $\bm{\tau}_e$ 建模为动态系统，并通过数据学习其行为。具体来说，提出的框架借助由Koopman算子理论导出的升维线性系统（Lifted Linear System, LLS），以显式方式捕获外力和力矩的动态特性。
+
+\subsection{升维线性系统}
+Koopman算子可以从数据中将非线性系统通过数据映射为全局线性系统 \cite{Mamakoukas2023}。这一性质为显式捕获未知非线性动态（如公式(\ref{quadrotordynamics})中的$\bm f_e$和$\bm \tau_e$）提供了一种数据驱动的方法。因此，本文采用这一特性，通过数据驱动的方式学习$\bm f_e$和$\bm \tau_e$。
+
+考虑一个具有控制输入的未知非线性动力学系统： \begin{equation} \dot{\bm{x}} = \bm{f}(\bm{x},\bm{u}) \label{nonlinear_input} \end{equation} 其中$\bm{x} \in \mathbb{R}^n$为系统状态，$\bm{u} \in \mathbb{R}^p$为控制输入。定义一组标量值函数$\bm{g}$作为升维函数，这些函数构成了一个无限维的Hilbert空间$\mathcal{H}$。假设这些升维函数可以表示为： \begin{equation} \bm{g}(\bm{x},\bm{u}) = \bm{\Phi}(\bm{x}) + \bm{L}\bm{u} \end{equation} 其中$\bm{L}$为常数矩阵。在假设控制输入$\bm{u}$ 不会在Hilbert空间 $\mathcal{H}$ 中演化的条件下，公式(\ref{nonlinear_input})中的非线性动力学系统可以重新表述为： \begin{equation} \bm{\Phi}(\bm{x}(t_0+t_s)) = \bm{\mathcal{K}} \bm{g}(\bm{x}(t_0), \bm{u}(t_0)) = \begin{bmatrix} \bm{A} & \bm{B} \end{bmatrix} \begin{bmatrix} \bm{\Phi}(\bm{x}) \ \bm{u} \end{bmatrix}
+\label{3-21} \end{equation} 其中，$\bm{x}(t_0+t_s)=\bm{x}(t_0)+\int_{t_0}^{t_0+t_s}\bm{f}(\bm{x},\bm{u}){\mathrm{d}t}$，$t_s$ 为采样时间$t_s$。上述公式描述了升维函数$\bm{g}(\bm{x})$的前向时间演化。令$\bm{z}(t) \triangleq \bm{\Phi}(\bm{x}(t))$，可以将公式(\ref{3-21})改写为： \begin{equation} \bm{z}(t_0 + t_s) = \bm{A}\bm{z}(t_0) + \bm{B}\bm{u}(t_0) \label{lls} \end{equation} 这被称为未知非线性动力学系统 (\ref{nonlinear_input}) 的升维线性系统（Lifted Linear System, LLS）。
+
+如果给定非线性系统(\ref{nonlinear_input})的一组数据序列 $\{(\bm{x}_1,\bm{u}_1),\cdots,(\bm{x}_{T-1},\bm{u}_{T-1}),(\bm{x}_T)\}$，则可以通过求解以下最小二乘优化问题来近似估计矩阵$\bm{A}$和$\bm{B}$：
+\begin{equation}
+	\bm{A},\bm{B} = \mathop{\arg\min\limits_{\bm{A},\bm{B}}} \Vert \bm{Z}_{2:T} - (\bm{A}\bm{Z}_{1:T-1}+\bm{B}\bm{U}_{1:T-1}) \Vert \label{LS_AB}
+\end{equation} 
+其中，$\bm{Z}_{1:T-1}= [ \bm{z}_1,\bm{z}_2,\cdots,\bm{z}_{T-1} ]^\mathrm{T}$，$\bm{Z}_{2:T}= [\bm{z}_2,\bm{z}_3,\cdots,\bm{z}_{T}]^\mathrm{T}$，$\bm{U}_{1:T-1}= [\bm{u}_1,\bm{u}_2,\cdots,\bm{u}_{T-1}]^\mathrm{T}$，$\bm{z}_i$ 表示对应于第 $i$ 个样本 $\bm{x}_i\ (i=1,2,\cdots,T)$ 的状态。当$\bm{Z}{1:T-1}$和$\bm{U}{1:T-1}$的序列长度$T$有限时，上述优化问题实际上对Koopman算子进行了有限维近似 \cite{Hao2024}。
+
+公式(\ref{lls})是离散形式，因其由数据驱动推导得到。因此，根据式 (\ref{lls})，未知非线性系统 (\ref{nonlinear_input}) 的连续有限维近似形式可以表示为： 
+\begin{equation}
+	\left\{ \begin{array}{c}
+		\dot{\bm{z}}=\bm{A_c}\bm{z}+\bm{B_c}\bm{u}\\
+		\bm{x}=\bm{Cz}\\
+	\end{array} \right. \label{lift_linear}
+\end{equation}
+
+其中$\bm{A_c}=\log(\bm{A})/t_s$， $\bm{B_c}=\bm{B}/(\int_{0}^{t_s}e^{\bm{A}t}\text{dt})$， $\bm{z} = \bm{\Phi}(\bm{x}):\mathbb{R}^n \rightarrow \mathbb{R}^K$， $K\gg n$, $\bm{u}\in \mathbb{R}^p$， $\bm{A_c} \in \mathbb{R}^{K\times K}$，  $\bm{B_c} \in \mathbb{R}^{K\times p}$, $\bm{C} \in \mathbb{R}^{n\times K}$，$t_s$为采样时间间隔。
+
+
+
+
+
+\subsection{基于学习的未知外力和力矩捕获方案}
+本节提出了一种数据驱动的基于学习的框架，用以捕捉外力 $\bm{f}_e$ 和力矩 $\bm{\tau}_e$ 的未知动态特性。假设外力和力矩的未知动力学系统可描述为以下形式：
+
+\begin{equation}
+	\dot{\bm \chi} = \bm{\xi}(\bm \chi,\bm \zeta) \label{dynamics}
+\end{equation}
+其中 $\bm \chi = [ \bm f_e, \bm \tau_e]^\mathrm{T}$，$\bm{\xi}$ 表示外力和扭矩的未知动态函数，$\bm{\zeta}$ 表示系统的控制输入，通常是四旋翼的状态或部分子状态。$\bm{\zeta}$ 的选择将在后续的实现部分讨论。
+
+如上所述，类似于公式(\ref{dynamics})这样的未知非线性动力学可以通过有限维的升维线性系统(\ref{lift_linear})从数据中捕捉。然而，寻找合适的基函数 $\bm{\Phi}$ 并非易事。因此，本文提出使用深度神经网络（DNN）来近似构造有限维的基函数，其表示形式如下：
+\begin{equation}
+	\bm{\Phi}(\bm \chi;\bm{\theta}) = W^{L+1}\phi(W^L(...\phi(W^1 \bm \chi...)) \label{dnn}
+\end{equation}
+其中，$\bm{\theta} = \{W^1, ..., W^{L+1}\}$ 表示网络的权重参数，$\phi$ 是ReLU激活函数。使用深度神经网络的主要动机在于其在函数近似中的强大能力。
+为了找到与Koopman算子相关联的基函数，通过最小化以下损失函数来进行训练：
+\begin{equation}
+	L = \beta_1 L_{\text{recons}} + \beta_2 L_{\text{forward}} + \beta_3 L_{\text{backward}}
+\end{equation}
+其中 $\beta_1$、$\beta_2$ 和 $\beta_3$ 是正的超参数，分别衡量三种损失函数的权重。三个损失函数 $L_{\text{recons}}$、$L_{\text{forward}}$ 和 $L_{\text{backward}}$ 定义如下：
+
+\textbf{\romannumeral1) 重构损失 $L_{\text{recons}}$}: 非线性系统的状态应从Hilbert空间 $\mathcal{H}$ 中重构。重构损失函数 $L_{\text{recons}}$ 定义为：
+\begin{equation}
+	L_{\text{recons}}=\Vert \bm{f}_e(t) - \bm{C} \bm{z}(t) \Vert
+\end{equation}
+
+\textbf{\romannumeral2) 多步预测损失 $L_{\text{forward}}$ 和 $L_{\text{backward}}$}: 从带有基准控制器的四旋翼无人机系绳吊运系统中采样数据，构建包含 $s$ 条轨迹的数据集 $\{\bm{X}_i \in \mathbb{R}^{n\times m}, \bm{U}_i \in \mathbb{R}^{p \times m}, i=1,\cdots,s\}$。每条轨迹含有 $m$ 个时间步长的数据。训练所需的标签，即每个采样时刻的外力 $\bm{f}_e$ 和力矩 $\bm{\tau}_e$，由四旋翼动力学方程 (\ref{3-1}) 计算得出。
+
+每个采样时刻的+状态可以表示为 $\bm{Z}_i = [\bm{z}_0^i,\cdots,\bm{z}_{m-1}^i]=[\bm{\Phi}(\bm{\chi_{0}}^i),\cdots,\bm{\Phi}(\bm{\chi}_{m-1}^i)]\in \mathbb{R}^{K\times m}$。
+通过升维线性系统(\ref{lift_linear})，基于初始状态 $\bm{z}_0^i$ 进行时间前向和后向预测，得到的预测状态分别为$\hat{\bm{Z}}_i^{\text{forward}} = [\hat{\bm{z}}_0^i, \cdots, \hat{\bm{z}}_{m-1}^i]$ 和 $\hat{\bm{Z}}_i^{\text{backward}} = [\hat{\bm{z}}_0^i, \cdots, \hat{\bm{z}}_{m-1}^i]$。
+
+
+前向和后向预测误差的损失函数定义为：
+\begin{equation}
+	\begin{aligned}
+		L_{\text{forward}} = \sum_{i=1}^{k} \mu_1^{i} {\rm MSE}(\bm{Z_{i}},\hat{\bm{Z_{i}}}^{\text{forward}})  \\
+		L_{\text{backward}} = \sum_{i=1}^{k} \mu_2^{i} {\rm MSE}(\bm{Z_{i}},\hat{\bm{Z_{i}}}^{\text{backward}})\label{L2}
+	\end{aligned}
+\end{equation}
+其中 $\mu_1,\mu_2 \in(0,1)$ 为超参数，用于调整损失项的时间步长权重。损失函数(\ref{L2})专注于最小化向前和向后的多步预测误差，这有助于在更长的预测范围内更精确地预测状态。
+
+\subsection{学习动力学的理论保证}
+尽管学习得到的动力学模型能够很好地拟合外力与力矩的动态特性，但其预测结果可能存在发散的风险，进而导致外力和力矩估计误差较大。为确保学习动力学的预测误差在全局范围内可控，需要引入一种约束条件对预测误差进行界定。以下定理为学习动力学的预测误差提供了理论上的全局有界性保证。
+
+\begin{theorem}\label{error_boundness}
+	假设存在正数 $\alpha_{\bm{\chi}}$ 和 $\alpha_{\bm{\zeta}}$，使得 $\Vert \bm{\chi}(t_0+t_s)-\bm{\chi}(t_0)\Vert \le \alpha_{\bm{\chi}}$ 和 $\Vert \bm{\zeta}(t_0+t_s) - \bm{\zeta}(t_0) \Vert \le \alpha_{\bm{\zeta}}$ 成立，并且近似得到的Koopman算子 $\hat{\bm{\mathcal{K}}}$ 是稳定的，且与其相关的基函数满足Lipschitz常数 $L_{\bm{\Phi}}$，则学习得到的动力学的预测误差是全局有界的。
+\end{theorem}
+\begin{proof}
 	
+在时刻 \( t_0 + n\Delta t \)，定义基函数在真实状态 \( s(t_0 + n\Delta t) \) 下的真实值为 
+$
+\Psi(s(t_0 + n\Delta t))$，
+其近似解为$
+\tilde{\Psi}_n
+$，
+其中 $ n \in \mathbb{Z}^+ $ 表示向未来推进的时间步数。
+
+局部误差考虑的是模型在单个时间步长内的精度；全局误差考虑的是模型在所有时间步长内的精度。用$e_n$表示由近似的 Koopman 算子 \( \tilde{K}_d \)引起的第 
+\( n \)个时间步的局部误差，其假设 Koopman 算子从前一个时间步开始传播基函数的真实值，即：
+\begin{equation}
+	e_n\equiv\Psi(s(t_0+n\Delta t))-\tilde{K}_d\Psi(s(t_0+(n-1)\Delta t))
+	\label{k}
+\end{equation}
+
+其假设为 Koopman 算子可以将上一时间步的基函数真实值进行传播。此外，第 \( n \) 个时间步的全局误差记为 $E_n$。它假设Koopman算子从前一个时间步传播基函数的真实值。类似地，我们用$E_n$来表示第\( n \) 个时间步的全局误差：	
+\begin{equation}
+	E_n\equiv\Psi(s(t_0+n\Delta t))-\tilde{\mathcal{K}}_d^n\Psi(s(t_0))
+	\label{kk}
+\end{equation}
+
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=26pc]{picture/3_2.png} 
+	\caption{近似Koopman算子引起的局部误差和全局误差} \label{3_2}
+\end{figure}
+当 \( n = 1 \) 时，全局误差与局部误差（公式 (\ref{k})）相等。然而需要注意的是，全局误差（公式 (\ref{kk})）并不是局部误差（公式 (\ref{k})）的累积： 
+$
+E_n \neq \sum_{i=1}^n e_i
+$。
+我们在图 \ref{3_2} 中展示了局部误差与全局误差之间的区别。
+
+	令$z(x)=\Psi(s(x))$，基于近似Koopman算子 $\hat{\bm{\mathcal{K}}}$ 的预测误差在经历 $n$ 个采样时刻后的全局误差可以表示为：
+	\begin{equation}
+		\bm{E}_n = \bm{z}(t_0 + nt_s) - \hat{\bm{\mathcal{K}}}^n \bm{z}(t_0)
+	\end{equation}
+
+
 	
-\section{基于数据驱动的模型预测控制器的设计}
-\subsection{带提升线性系统的学习动力学}
+	通过递归迭代(\ref{lls}), 全局预测误差可以表示为
+	\[
+	\begin{aligned}
+		\Vert \bm{E_n} \Vert &= \Vert \bm{\Phi}(t_0+nt_s) -\hat{\bm{\mathcal{K}}}^n\bm{\Phi}(t_0) \Vert  \\
+		&=\Vert \sum_{i=0}^{n-1}\hat{\bm{\mathcal{K}}}^i\bm{e}(t_0+(n-i)t_s)\Vert \\
+		&\le \sum_{i=0}^{n-1}\Vert \hat{\bm{\mathcal{K}}}^i\Vert \cdot \Vert \bm{e}(t_0+(n-i)t_s) \Vert
+	\end{aligned}
+	\]
+	其中，局部预测误差 $\bm{e}(t)=\bm{\hat{\chi}}(t)-\bm{\chi}(t)$，$\bm{\hat{\chi}}$ 表示外部力和力矩的预测值。
+	
+	由于 $\bm{\chi}$, $\bm{\zeta}$ 和基函数 $\bm{\Phi}$ 是Lipschitz连续的，根据文献\cite{Hao2024}的定理1，局部预测误差 $\bm{e}(t)$ 有界，即
+	\[
+	\begin{aligned}
+		\lim_{n_h\rightarrow \infty} \text{sup} \Vert \bm{e}(t) \Vert &=(\Vert \bm{CA} \Vert L_{\bm{\Phi}}+1) \alpha_{\bm{\chi}}+\Vert \bm{CB}\Vert \alpha_{\bm{\zeta}} \\
+		&+\max_{\overline{\bm{\chi}}\in \mathbb{B}} \Vert \overline{\bm{\chi}} -\bm{C}\bm{\Phi(\overline{\bm{\chi}}}) \Vert \triangleq c
+	\end{aligned}
+	\]
+	其中，$n_h$ 是基函数中最后一个隐藏层的层数，$\mathbb{B}$ 是包含每个采样时刻 $\bm{\chi}$ 的集合。由于局部预测误差 $\bm{e}(t)$ 有界，且近似Koopman算子 $\hat{\bm{\mathcal{K}}}$ 稳定，因此
+	\[
+	\Vert \bm{E_n} \Vert \le \sum_{i=0}^{n-1}\Vert \hat{\bm{\mathcal{K}}}^i\Vert \cdot \Vert \bm{e}(t_0+(n-i)t_s) \Vert\le \Vert c \Vert \sum_{i=0}^{n-1}\Vert \bm{\mathcal{K}}^i \Vert
+	\]
+	是有界的。因此，预测误差有界。
+\end{proof}
+
+综上所述，上述定理表明，在满足特定条件下，学习的动力学模型的预测误差在全球范围内是有界的，从而保证了模型的稳定性与预测的准确性。
+
+\subsection{基函数的Lipschitz常数约束}
+
+如定理 \ref{error_boundness} 所述，如果基函数 $\bm{\Phi}$ 具有Lipschitz常数时，则预测误差是有界的。为了实现这一目标，本文用光谱归一化（Spectral Normalization, SN）方法来约束基函数 $\bm{\Phi}$ 的Lipschitz常数。
+
+根据定义，函数 $\rho$ 的Lipschitz常数等于其梯度的最大谱范数，即 $\Vert \rho \Vert_{\text{Lip}} = \sup \sigma (\nabla \rho)$。因此，对于由深度神经网络(\ref{dnn})参数化的基函数 $\bm{\Phi}$，可以通过限制每一层的谱范数来限定其Lipschitz常数。
+
+线性层 $g(\bm{x})=\bm{W}\bm{x}$ 的Lipschitz常数为 $\Vert g \Vert_{\text{Lip}} = \sup \sigma(\nabla(g))=\sup \sigma(\bm{W})=\sigma(\bm{W})$。因此，基函数$\bm{\Phi}$的Lipschitz常数可以计算为（利用不等式 $\Vert g_1 \circ g_2 \Vert_{\text{Lip}} \le \Vert g_1 \Vert_{\text{Lip}}\cdot \Vert g_2 \Vert_{\text{Lip}}$）：
+
+\[
+\begin{aligned}
+	\Vert \bm{\Phi}(\bm{\chi}) \Vert_{\text{Lip}} &\le \Vert g^{L+1} \Vert_{\text{Lip}} \cdot \Vert \phi_L \Vert_{\text{Lip}} \cdots \Vert \phi_1 \Vert_{\text{Lip}} \cdot \Vert g_1 \Vert_{\text{Lip}} \\
+	&= \prod_{l=1}^{L+1}\sigma(\bm{W}^l)
+\end{aligned}
+\]
+其中，ReLU激活函数的Lipschitz常数为1，即 $\Vert \phi_l \Vert_{\text{Lip}} = 1$。在训练过程中，对每一层的权重 $\bm{W}$ 进行谱归一化可以表示为：
+
+\[
+\hat{\bm{W}} = \bm{W} / \sigma(\bm{W}) \cdot \gamma ^{\frac{1}{L+1}}  \label{sn}
+\]
 
 
-\subsection{基于学习的外力和力矩捕获方案}
+\begin{lemma} \label{lemma_lip}
+	通过对基函数应用谱归一化（\ref{sn}）方法之后，基函数的Lipschitz常数将满足以下约束：
+	\[
+	\Vert \bm{\Phi}(\bm{\chi}) \Vert_{\text{Lip}}\le \gamma
+	\]
+	其中，$\gamma$ 是基函数的目标Lipschitz常数。
+\end{lemma}
+
+\begin{proof}
+	对DNN的每一层应用谱归一化之后，基函数的Lipschitz常数满足
+	\[
+	\Vert \bm{\Phi}(\bm{\chi}) \Vert_{\text{Lip}} \le \prod_{l=1}^{L+1}\sigma(\hat{\bm{W}}^l) = \prod_{l=1}^{L+1}\gamma^{\frac{1}{L+1}}=\gamma
+	\]
+	因此，通过谱归一化可以有效约束基函数的Lipschitz常数。
+\end{proof}
+
+综上所述，在深度神经网络的训练过程中，引入谱归一化技术不仅能够确保网络的Lipschitz常数满足特定的约束，还能提高模型的稳定性和泛化能力。这种方法在实现对嵌入函数约束的同时，避免了直接优化Lipschitz常数所带来的计算复杂性，从而为动态系统的学习提供了更加稳健的理论支撑。
 
 
+\subsection{基于学习动力学的控制器实现}
 
-\subsection{约束嵌入函数的 Lipschitz 常数}
+在本工作中，我们提出了将神经预测器集成到MPC框架中的NP-MPC框架，用于系留无人机系统，如图\ref{illustration_framework}所示。传统的鲁棒MPC虽然考虑了不确定性，但在实际应用中往往难以满足其假设条件。此外，MPC的闭环性能与其模型的准确性密切相关。因此，我们引入神经预测器来捕捉数据中缺失的动态特性，从而提高控制器的性能。
 
-\subsection{利用学习到的动力学实现控制器}
+NP-MPC的优化问题如下：
+\begin{equation}
+	\begin{aligned} \label{nmpc}
+		&\operatorname*{minimize}_{\bm{\bar{u}}}& & \sum_{i=0}^{N-1}\left(\bm{\bar{x}}_i^T\bm{Q}\bm{\bar{x}}_i + \bm{\bar{u}}_i^T\bm{R}\bm{\bar{u}}_i\right) + \bm{\bar{x}}_N^T\bm{P}\bm{\bar{x}}_N  \\
+		&\text{subject to}& & \begin{aligned}
+			&\bm{\bar{x}}_{0} = \bm{x}_k, \quad \bm{\bar{x}}_{N} \in \mathcal{X}_f, \\
+			&\bm{\bar{x}}_{i+1} = \bm{f}_{\text{nominal}}(\bm{\bar{x}}_i, \bm{\bar{u}}_i) + \bm{f}_{\text{learned}},
+		\end{aligned} \\
+		&&& \bm{\bar{x}}_i \in \mathcal{X}, \quad \bm{\bar{u}}_i \in \mathcal{U}, \quad \forall i = 0, \ldots, N-1
+	\end{aligned}
+\end{equation}
+其中，$\bm{x}_k$表示四旋翼在时间$k$的状态，$\bm{\bar{x}}_i$和$\bm{\bar{u}}_i$分别是时间$k$的预测状态和控制输入，$N$是预测时域。$\mathcal{X}$、$\mathcal{U}$和$\mathcal{X}_f$分别是状态、控制输入和终端状态的约束集。$\bm{Q}$和$\bm{R}$是状态和控制输入的权重矩阵，$\bm{P}$是终端状态的权重矩阵。$\bm{f}_{\text{nominal}}$是四旋翼的 nominal 动力学，而$\bm{f}_{\text{learned}}$是通过LLS学习得到的动态特性。
+
+该优化问题通过序列二次规划（SQP）求解，并在实时迭代（RTI）方案中使用高斯-牛顿Hessian近似来提高计算效率。这种集成方法旨在通过结合学习到的动态特性，提高控制器的性能和鲁棒性。
 
 
 \section{仿真验证}
