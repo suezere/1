@@ -280,7 +280,7 @@ $y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上�
 	f=\sum_{i=1}^4f_i=c_\mathrm{T}\Omega_i^2
 	\label{2-5}
 \end{equation}
-其中$f_i$表示表示一个旋翼在机体坐标系下旋转产生的升力，与旋翼的转速的平方正相关。$c_\mathrm{T}=1/4\pi^2\cdot\rho D_\mathrm{p}^4C_\mathrm{T}$为螺旋桨的升力系数，大小与其自身的材质、倾斜角等因素有关，$\Omega_i$为
+其中$f_i$表示表示一个旋翼在机体坐标系下旋转产生的升力，与旋翼的转速的平方正相关。$c_\mathrm{T}=1/4\pi^2\cdot\rho D_\mathrm{p}^4C_\mathrm{T}$为螺旋桨的升力系数，其大小与无人机自身的材质、倾斜角等因素有关，$\Omega_i$为
 单个螺旋浆的旋转速度。由于本文采用“X”型气动布局，实际力臂长度是机臂长度的$\sqrt{2}/2$倍，可以得到无人机每个螺旋桨产生的力矩如式(\ref{2-6})所示：
 
 
@@ -314,7 +314,7 @@ $y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上�
 	\label{2-7}
 \end{equation}
 \subsection{四旋翼无人机绳系吊运系统的动力学模型}
-在本文的吊装运输场景中，四旋翼无人机在满足自身飞行需求的同时，还会受到吊装载荷对其作用的拉力干扰，单无人机吊装载荷受力分析如图 \ref{2_2} 所示，其中$\bm{F}$表示无人机的升力，$\bm{G}$表示无人机自身的重力，$\bm{G_0}$表示无人机自身的重力，$\bm{T}$表示载荷对无人机产生的拉力，$\theta$表示系绳与垂直平面之间的夹角。
+在本文的吊装运输场景中，四旋翼无人机在满足自身飞行需求的同时，还会受到吊装载荷对其作用的拉力干扰，单无人机吊装载荷受力分析如图 \ref{2_2} 所示，其中$F$表示无人机的升力，$G$表示无人机自身的重力，$G_0$表示无人机自身的重力，$T$表示载荷对无人机产生的拉力，$\theta$表示系绳与垂直平面之间的夹角。
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=21pc]{picture/2_2.png} 
@@ -335,70 +335,72 @@ $y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上�
 四旋翼无人机绳系吊运系统由载荷相对于地面坐标系的位置、载荷姿态和四旋翼飞行器的姿态来定义。当系绳拉紧时，该系统具有八个自由度，并存在四个自由度的欠驱动。四旋翼无人机和载荷的位置之间的关系为：
 
 \begin{equation}
-	p_Q=p_L-lq,
+	\bm p_Q=\bm p_L-l\bm q
 \end{equation}
-其中$p_Q$、$p_L$分别为四旋翼无人机和载荷的位置，$l$为系绳的长度，$q$表示从四旋翼无人机指向载荷的单位向量。本文采用拉格朗日法来推导运动方程。系统的拉氏量 $\mathcal{L}:T\bar{Q}\to\mathbb{R}$ 定义为$\mathcal{L}=\mathcal{T}-\mathcal{U}$，其中$\mathcal{T}:TQ\to\mathbb{R}$和${\mathcal{U}}:Q\to\mathbb{R}$分别是机械系统的动能和势能，它们的定义如下：
+其中$\bm p_Q$、$\bm p_L$分别为四旋翼无人机和载荷的位置，$l$为系绳的长度，$\bm q$表示从四旋翼无人机指向载荷的单位向量。本文采用拉格朗日法来推导运动方程。系统的拉氏量 $\mathcal{L}:T\bar{Q}\to\mathbb{R}$ 定义为$\mathcal{L}=\mathcal{T}-\mathcal{U}$，其中$\mathcal{T}:TQ\to\mathbb{R}$和${\mathcal{U}}:Q\to\mathbb{R}$分别是机械系统的动能和势能，它们的定义如下：
 
 \begin{equation}
-		\begin{aligned}
-	\mathcal{T}=\frac{1}{2}m_{Q}v_{Q}\cdot v_{Q}+\frac{1}{2}m_{L}v_{L}\cdot v_{L}+\frac{1}{2}\langle\hat{\Omega},\widehat{J_{Q}\Omega}\rangle\\
-	\mathcal{U}=m_{Q}ge_{3}\cdot x_{Q}+m_{L}ge_{3}\cdot x_{L}
-		\end{aligned}
+\begin{aligned}
+	\mathcal{T}=\frac{1}{2}&m_{Q}\bm v_{Q}\cdot \bm v_{Q}+\frac{1}{2}m_{L}\bm v_{L}\cdot \bm v_{L}+\frac{1}{2}\langle\hat{\bm  \omega_Q},\widehat{\bm J_{Q}\bm  \omega_Q}\rangle\\
+	&\mathcal{U}=m_{Q}g\bm e_{3}\cdot \bm x_{Q}+m_{L}g\bm e_{3}\cdot \bm x_{L}
+\end{aligned}
 	\label{2-8}
 \end{equation}
-其中$v_Q$、$v_L$分别为无人机和载荷的速度，$m_Q$、$m_L$分别为无人机和载荷的质量，$\langle\cdot,\cdot\rangle $表示内积，$\hat{.}$被定义为使得 $\hat{x}y=x\times y$对于所有$x,y\in\mathbb{R}^3$恒成立。在本文中，$\lambda_m(\cdot)$和 $\lambda_n(\cdot)$ 分别表示矩阵的最小和最大特征值。系统的动力学满足拉格朗日原理：
+其中$\bm v_Q$、$\bm v_L$分别为无人机和载荷的速度，$m_Q$、$m_L$分别为无人机和载荷的质量，$\langle\cdot,\cdot\rangle $表示内积，$\hat{.}$被定义为使得 $\hat{\bm x}\bm y=\bm x\times \bm y$对于所有$\bm x,\bm y\in\mathbb{R}^3$恒成立，$\omega_Q$为四旋翼飞行器在机体坐标系下的角速度。在本文中，$\lambda_m(\cdot)$和 $\lambda_n(\cdot)$ 分别表示矩阵的最小和最大特征值。系统的动力学满足拉格朗日原理：
 \begin{equation}
-	\delta\int_0^\tau\mathcal{L} dt+\int_0^\tau\left(\langle W_1,\hat{\tau}\rangle+W_2\cdot f\bm{R}_{b-e}e_3\right) dt=0
+	\bm \delta\int_0^\tau\mathcal{L} dt+\int_0^\tau\left(\langle \bm W_1,\hat{\bm \tau}\rangle+\bm W_2\cdot f\bm{R}_{b-e}\bm e_3\right) dt=0
 	\label{2-10}
 \end{equation}
-其中$W_{1}=R^{T}\delta R$， $ W_{2}=\delta x_{Q}=\delta x_{L}-l\delta q$是变分向量场，满足以下条件：
+其中$\bm W_{1}=\bm R_{b-e}^{T}\bm \delta \bm R_{b-e}$是定义在旋转空间上的变分向量场， $ \bm W_{2}=\bm \delta \bm x_{Q}=\bm \delta \bm x_{L}-l\bm \delta q$是定义在平移空间上的变分向量场，两者共同描述刚体系统中的变分动态，并且满足以下条件：
 \begin{equation}
 	\begin{aligned}
-		\delta q = \xi \times& q, \quad \xi \in \mathbb{R}^{3} \ \mathrm{s.t.} \ \xi \cdot q = 0 \\
-		\delta \dot{q} &= \dot{\xi} \times q + \xi \times \dot{q} \\
-		\delta R& = R \hat{\eta}, \quad \eta \in \mathbb{R}^{3} \\
-		&\delta \hat{\Omega} = \widehat{\hat{\Omega} \eta} + \hat{\dot{\eta}}
-	\end{aligned}
+	&\bm \delta \bm q = \bm \xi \times \bm q\\
+	\bm \delta \dot{\bm q} = &\dot{\bm \xi} \times \bm q + \bm \xi \times \dot{\bm q} \\
+	\bm \delta\bm  R&_{b-e} = \bm R_{b-e} \hat{\bm \eta} \\
+	\bm \delta \hat{\bm  \omega _Q}& = \widehat{\hat{\bm  \omega_Q} \bm \eta} + \hat{\dot{\bm \eta}}
+\end{aligned}
 \end{equation}
-其中$\delta q$为二维球面上的变分，$\delta R$为三维空间上的变分。
-由于(\ref{2-10})对所有可能的变化都是满足的，因此得到了带有系绳载荷的四旋翼无人机的运动方程为：
+其中$\bm \delta \bm q$为二维球面上的变分，$\bm \delta \bm R$为三维空间上的变分。
+向量 $\bm{\xi} \in \mathbb{R}^3$ 是一个三维实数向量，满足 $\bm{\xi}$ 与向量 $\bm{q}$ 的点积为零，即$\bm{\xi}$ 垂直于 $\bm{q}$，向量 $\bm{\eta} \in \mathbb{R}^3$ 是一个三维实数向量。
+
+由于(\ref{2-10})对所有可能的变化都是满足的，因此得到带有系绳载荷的四旋翼无人机的运动方程为：
 
 \begin{equation}
 	\begin{aligned}
-		&\dot{x}_{L}=v_{L}, \\
-		(m_Q+m_L)(\dot{v}_L+ge_3)& =(q\cdot fRe_3-m_Ql(\dot{q}\cdot\dot{q}))q, \\
-		&\dot{q}=\omega\times q, \\
-		m_{Q}l \dot{\omega}&=-q\times fRe_{3}, \\
-		&\dot{R}=R\hat{\Omega}, \\
-		J_{Q}\dot{\Omega}+&\Omega\times J_{Q}\Omega=M.
+		&\dot{\bm x}_{L}=\bm v_{L} \\
+		(m_Q+m_L)(\dot{\bm v}_L+g\bm e_3)& =(\bm q\cdot f\bm R\bm e_3-m_Ql(\dot{\bm q}\cdot\dot{\bm q}))\bm q \\
+		&\dot{\bm q}=\bm \omega_L\times \bm q \\
+		m_{Q}l \dot{\bm \omega_L}&=-\bm q\times f\bm R\bm e_{3} \\
+		&\dot{\bm R_{b-e}}=\bm R_{b-e}\hat{\bm  \omega_Q} \\
+		\bm J_{Q}\dot{\bm  \omega_Q}+&\bm  \omega_Q\times \bm J_{Q}\bm  \omega_Q=\bm \tau
 	\end{aligned}
 \end{equation}
 
-上述动力学可以写成标准形式$\dot{X}_n=f_n(X_n)+g_n(X_n)u$，其中$X_n = \{x_L,q,R,v_L,\omega,\Omega\}$是系统的状态，$u = { f，M }$是系统的输入。
+上述动力学可以写成标准形式 $\dot{\bm X}_n=\bm f_n(\bm X_n)+\bm g_n(\bm X_n)\bm u$ ，其中 $\bm X_n = \{\bm x_L,\bm q,\bm R_{b-e},\bm v_L,\bm \omega_L,\bm \omega_Q\}$ 是系统的状态，$\bm u = \left[f,\bm \tau \right]$是系统的输入。
 \subsubsection{系绳张力为零时的动力学模型}
-当缆绳张力趋于零时，四旋翼飞行器和吊挂载荷作为独立系统，载荷处于自由落体状态。这种情况下的动力学模型是：
+当系绳张力趋于零时，四旋翼飞行器和吊挂载荷作为独立系统，载荷处于自由落体状态。在这种情况下，四旋翼无人机绳系吊运系统的运动方程为：
 \begin{equation}
 	\begin{aligned}
-		&\dot{x}_{L}=v_{L}\\
-		\quad m_{L}(&\dot{v}_{L}+ge_{3})=0\\
-		&\dot{x}_{Q}=v_{Q}\\
-		\quad m_{Q}(\dot{v}_{Q}&+ge_{3})=fRe_{3}\\
-		&\dot{R}=R\hat{\Omega}\\
-		\quad J_{Q}\dot{\Omega}+&\Omega\times J_{Q}\Omega=M
-	\end{aligned}
+	&\dot{\bm x}_{L}=\bm v_{L}\\
+	\quad m_{L}(&\dot{\bm v}_{L}+g\bm e_{3})=0\\
+	&\dot{\bm x}_{Q}=\bm v_{Q}\\
+	\quad m_{Q}(\dot{\bm v}_{Q}&+g\bm e_{3})=f\bm R_{b-e}\bm e_{3}\\
+	&\dot{\bm R_{b-e}}=\bm R_{b-e}\hat{\Omega}\\
+	\quad \bm J_{Q}\dot{\bm \Omega}+&\bm \Omega\times \bm J_{Q}\bm \Omega=\bm \tau
+\end{aligned}
 \end{equation}
-上述动力学也可以写成标准形式$\dot{X}_n=f_n(X_n)+g_n(X_n)u$，其中$X_n=\{x_L,x_Q,R,v_L,v_Q,\Omega\}$为状态。
+上述方程也可以写成标准形式$\dot{\bm X}_n=\bm f_n(\bm X_n)+\bm g_n(\bm X_n)\bm u$，其中中$\bm X_n = \{\bm x_L,\bm x_Q,\bm R_{b-e},\bm v_L,\bm v_Q,\bm \omega_b\}$为状态。
 
 \subsubsection{混合系统的动力学模型}
 系绳悬挂载荷的四旋翼飞行器是一个混合系统，因为当缆索中的张力降为零或当张力恢复时松弛的缆索变得绷紧时，动力学会发生切换。混合模型可以写成，
 \begin{equation}
-	\left.\begin{aligned}&\Sigma_{n}\quad:\quad\left\{\begin{array}{ll}\dot{X_n}=f_n(X_n)+g_n(X_n)u,&X_n\notin S_z\\X_z^+=\Delta_{n\to z}(X_n^-),&X_n\in S_z\end{array}\right.\\&\Sigma_{z}\quad:\quad\left\{\begin{array}{ll}\dot{X_z}=f_z(X_z)+g_z(X_z)u,&X_z\notin S_n\\X_n^+=\Delta_{z\to n}(X_z^-),&X_z\in S_n,\end{array}\right.\end{aligned}\right.
+	\left.\begin{aligned}&\Sigma_{n}:\left\{\begin{array}{ll}\dot{\bm X_n}=\bm f_n(\bm X_n)+\bm g_n(\bm X_n)\bm u  &\bm X_n\notin \mathbb{S}_z\\\bm X_z^+=\Delta_{n\to z}(\bm X_n^-)  &\bm X_n\in \mathbb{S}_z\end{array}\right.\\&\Sigma_{z}:\left\{\begin{array}{ll}\dot{\bm X_z}=\bm f_z(\bm X_z)+\bm g_z(\bm X_z)\bm u \ \ &\bm X_z\notin \mathbb{S}_n\\\bm X_n^+=\Delta_{z\to n}(\bm X_z^-) \ &\bm X_z\in \mathbb{S}_n\end{array}\right.\end{aligned}\right.
 \end{equation}
-过渡映射∆n→z是恒等映射，∆z→n被建模为两个物体的非弹性碰撞，保证x ̇ + Q-x ̇ + L = 0。
+其中集合$\mathbb S_z = \{ \bm X_n \mid  T \equiv 0 \}$，$\mathbb S_n = \{ \bm X_z \mid \|\bm x_Q - \bm x_L\| \equiv l, d \|\bm x_Q - \bm x_L\| /dt> 0 \}$，系绳上的张力定义为$T = \|m_L (\ddot{\bm x}_L + g\mathbf{e}_3)\|$，状态转移映射$\Delta_{n\to z}$为单位映射，$\Delta_{z\to n}$为两个物体非弹性碰撞的模拟，并满足条件$\dot{\bm x}_Q^+-\dot{\bm x}_L^+=0$。
 
 \section{多无人机绳系吊运系统的动力学模型}
 在本文中，我们采用三个无人机吊挂载荷的方式来运输载荷。该吊运系统
-由三个四旋翼无人机、三根绳索和一个需要被运输的重物组成。其吊运结构如图 \ref{2_3} 所示，三架无人机保持水平高度一致，无人机之间的相对距离为d。为建
+由三个四旋翼无人机、三根绳索和一个需要被运输的重物组成。其吊运结构如图 \ref{2_3} 所示，三架无人机保持水平高度一致，无人机之间的相对距离为$d$。为建
 立多机吊运系统的动力学模型，本章采用了两个坐标系，即惯性坐标系和机体
 坐标系。
 
@@ -478,7 +480,7 @@ Koopman算子理论的提出为建模方法以及模型线性化方法提供了�
 (2)它通过实时学习线性算子来估计底层动力学，从而消除了对非线性函数进行最小二乘回归的需求，这在一般情况下需要大量数据。
 \begin{figure}[hbt!]
 	\centering
-	\includegraphics[width=28pc]{picture/3_1.png} 
+	\includegraphics[width=34pc]{picture/3_1.png} 
 	\caption{Koopman算子理论} \label{3_1}
 \end{figure}
 \subsection{基于Koopman理论的数据驱动预测}
@@ -794,11 +796,7 @@ $，
 	\label{kk}
 \end{equation}
 
-\begin{figure}[hbt!]
-	\centering
-	\includegraphics[width=26pc]{picture/3_2.png} 
-	\caption{近似Koopman算子引起的局部误差和全局误差} \label{3_2}
-\end{figure}
+
 当 \( n = 1 \) 时，全局误差与局部误差（公式 (\ref{k})）相等。然而需要注意的是，全局误差（公式 (\ref{kk})）并不是局部误差（公式 (\ref{k})）的累积： 
 $
 E_n \neq \sum_{i=1}^n e_i
@@ -833,14 +831,19 @@ $。
 	\[
 	\Vert \bm{E_n} \Vert \le \sum_{i=0}^{n-1}\Vert \hat{\bm{\mathcal{K}}}^i\Vert \cdot \Vert \bm{e}(t_0+(n-i)t_s) \Vert\le \Vert c \Vert \sum_{i=0}^{n-1}\Vert \bm{\mathcal{K}}^i \Vert
 	\]
-	是有界的。因此，预测误差有界。
+	是有界的。即预测误差有界。
 \end{proof}
 
-综上所述，上述定理表明，在满足特定条件下，学习的动力学模型的预测误差在全球范围内是有界的，从而保证了模型的稳定性与预测的准确性。
 
+综上所述，上述定理表明，在满足特定条件下，学习的动力学模型的预测误差在全球范围内是有界的，从而保证了模型的稳定性与预测的准确性。
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=30pc]{picture/3_2.png} 
+	\caption{近似Koopman算子引起的局部误差和全局误差} \label{3_2}
+\end{figure}
 \subsection{基函数的Lipschitz常数约束}
 
-如定理 \ref{error_boundness} 所述，如果基函数 $\bm{\Phi}$ 具有Lipschitz常数时，则预测误差是有界的。为了实现这一目标，本文用光谱归一化（Spectral Normalization, SN）方法来约束基函数 $\bm{\Phi}$ 的Lipschitz常数。
+如定理 \ref{error_boundness} 所述，如果基函数 $\bm{\Phi}$ 具有Lipschitz常数时，则预测误差是有界的。为了实现这一目标，用谱归一化（Spectral Normalization, SN）方法来约束基函数 $\bm{\Phi}$ 的Lipschitz常数。
 
 根据定义，函数 $\rho$ 的Lipschitz常数等于其梯度的最大谱范数，即 $\Vert \rho \Vert_{\text{Lip}} = \sup \sigma (\nabla \rho)$。因此，对于由深度神经网络(\ref{dnn})参数化的基函数 $\bm{\Phi}$，可以通过限制每一层的谱范数来限定其Lipschitz常数。
 
@@ -878,11 +881,12 @@ $。
 综上所述，在深度神经网络的训练过程中，引入谱归一化技术不仅能够确保网络的Lipschitz常数满足特定的约束，还能提高模型的稳定性和泛化能力。这种方法在实现对嵌入函数约束的同时，避免了直接优化Lipschitz常数所带来的计算复杂性，从而为动态系统的学习提供了更加稳健的理论支撑。
 
 
-\subsection{基于学习动力学的控制器实现}
+\subsection{基于数据驱动下的学习动力学的控制器实现}
 
-在本工作中，我们提出了将神经预测器集成到MPC框架中的NP-MPC框架，用于系留无人机系统，如图\ref{illustration_framework}所示。传统的鲁棒MPC虽然考虑了不确定性，但在实际应用中往往难以满足其假设条件。此外，MPC的闭环性能与其模型的准确性密切相关。因此，我们引入神经预测器来捕捉数据中缺失的动态特性，从而提高控制器的性能。
+传统的鲁棒模型预测控制方法虽然能够有效应对系统中的不确定性，但其实际应用往往受到严格假设条件的限制，难以完全满足实际工程需求。此外，模型预测控制的闭环性能在很大程度上依赖于其内部模型的准确性，模型误差可能导致控制效果的下降。
 
-NP-MPC的优化问题如下：
+为了解决这些问题，引入数据驱动预测模型的方法，利用其强大的数据拟合能力捕捉系统中难以建模或缺失的动态特性，从而显著提升控制器的整体性能和鲁棒性。
+对于四旋翼无人机系绳吊运系统来说，使用基于Koopman理论的升维线性系统，对未知有效载荷和残余动力学引起的外力进行建模，捕获得到未知外力和力矩并集成到模型预测控制框架中，系统的模型以及状态和输入约束被考虑在如下形式的优化问题中：
 \begin{equation}
 	\begin{aligned} \label{nmpc}
 		&\operatorname*{minimize}_{\bm{\bar{u}}}& & \sum_{i=0}^{N-1}\left(\bm{\bar{x}}_i^T\bm{Q}\bm{\bar{x}}_i + \bm{\bar{u}}_i^T\bm{R}\bm{\bar{u}}_i\right) + \bm{\bar{x}}_N^T\bm{P}\bm{\bar{x}}_N  \\
@@ -893,11 +897,15 @@ NP-MPC的优化问题如下：
 		&&& \bm{\bar{x}}_i \in \mathcal{X}, \quad \bm{\bar{u}}_i \in \mathcal{U}, \quad \forall i = 0, \ldots, N-1
 	\end{aligned}
 \end{equation}
-其中，$\bm{x}_k$表示四旋翼在时间$k$的状态，$\bm{\bar{x}}_i$和$\bm{\bar{u}}_i$分别是时间$k$的预测状态和控制输入，$N$是预测时域。$\mathcal{X}$、$\mathcal{U}$和$\mathcal{X}_f$分别是状态、控制输入和终端状态的约束集。$\bm{Q}$和$\bm{R}$是状态和控制输入的权重矩阵，$\bm{P}$是终端状态的权重矩阵。$\bm{f}_{\text{nominal}}$是四旋翼的 nominal 动力学，而$\bm{f}_{\text{learned}}$是通过LLS学习得到的动态特性。
+其中，$\bm{x}_k$表示四旋翼在时间$k$时刻的状态，$\bm{\bar{x}}_i$和$\bm{\bar{u}}_i$分别是时间$k$的预测状态和控制输入，$N$是预测时域。$\mathcal{X}$、$\mathcal{U}$和$\mathcal{X}_f$分别是状态、控制输入和终端状态的约束集。$\bm{Q}$和$\bm{R}$是状态和控制输入的权重矩阵，$\bm{P}$是终端状态的权重矩阵。$\bm{f}_{\text{nominal}}$是四旋翼无人机的名义动力学，而$\bm{f}_{\text{learned}}$是通过升维线性系统学习得到的动态特性。
 
-该优化问题通过序列二次规划（SQP）求解，并在实时迭代（RTI）方案中使用高斯-牛顿Hessian近似来提高计算效率。这种集成方法旨在通过结合学习到的动态特性，提高控制器的性能和鲁棒性。
+该优化问题通过序列二次规划（SQP）求解，并在实时迭代（RTI）方案中使用高斯-牛顿海森近似来提高计算效率。这种方法将学习到的动态特性融合到传统的名义模型里，从而提高控制器的性能和鲁棒性，整个算法的框架如图\ref{illustration_framework}所示，
 
-
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=38pc]{picture/3_3.png} 
+	\caption{数据驱动下的非线性模型预测控制框架} \label{illustration_framework}
+\end{figure}
 \section{仿真验证}
 
 
