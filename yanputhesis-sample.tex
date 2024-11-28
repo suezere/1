@@ -396,7 +396,7 @@ $y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上�
 \begin{equation}
 	\left.\begin{aligned}&\Sigma_{n}:\left\{\begin{array}{ll}\dot{\bm X_n}=\bm f_n(\bm X_n)+\bm g_n(\bm X_n)\bm u  &\bm X_n\notin \mathbb{S}_z\\\bm X_z^+=\Delta_{n\to z}(\bm X_n^-)  &\bm X_n\in \mathbb{S}_z\end{array}\right.\\&\Sigma_{z}:\left\{\begin{array}{ll}\dot{\bm X_z}=\bm f_z(\bm X_z)+\bm g_z(\bm X_z)\bm u \ \ &\bm X_z\notin \mathbb{S}_n\\\bm X_n^+=\Delta_{z\to n}(\bm X_z^-) \ &\bm X_z\in \mathbb{S}_n\end{array}\right.\end{aligned}\right.
 \end{equation}
-其中集合$\mathbb S_z = \{ \bm X_n \mid  T \equiv 0 \}$，$\mathbb S_n = \{ \bm X_z \mid \|\bm x_Q - \bm x_L\| \equiv l, d \|\bm x_Q - \bm x_L\| /dt> 0 \}$，系绳上的张力定义为$T = \|m_L (\ddot{\bm x}_L + g\mathbf{e}_3)\|$，状态转移映射$\Delta_{n\to z}$为单位映射，$\Delta_{z\to n}$为两个物体非弹性碰撞的模拟，并满足条件$\dot{\bm x}_Q^+-\dot{\bm x}_L^+=0$。
+其中集合$\mathbb S_z = \{ \bm X_n \mid  T \equiv 0 \}$，$\mathbb S_n = \{ \bm X_z \mid \|\bm x_Q - \bm x_L\| \equiv l, d \|\bm x_Q - \bm x_L\| /dt> 0 \}$，系绳上的张力定义为$T = \|m_L (\ddot{\bm x}_L + g\bm{e}_3)\|$，状态转移映射$\Delta_{n\to z}$为单位映射，$\Delta_{z\to n}$为两个物体非弹性碰撞的模拟，并满足条件$\dot{\bm x}_Q^+-\dot{\bm x}_L^+=0$。
 
 \section{多无人机绳系吊运系统的动力学模型}
 在本文中，我们采用三个无人机吊挂载荷的方式来运输载荷。该吊运系统
