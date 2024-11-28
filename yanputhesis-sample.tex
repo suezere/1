@@ -1684,7 +1684,7 @@ $。
 	\caption{固定位姿消旋耗时\label{Fig.fixdetumb_time}}
 \end{figure*}
 
-\section{本章小结}
+\section{本章总结}
 本章针对复杂外形章动目标极近距离逼近与消旋过程中的位姿轨迹规划问题展开研究。两阶段均采用引导优化的规划框架，并根据二者对轨迹要求的不同对相关方法进行了调整。极近距离逼近阶段轨迹采用FMT*算法计算参考路径，随后对各控制点及轨迹时间进行优化，以给出满足各项约束的速度平滑位姿轨迹，有效减少了无效机动。极近距离消旋阶段为减少轨迹规划耗时，设计PPO算法以给出参考路径，随后对轨迹的控制点进行优化以满足碰撞约束并最大化消旋力矩，通过时间重分配算法保证轨迹速度、加速度可行，保证了消旋轨迹规划耗时满足要求，并极大提升了消旋效率。最后，进行了相关仿真验证，结果表明所提出的方法能在考虑章动目标、服务星复杂外形的前提下，给出安全无碰撞的可行位姿轨迹，实现章动目标的极近距离逼近，相比现有方法能有效减少电磁消旋所需时间。
 
 
@@ -1692,474 +1692,100 @@ $。
 
 \chapter{物理引擎仿真与试验验证}
 \chaptermark{物理引擎仿真与试验验证}
-\section{引言}
-
 %为验证所提出方法的可行性与有效性，本章对章动目标消旋地面实验系统进行了搭建。实验系统主要由目标章动旋转模拟装置、磁场源、机械臂和计算机组成，通过目标章动模拟装置模拟空间目标的章动旋转运动，通过机械臂抓取磁场源模拟服务星的运动。采用不同消旋轨迹进行了多组实验，记录目标角速度变化情况并对结果进行了比较分析。
-为验证所提出方法的可行性与有效性，本章搭建了章动目标电磁消旋地面实验系统并进行了逼近消旋等实验。首先，本章描述了实验系统的整体架构，并对实验系统的软硬件设计进行了介绍；随后，为保证实验的顺利实施，对实验相关参数的确定进行了分析，并对仿真实验环境进行了介绍；最后，本章设计并进行了相关消旋实验，对实验数据进行了对比分析。
+为了验证上述提出方法的可行性与有效性，通过物理引擎仿真和试验验证两个方面对设计的算法效果进行评估。在物理引擎仿真方面，利用Gazebo、Drake和MuJoCo几种主流仿真平台，搭建四旋翼无人机绳系吊运系统的动力学和环境模型，并模拟其飞行轨迹与响应特性。在试验验证方面，基于实际硬件搭建四旋翼无人机绳系吊运系统，并在室内场景中完成一系列试验，验证仿真模型的准确性与适用性。本章通过仿真与试验的结合，为四旋翼无人机绳系吊运系统的设计与优化提供科学依据。
+\section{物理引擎仿真系统介绍}
 
-\section{消旋实验系统设计搭建}
-本文中章动目标电磁消旋地面实验系统需实现的主要功能包括目标的章动旋转控制、目标角速度的准确测量、磁场源位置与姿态运动控制。为实现上述功能，本章搭建地面实验系统如图\ref{fig:exp_sys}所示，可分为启旋与测量模块、章动模拟模块和磁场源运动控制模块，主要包括目标章动旋转模拟装置、磁场源、Kuka机械臂、计算机等。通过目标章动模拟装置中的电机控制目标章动旋转，通过角速度传感器测量目标转速，通过机械臂抓取磁场源执行给定轨迹。下面对系统中涉及的软硬件进行介绍。
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 5.4in]{picture/experiment_sys.png}
-	\caption{电磁消旋实验系统组成}
-	\label{fig:exp_sys}
-\end{figure}
+为实现对四旋翼无人机绳系吊运系统的深入分析和验证，选用了几种主流物理仿真平台，包括Gazebo、Drake和MuJoCo。这些平台具有高效的物理建模和仿真功能，可以满足复杂动力学系统建模及仿真精度的需求。本节将对仿真系统的构建流程、各平台的特点及其在仿真中的具体应用进行详细介绍。
 
-\subsection{目标章动旋转模拟装置设计}
-目标章动旋转模拟装置结构如图\ref{Fig.tar_sys_all}所示，可分为上方的目标章动模拟模块和下方的启旋与测量模块。
-\begin{figure*}[htbp]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/target_sys_solidwork.png}
-			\caption{ }
-			\label{fig:tar_sys_solidwork}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/target_sys.pdf}
-			\caption{ }
-			\label{fig:tar_sys}
-		\end{subfigure}
-	\end{minipage}
-	\caption{目标章动旋转模拟装置设计图\label{Fig.tar_sys_all}}
-\end{figure*}
+\subsection{仿真平台的选型与特点}
+Gazebo是一款广泛应用于机器人学领域的开源仿真工具，其优势在于支持复杂的三维环境建模和多传感器模拟。通过与Robot Operating System (ROS) 的集成，可以方便地实现机器人算法的验证和硬件交互仿真。对于四旋翼无人机仿真，Gazebo能够通过插件实现气动力、重力以及绳系约束的精确建模。
 
-启旋与测量模块外部采用铝合金板支撑，保证结构刚度的同时避免被磁化影响实验效果。铝合金板两侧加工有螺纹孔，可横向安装铝合金板为所需设备提供支撑。该模块中所安装的设备包括转动电机、离合器、角速度传感器，通过离合器连接电机轴和主传动轴；转动电机带动目标章动模拟模块旋转；通过角速度传感器对目标章动模拟装置角速度进行高频测量。
+Gazebo 是一个非常常用的开源机器人仿真平台，尤其在与ROS集成方面非常出色，常用于工业级别的仿真研究。
 
-章动模拟模块采用尼龙板支撑，并使用尼龙螺栓、螺母固定，避免模块旋转时外壳激发涡电流影响实验效果。章动模拟模块内部安装有锂电池、STM32控制板和章动控制电机，通过锂电池为STM32控制板和章动控制电机供电；STM32控制板向章动控制电机驱动器发送脉冲信号以控制电机转动；章动控制电机依次通过减速器、梅花联轴器、同步带、同步轮等结构与模拟目标连接，带动模拟目标旋转以改变其章动角。
-
-模拟目标采用常见的立方星外形，加工材质为铝合金，主体为边长$25\ (\mathrm{cm})$，厚度$2\ (\mathrm{mm})$的立方壳，两侧安装有长$37.5\ (\mathrm{cm})$，宽$10\ (\mathrm{cm})$的模拟太阳帆板。目标总长为$1\ (\mathrm{m})$，质量为$2.73\ (\mathrm{kg})$，转动惯量为$\mathrm{diag}(0.0651,0.0448,0.069)\ (\mathrm{kg\cdot m^2})$。目标安装处通过亚克力板与其余部件绝缘隔离，避免目标表面涡电流外溢耗散，影响实验效果。
-
-目标章动旋转模拟装置中的各传动轴均安装于陶瓷轴承中，从而减小摩擦阻力并保证其大小基本恒定，以便于对摩擦力矩进行拟合。
-
-目标章动旋转模拟装置的工作流程为：闭合离合器，开启转动电机带动章动模拟模块旋转，通过角速度传感器测量目标角速度，到达指定转速后，断开离合器使章动模拟模块自由旋转，通过章动控制电机改变模拟目标章动角，记录角速度传感器所测得的目标角速度变化情况。本装置可模拟空间章动目标的两轴旋转，模拟目标的运动区域与本文所构建的角动量定向型安全区域基本吻合，可用于验证本文方法的有效性。装置中使用的主要设备的选型与参数介绍如下。
-
-\subsubsection{转动电机选型}
-装置中的章动模拟模块总重量为$6.6\ (\mathrm{kg})$，沿旋转轴方向转动惯量约为$0.191\ (\mathrm{kg\cdot m^2})$，综合考虑负载大小、电磁消旋效果、结构强度等因素，确定模拟目标的设计转速为$3.3\pi\ (\mathrm{rad/s})$，即$100\ (\mathrm{rpm})$。根据上述参数，选择无刷电机GM6020作为装置转动电机，如图\ref{fig:wushuamotor}所示，该电机使用磁场定向控制算法，可通过闭环速度控制精确调节电机转速，最大转速为$320\ (\mathrm{rpm})$，额定扭矩为$1.2\ (\mathrm{N \cdot m})$，额定转速下的调速范围为$0\sim 132\ (\mathrm{rpm})$，可以满足装置需求。
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 2.5in]{picture/wushuamotor.jpg}
-	\caption{无刷电机实物图}
-	\label{fig:wushuamotor}
-\end{figure}
-
-\subsubsection{离合器选型}
-章动模拟模块到达指定转速后需与转动电机轴分离，进入自由旋转状态，为尽可能减小自由旋转状态下章动模拟模块所受阻力，选择干式单片电磁离合器连接章动模拟模块与转动电机轴，其工作电压为$24$伏，通过串口继电器控制通断，最大转矩为$1.1\ (\mathrm{N \cdot m})$，如图\ref{fig:diancilihe}所示。所选电磁离合器主要由制动片、预压式弹片、电磁线圈等构成，接入直流电源后将产生磁场使制动片和弹片吸合，通过二者间的摩擦力传递扭矩，断开电流后制动片将与弹片分离，避免转动电机对章动模拟模块的自由转动产生干扰。
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width = 2.5in]{picture/diancilihe.jpg}
-	\caption{电磁离合器实物图}
-	\label{fig:diancilihe}
-\end{figure}
-
-\subsubsection{章动控制电机参数选型}
-本装置中模拟目标章动旋转时，由于两侧帆板的质心高度不同，将产生回转力矩$T_{r}$，如图\ref{fig:huizhuan_tor}所示。立方壳体偏心距离较小，可忽略其影响，则$T_{r}$可由下式计算：
-\begin{equation}
-	\begin{aligned}
-		\label{Tor_r}
-		T_{r}&=2F_{r}l\sin(\theta)\\
-		&=m_{p}\omega^{2}l^{2}\sin(2\theta)
-	\end{aligned}
-\end{equation}
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 2.5 in]{picture/huizhuan_tor_pic.png}
-	\caption{回转力矩示意图}
-	\label{fig:huizhuan_tor}
-\end{figure}
-所使用的模拟帆板质量$m_{p}=0.18\ (\mathrm{kg})$，质心距转动中心距离$l=0.32\ (\mathrm{m})$，目标的设计转速为$3.3\pi\ (\mathrm{rad/s})$，根据\autoref{Tor_r}，在$\theta=45\ (\mathrm{^\circ})$时回转力矩最大，$T_{r,\max}=1.98\ (\mathrm{N \cdot m})$。
-
-为抵消目标回转力矩，实现目标章动角控制，选择带行星齿轮减速器的步进电机作为章动控制电机，如图\ref{Fig.stepmotor_reducer}所示。其中步进电机的额定转矩为$0.42\ (\mathrm{N \cdot m})$，行星齿轮减速器的减速比为$1:10$，装置中同步带轮的传动比为$1.43$，故该电机可提供$6.01\ (\mathrm{N \cdot m})$的保持力矩，能够满足装置需要。
-\begin{figure*}[htbp]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/stepmotor.jpg}
-			\caption{ }
-			\label{fig:stepmotor}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/reducer2.jpg}
-			\caption{ }
-			\label{fig:reducer}
-		\end{subfigure}
-	\end{minipage}
-	\caption{步进电机及减速器实物图\label{Fig.stepmotor_reducer}}
-\end{figure*}
-
-\subsubsection{角速度传感器选型}
-为更好的验证电磁消旋效果，需对目标角速度进行高频、高精度的测量。常见的角速度传感器包括陀螺仪型角速度传感器、霍尔式编码器、电容式编码器和光电编码器等，其中陀螺仪型角速度传感器分辨率与测量频率较低，霍尔式编码器和电容式编码器易受电磁干扰，不适用于本实验，因此选择一体式增量光电编码器作为角速度传感器，如图\ref{Fig.anglecoder}所示。该编码器搭配2500线码盘，输出双相脉冲信号，经编码器采集卡处理后可获得角速度信息，最高分辨率为$0.036\ (\mathrm{^\circ})$，最高允许转速为$5000\ (\mathrm{rpm})$。
-\begin{figure*}[htbp]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/anglecoder.png}
-			\caption{ }
-			\label{fig:anglecoder}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/anglecoder_pic.jpg}
-			\caption{ }
-			\label{fig:anglecoder_pic}
-		\end{subfigure}
-	\end{minipage}
-	\caption{光电编码器结构图\label{Fig.anglecoder}}
-\end{figure*}
-
-\subsection{磁场源运动控制模块设计}
-磁场源运动控制模块包括磁场源和机械臂系统，通过机械臂抓取永磁体执行逼近及消旋轨迹。为获得理想的消旋效果，磁场源应提供足够强度的磁场，装置中磁场源采用钕铁硼永磁体，牌号为N48，使用多片定制磁体组合而成，直径为$100\ (\mathrm{mm})$，总厚度为$50\ (\mathrm{mm})$，表面磁场强度可达$4200\ (\mathrm{Gs})$。磁体夹具使用PA10尼龙制作，如图\ref{Fig.sys_magnet}所示，二者总质量为$3.8\ (\mathrm{kg})$。
-\begin{figure*}[htbp]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/magnet.jpg}
-			\caption{ }
-			\label{fig:magnet}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/magnet_holder.jpg}
-			\caption{ }
-			\label{fig:magnet_holder}
-		\end{subfigure}
-	\end{minipage}
-	\caption{永磁体实物图\label{Fig.sys_magnet}}
-\end{figure*}
-
-机械臂采用Kuka iiwa 14 R820系统，其系统组成主要包括机械臂本体、控制柜与示教器，可通过计算机连接控制柜对机械臂进行离线编程，通过示教器完成程序的载入与运行，实现机械臂的在线控制。
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width = 3.55in]{picture/kuka.png}
-%	\caption{Kuka iiwa机械臂}
-%	\label{fig:robot_arm}
-%\end{figure}
-
-机械臂本体负载为$14\ (\mathrm{kg})$，臂展为$820\ (\mathrm{mm})$，具有七个可控关节，从底部到末端依次记为$A_{1}\sim A_{7}$，末端关节带有法兰盘，可连接各种负载。机械臂各关节速度、关节角范围限制如表\ref{Table_robot_arm}所示。
-\begin{table}[!htb]
-	\caption{机械臂关节参数限制范围}
-	\label{Table_robot_arm}
-	\centering
+学习难度：中等偏高。Gazebo 的学习曲线比 Webots 更陡，尤其是如果要结合ROS使用。不过，Gazebo 的灵活性和扩展性较好，可以支持复杂的仿真。
+教程和资源丰富度：Gazebo 作为 ROS 生态的一部分，有非常多的教程、文档和社区支持。大量的在线资源和开源库可以为用户提供帮助，特别是与ROS相关的项目。
+力控传感器支持：Gazebo 支持精确的物理仿真，可以仿真力/扭矩传感器等，且可以进行高保真的力控仿真。适合用于研究中对力控有较高要求的仿真项目。
+优势：支持复杂的物理仿真，尤其在动态模拟和力控制方面的精度较高。强大的ROS集成能力适合与机器人相关的研究和开发。
+不足：对于初学者而言，学习成本较高，配置和调试较为复杂。尤其是力控仿真，可能需要深入了解 Gazebo 的物理引擎（如 ODE 或 Bullet）及相关参数的调整。
 	
-	\begin{tabularx}{\textwidth}{CCC}
-		\toprule
-		% after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
-		关节 							      & 最高转速 					& 关节角范围 					  \\
-		\midrule
-		$A_{1}$ 	&	$85\ (\mathrm{^\circ/s})$	    	&	$-170\sim 170\ (\mathrm{^\circ})$		\\
-		$A_{2}$ 	&	$85\ (\mathrm{^\circ/s})$	    	&	$-120\sim 120\ (\mathrm{^\circ})$		\\
-		$A_{3}$ 	&	$100\ (\mathrm{^\circ/s})$	    	&	$-170\sim 170\ (\mathrm{^\circ})$			\\
-		$A_{4}$ 	&	$75\ (\mathrm{^\circ/s})$	    	&	$-120\sim 120\ (\mathrm{^\circ})$			\\
-		$A_{5}$ 	&	$130\ (\mathrm{^\circ/s})$	    	&	$-170\sim 170\ (\mathrm{^\circ})$	 \\
-		$A_{6}$ 	&	$135\ (\mathrm{^\circ/s})$	    	&	$-120\sim 120\ (\mathrm{^\circ})$  \\
-		$A_{7}$ 	&	$135\ (\mathrm{^\circ/s})$	    	&	$-175\sim 175\ (\mathrm{^\circ})$		\\
-		\bottomrule
-	\end{tabularx}
-\end{table}
 
-\subsection{软件系统设计}
-为整合各设备，减少操作步骤，基于$C\#$开发章动目标模拟装置控制软件，软件与各设备间的通讯连接如图\ref{fig:software_connet}所示。
-\begin{figure}[hbt]
-	\centering
-	\includegraphics[width = 3.55in]{picture/software_connet.png}
-	\caption{章动目标模拟装置控制软件通讯连接图}
-	\label{fig:software_connet}
-\end{figure}
+MuJoCo以其高效的动力学计算和稳定的仿真性能而闻名，特别适用于高频实时控制场景。在四旋翼无人机仿真中，MuJoCo可用于快速评估系统在不同环境约束下的动态响应。其支持的柔性物体建模功能对绳系的模拟具有优势。
 
-其中，软件与编码器采集卡间采用RS485通讯协议传递角速度信息，传输频率为$50\ (\mathrm{Hz})$。软件与无刷电机间采用CAN通讯，通讯周期为$10\ (\mathrm{ms})$，设定无刷电机速度后其内置的驱动器将对电机速度进行闭环控制。软件通过串口协议与串口继电器通讯，控制离合器通断。步进电机与STM32控制卡位于章动模拟模块中，需随模拟目标一起旋转，无法直接与计算机连接，若采用滑环连接则会引入较大的摩擦阻力，故软件与STM32控制板间采用蓝牙通讯，通过STM32控制板发送脉冲信号控制步进电机运动。
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width = 5.4in]{picture/software_panel.png}
-	\caption{章动目标模拟装置控制软件界面图}
-	\label{fig:software_panel}
-\end{figure}
+MuJoCo 是一个高性能的物理引擎，专注于多关节系统的动力学仿真，特别适合机器人和肌肉控制的研究。它以其快速精确的物理仿真能力而闻名。
 
-软件具有角速度信息采集与显示、电磁离合器通断控制、无刷电机控制、步进电机控制、数据导出等功能，其界面如图\ref{fig:software_panel}所示。其工作流程为：选择对应串口连接各设备后，软件在界面下方实时绘制目标角速度变化曲线，通过对应按钮控制电磁离合器闭合，设定无刷电机速度，当光电编码器返回的目标角速度到达设定的期望值后，软件将控制电磁器断开，控制步进电机运动使模拟目标开始章动旋转，实验完成后，将目标角速度变化情况导出至Excle文件中。
+学习难度：较高。MuJoCo 是专注于动力学和接触仿真的引擎，虽然功能强大，但对初学者的门槛较高，尤其是在使用其API或结合其他系统时。
+教程和资源丰富度：相对较少。虽然 MuJoCo 的文档和一些示例相对齐全，但其社区规模较小，在线教程和用户讨论较少，学习资源不如 Gazebo 和 Webots 丰富。
+力控传感器支持：MuJoCo 的物理仿真极为精确，能够非常准确地模拟力控场景，尤其在处理接触力、扭矩和关节动态方面表现出色。适合做高精度的力控仿真。
+优势：物理仿真精度非常高，尤其适合复杂、多关节力控仿真。性能表现优异，特别是在处理接触和动力学仿真时。
+不足：学习难度较大，文档和社区资源相对较少，适合有物理仿真和机器人动力学基础的研究者使用。与ROS的集成不如Gazebo顺畅。
 
 
-\subsection{系统操控框架}
-章动目标电磁消旋地面实验系统操控框架如图\ref{fig:sys_box}所示，完整实验流程为：计算机控制无刷电机通过电磁离合器带动章动模拟模块旋转，控制机械臂抓取永磁体执行逼近轨迹；通过编码器采集目标角速度，检测目标角速度到达指定值后，断开电磁离合器，通过步进电机改变模拟目标章动角，控制机械臂执行消旋轨迹，目标角速度降至$0\ (\mathrm{^\circ/s})$后，实验流程结束，记录目标角速度变化情况。
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 5.4in]{picture/sys_box.png}
-	\caption{系统操控框架图}
-	\label{fig:sys_box}
-\end{figure}
+\subsection{动力学与环境模型的构建}
+在仿真平台中，首先对四旋翼无人机及其绳系吊运系统进行动力学建模，包括无人机主体的刚体模型、旋翼的气动力模型，以及绳系的柔性力学模型。接着，在环境建模中引入以下关键要素：
+
+绳系的约束建模：模拟绳索在受力、摆动及碰撞等情况下的动力学行为。
+外部环境扰动：包括风场、气流湍动等干扰因素，用以测试控制算法的鲁棒性。
+目标物体：模拟无人机需吊运的目标物体，其质量、重心及几何特性对吊运系统的稳定性影响显著。
+\subsection{仿真系统的功能验证与优化}
+在完成模型构建后，通过对以下典型任务场景的仿真，验证系统的功能及性能：
+
+轨迹跟踪：设定预定轨迹，测试无人机在不同载荷条件下的轨迹跟踪能力及控制精度。
+抗干扰能力：施加随机扰动，评估无人机对环境变化的响应特性。
+稳定性分析：在复杂任务环境中，模拟绳系摆动的动态特性，验证算法的适用性与稳定性。
+通过对上述平台的综合使用和比对分析，仿真系统为后续试验验证及算法优化提供了可靠的基础和参考数据。
+
+\subsection{低保真度Drake仿真引擎}
+Drake 是麻省理工大学联合丰田研究院制作的一个强大的开源物理仿真和控制工具，专注于动力学建模、优化和精确控制仿真平台，尤其适合复杂机器人系统和高自由度系统的研究。与simulink相似，Drake 强调模块化设计，并提供灵活的接口和先进的数学工具，是学术研究和工业应用的理想选择。同时，其高效的优化工具可以辅助实现控制算法的验证与性能优化。
+
+Drake 的学习曲线较陡，主要因为其功能复杂且面向高级用户。用户需要一定的动力学建模、优化理论以及编程基础（尤其是C++和Python）来高效使用 Drake 的工具集。
+
+Drake 提供了较为详细的官方文档和教程，同时还包含多种示例代码。然而，与更广泛应用的仿真工具（如Gazebo）相比，社区规模较小，第三方教程和用户案例相对较少。
+
+Drake 具备高精度的动力学仿真能力，能够模拟复杂多体系统中的力、扭矩和接触力场景。尤其在研究机器人柔性控制和优化控制的场景中，Drake 提供了独特的建模和分析工具，非常适合力控仿真任务。
 
 
-\section{仿真实验环境构建与验证}
-本文所提出的轨迹规划方法适用对象为携带磁场源且可自由移动的服务星，与地面实验系统中使用机械臂控制磁场源运动有所不同，故所给出的轨迹仅为机械臂末端的轨迹。为保证实验的安全性，避免给出的轨迹超出机械臂工作范围或执行轨迹时机械臂其他关节与目标发生碰撞，在进行实际实验前，本章先构建了仿真实验环境以验证轨迹的可行性。
+本节讨论尝试使用 Drake 验证多无人机悬挂负载系统中控制系统稳定性的一些挑战。选择 Drake 是因为它是一个流行的开源工具箱，专注于接触力学仿真并提供许多预实现的控制器。主要结果的视频概述可以在这里找到：https://youtu.be/NR5nPiXb5wU，而相应的代码可以在这里找到：https://github.com/hmer101/6.8210_drake_slung_load。请注意，视频清晰地展示了该项目的三个组成部分：差分平坦度、状态调节和轨迹稳定。这里仅讨论状态调节和轨迹稳定组件（如图 3.11 所示），因为微分平坦度模块主要由合作者开发。
+Drake 工具箱提供了三个核心组件，用于实现高效、灵活的动力学系统建模：
+(1)动力学系统建模
+Drake 的核心功能是允许用户通过大量的动力学组件构建系统模型。这些组件包括传感器、执行器、估计器和控制器等模块，能够满足复杂系统建模的需求。
 
-如前所述，将机械臂末端关节与磁体视为本文研究场景中的服务星，根据定义建立对应坐标系并通过所提出的GMMCRA法分别构建地面实验系统中的模拟目标和服务星的安全区域如图\ref{fig:sys_safezone}所示，其中$\mathcal{A} = \{ {O_\mathcal{A}},{{\boldsymbol{\hat a}}_x},{{\boldsymbol{\hat a}}_y},{{\boldsymbol{\hat a}}_z}\} $为机械臂基座坐标系。
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 3.55in]{picture/sys_safezone.png}
-	\caption{地面实验系统模拟目标与服务星安全区域}
-	\label{fig:sys_safezone}
-\end{figure}
+(2)多体运动学与动力学
+Drake 支持多种运动学模型格式的解析，能够对多体系统进行运动学仿真，并支持接触建模。无论是刚体还是柔性体，Drake 都能提供精确的动力学计算。
 
-为避免装置发生干涉，实验中目标最大章动角设定为$45\ (\mathrm{^\circ})$，消旋过程中缓慢变为$90\ (\mathrm{^\circ})$，该方向的角速度极小可以忽略，即认为目标角速度始终沿转动电机轴方向，且目标质心位置恒定，故不同章动角下服务星的最优消旋位姿和消旋轨迹可以预先计算。服务星起始相对位姿设定为${{\boldsymbol{x}}_\mathcal{B}^{\mathcal{L}}}(0)=[0.618,0,0.684]^{\top}\ (\mathrm{m})$和${{\boldsymbol{\varphi}}_\mathcal{B}^{\mathcal{L}}}(0)=[\pi/2,\pi/2,\pi/2]^{\top}\ (\mathrm{rad})$，通过所提出的轨迹规划方法给出逼近及消旋切换轨迹如图\ref{Fig.exp_tra}所示。
-\begin{figure*}[htbp]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/exp_proximity_tra.eps}
-			\caption{ }
-			\label{fig:exp_proximity_tra}
-		\end{subfigure}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/exp_detumble_tra.eps}
-			\caption{ }
-			\label{fig:exp_detumble_tra}
-		\end{subfigure}
-	\end{minipage}
-	\caption{地面实验逼近与消旋轨迹\label{Fig.exp_tra}}
-\end{figure*}
+(3)数学规划求解
+提供了统一的接口，支持多个数学规划求解器。这使得 Drake 能够处理复杂的优化问题，包括路径规划、控制优化和系统稳定性分析。
 
-考虑到机械臂工作空间有限，为确保轨迹可执行，同时避免章动目标与机械臂碰撞，需确定一合适的相对距离${{\boldsymbol{x}}_\mathcal{L}^{\mathcal{A}}}$，使得服务星轨迹始终在机械臂工作空间内，且机械臂执行轨迹时不与章动目标发生碰撞。通过机械臂正向运动学给出机械臂基座坐标系下的末端工作空间，根据待执行轨迹与模拟目标尺寸确定目标与机械臂底座间的距离为${{\boldsymbol{x}}_\mathcal{L}^{\mathcal{A}}}=[0.562,0,-0.75]^{\top}\ (\mathrm{m})$，如图\ref{Fig.arm_workplace}所示，其中橙黄色曲面表示机械臂的末端工作空间，紫色曲线为机械臂末端轨迹。
-\begin{figure*}[htbp]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/workplace1.eps}
-			\caption{ }
-			\label{fig:workplace1}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/workplace2.eps}
-			\caption{ }
-			\label{fig:workplace2}
-		\end{subfigure}
-	\end{minipage}
-	\caption{机械臂工作空间计算\label{Fig.arm_workplace}}
-\end{figure*}
-
-给定${{\boldsymbol{x}}_\mathcal{L}^{\mathcal{A}}}$后，通过坐标变换将逼近及消旋轨迹转化为机械臂基座坐标系下的末端位姿轨迹。由于iiwa 14机械臂存在冗余自由度，无法直接根据末端位姿确定唯一的关节配置，采用文献\oldcite{7dofarm}中的方法，固定臂形角为$0\ (\mathrm{^\circ})$，则通过逆运动学可得末端轨迹对应的机械臂关节角。机械臂关节角及其转速变化如图\ref{fig:arm_angle}所示，可以看出，机械臂各关节角及其转速满足表\ref{Table_robot_arm}中的参数限制，可通过机械臂抓取服务星执行逼近及消旋轨迹。
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 3.55in]{picture/arm_angle.eps}
-	\caption{切换构型策略中机械臂关节角与关节转速变化}
-	\label{fig:arm_angle}
-\end{figure}
+在进行系统建模时，通常使用仿真描述格式（SDF）文件。SDF 文件结构化地描述了模型的各个部分，能够清晰地定义系统的动力学属性，如图 3.12 所示。在 Drake 中，SDF 文件是建模的主要工具之一，通过定义传感器、执行器和多体结构等实现精确的仿真建模。
 
 
-类似的，给出固定构型和固定位姿消旋策略进行对比，其中固定构型的消旋策略仍采用GMMCRA法确定安全位姿，固定位姿的消旋策略采用椭球形安全区域，所使用的目标椭球安全区域参数为${\boldsymbol{E}}{{\boldsymbol{s}}} = \mathrm{diag}({0.58^2},{0.54^2},{0.54^2})\ (\mathrm{m})$。固定构型和固定位姿策略下相对位姿示意图如图\ref{Fig.pose_posifix}所示。
-\begin{figure*}[htbp]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/posefix.eps}
-			\caption{ }
-			\label{fig:posefix}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/posifix.eps}
-			\caption{ }
-			\label{fig:posifix}
-		\end{subfigure}
-	\end{minipage}
-	\caption{固定构型及固定位姿消旋策略实验仿真示意图\label{Fig.pose_posifix}}
-\end{figure*}
-
-
-固定构型消旋策略中机械臂关节角变化如图\ref{fig:arm_angle_posefix}所示，固定位姿消旋策略中机械臂关节角从$A_{1}$至$A_{7}$依次为$[91.8,13.6,0,-107.4,-72.2,116.9,0]\ (^\circ)$，均满足参数限制。
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 3.55in]{picture/arm_angle_posefix.eps}
-	\caption{固定构型策略中机械臂关节角与关节转速变化}
-	\label{fig:arm_angle_posefix}
-\end{figure}
-
-\section{电磁消旋实验设计与结果分析}
-完成章动目标电磁消旋地面系统搭建与仿真实验验证后，本节对章动旋转目标开展逼近与消旋实验并与其它方法进行对比以验证本文方法的可行性与有效性，包括切换构型消旋实验、固定构型消旋实验、固定位姿消旋实验和空白对照实验，各实验的流程与结果介绍如下。
-
-\subsection{切换构型消旋实验}
-将目标初始章动角设为$45\ (^\circ)$，通过无刷电机驱动模拟目标旋转至$3.3\pi\ \rm{(rad/s)}$，机械臂抓取永磁体执行逼近轨迹，到达当前最优消旋位姿后，断开电磁离合器，模拟目标开始自由旋转，消旋过程中目标章动角以$0.5\ \rm{(^\circ/s)}$的速率增大，机械臂根据目标章动角的变化执行消旋轨迹以切换至新的最优消旋位姿，直至目标角速度降至$0\ (\mathrm{^\circ/s})$，实验过程中机械臂与目标的状态变化如图\ref{fig:change_exp}所示。
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 5.4in]{picture/change_exp.png}
-	\caption{切换构型消旋实验场景}
-	\label{fig:change_exp}
-\end{figure}
-
-第0秒时永磁体处于设定的初始位置，随后机械臂抓取永磁体执行逼近轨迹，第20秒到达当前最优消旋位姿，开始对目标进行消旋；第20秒到第61秒磁体处于平行构型下，根据目标章动角变化调整自身位姿；第61秒时最优消旋位姿变为垂直构型，机械臂抓取永磁体执行消旋切换轨迹，第92秒到达新的最优消旋位姿；第92秒至191秒磁体处于垂直构型下，根据目标章动角变化调整自身位姿，直至目标角速度降为$0\ \rm{(^\circ/s)}$。
-
-\begin{figure*}[htb]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/changepose_errbar.eps}
-			\caption{ }
-			\label{fig:changepose_errbar}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/changepose_boxline.eps}
-			\caption{ }
-			\label{fig:changepose_boxline}
-		\end{subfigure}
-	\end{minipage}
-	\caption{切换构型消旋实验结果\label{Fig.changepose_result}}
-\end{figure*}
-
-为提高实验的可靠性，进行了数次重复实验，通过光电编码器记录目标角速度变化，根据重复实验结果对消旋时间的标准差进行计算，其误差带图如图\ref{Fig.changepose_result}所示。从图中可知，切换构型消旋实验中，平均消旋时间为$170.8\ \rm{(s)}$，多次实验的消旋时间差异约为$3\ \rm{(s)}$，实验结果具有较好的稳定性。产生波动的主要原因是实验中机械臂抓取永磁体跟踪最优消旋位姿时存在一定偏差，同时装置中的章动旋转模块存在一定偏心，每次实验中轴承摩擦力存在微小差异，使得最终消旋时间存在一定波动。
-
-
-\subsection{固定构型消旋实验}
-固定构型消旋实验中设定目标转速为$3.3\pi\ \rm{(rad/s)}$，章动角以$0.5\ \rm{(^\circ/s)}$的速率增大，采用所提出的GMMCRA法确定安全位姿，与切换构型消旋实验一致。但此实验中永磁体始终位于平行构型，目标章动角变化时，仅改变永磁体与目标间的相对距离以避免发生碰撞，实验过程中机械臂与目标的状态变化如图\ref{fig:posefix_exp}所示。
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 5.4in]{picture/posefix_exp.png}
-	\caption{固定构型消旋实验场景}
-	\label{fig:posefix_exp}
-\end{figure}
-
-第0秒到第20秒机械臂抓取永磁体逼近目标到达最优消旋位置，开始对目标进行消旋；第20秒到第214秒间永磁体始终位于平行构型下，随目标章动角变化调整自身位姿，直至消旋过程结束。
-
-类似的，进行了多次重复实验，消旋时间误差带如图\ref{Fig.posefix_result}所示，平均消旋时间为$193.7\ \rm{(s)}$。
-\begin{figure*}[htbp]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/posefix_errbar.eps}
-			\caption{ }
-			\label{fig:posefix_errbar}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/posefix_boxline.eps}
-			\caption{ }
-			\label{fig:posefix_boxline}
-		\end{subfigure}
-	\end{minipage}
-	\caption{固定构型消旋实验结果\label{Fig.posefix_result}}
-\end{figure*}
-
-\subsection{固定位姿消旋实验}
-固定位姿消旋实验中模拟目标转速设定为$3.3\pi\ \rm{(rad/s)}$，章动角以$0.5\ \rm{(^\circ/s)}$的速率增大，与固定构型消旋实验一致，但此实验采用椭球形安全区域，章动目标始终位于椭球形安全区域中，因此实验中机械臂不需要移动，永磁体与目标间的相对位置和姿态保持不变，实验过程如图\ref{fig:posifix_exp}所示。
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 5.4in]{picture/posifix_exp.png}
-	\caption{固定位姿消旋实验场景}
-	\label{fig:posifix_exp}
-\end{figure}
-
-进行了多次重复实验，并对消旋时间误差带进行计算，固定位姿消旋实验中消旋时间误差带如图\ref{Fig.posifix_result}所示，平均消旋时间为$207.4\ \rm{(s)}$。
-\begin{figure*}[htb]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/posifix_errbar.eps}
-			\caption{ }
-			\label{fig:posifix_errbar}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/posifix_boxline.eps}
-			\caption{ }
-			\label{fig:posifix_boxline}
-		\end{subfigure}
-	\end{minipage}
-	\caption{固定位姿消旋实验结果\label{Fig.posifix_result}}
-\end{figure*}
-
-\subsection{空白对照实验}
-地面实验中立方形目标转动时具有较大的空气阻力，为排除空气阻力和轴承等部件间的摩擦力对实验结果的影响，以更好的比较不同消旋策略的效果，对不施加磁场情况下章动目标的自由旋转时间进行了测试，实验中模拟目标的初始转速仍设定为$3.3\pi\ \rm{(rad/s)}$，章动角以$0.5\ \rm{(^\circ/s)}$的速率增大，与上述实验保持一致，实验过程如图\ref{fig:freerota_exp}所示。
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width = 5.4in]{picture/freerota_exp.png}
-	\caption{自由旋转实验场景}
-	\label{fig:freerota_exp}
-\end{figure}
-
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/free_errbar.eps}
-			\caption{ }
-			\label{fig:free_errbar}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/free_boxline.eps}
-			\caption{ }
-			\label{free_boxline}
-		\end{subfigure}
-	\end{minipage}
-	\caption{空白对照实验结果\label{Fig.free_result}}
-\end{figure*}
-
-多次重复得空白对照实验中目标角速度变化情况如图\ref{Fig.free_result}所示，模拟目标平均自转时间为$220.6\ \rm{(s)}$。
+该文件由 Drake 的多体运动学组件解释，给出如图 3.13 所示的系统。然后，该系统通过动力系统组件中的一些模块进行增强，包括螺旋桨和 LQR 控制器（第 3.4.2 节中讨论）。
 
 
 
-\subsection{实验结果对比与分析}
-不同消旋策略下目标角速度变化对比如图\ref{fig:detumtime_compare}所示，从图中可以看出，由于固定位姿消旋策略采用了较为保守的椭球形安全区域，永磁体距章动目标较远，能产生的消旋力矩很小，目标角速度变化曲线几乎与自由旋转实验的角速度曲线重合。固定构型消旋策略采用本文所提出的基于混合高斯模型的安全区域，在目标章动角较大时，对应的最优消旋位姿与切换构型消旋策略的一致，图中两种策略的前半段角速度变化曲线基本重合。当目标章动角继续变小时，切换构型的消旋策略机动至新的构型，机动过程中消旋力矩略小于固定构型消旋策略，到达新的构型后目标角速度下降速度明显高于固定构型的消旋策略，与理论分析一致。
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width = 3.55in]{picture/detumtime_compare.eps}
-	\caption{不同实验中目标角速度变化}
-	\label{fig:detumtime_compare}
-\end{figure}
+\subsection{中保真度Gazebo仿真引擎}
+尽管之前讨论的仿真器有各自的应用场景，但它们无法轻松模拟多无人机吊挂载荷的动力学和控制行为。一些专门的仿真器可以实现这一点，例如 RotorTM，但通常是为特定目的而构建的。为了准确测试视觉载荷姿态估计算法，需要一个能够生成视觉数据的仿真器。此外，仿真器生成的数据必须在真实动力学和控制场景的背景下，以保证与真实世界中观测到的视觉数据尽可能接近。这不仅可以确保在实际测试前验证整个系统的稳定性和安全性，还可以提高算法的转移能力。
 
-为获得无阻力干扰情况下的消旋时间，对目标角速度曲线进行差分得不同实验中目标所受外力矩。实验中目标所受外力矩主要包括目标转动受到的空气阻力矩、电磁消旋力矩和轴承产生的摩擦力矩。其中，空气阻力矩与角速度的平方成正比，电磁力矩与角速度成正比，所使用陶瓷轴承的摩擦力距基本为常数，故以目标角速度为自变量，采用二次函数对实验外力矩进行拟合，结果如图\ref{fig:exp_tor}所示。其中，切换构型实验中由于永磁体相对构型发生变化，前后力矩有明显变化，对其进行了分段拟合。
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width = 3.55in]{picture/exp_tor.eps}
-	\caption{不同实验中目标所受外力矩拟合曲线}
-	\label{fig:exp_tor}
-\end{figure}
+本节介绍了一个基于开源工具构建的多无人机吊挂载荷仿真平台。该平台专为载荷状态估计算法设计，并着重于实现从仿真到真实户外场景的顺利过渡。用于修改 PX4 的 Gazebo 仿真模块以适配此平台的自定义模型可在 GitHub 链接 找到，相关仿真飞行的视频结果可在 YouTube 链接 中查看。附录 C 汇总了本文其余部分提到的所有测试视频结果，便于读者参考。
 
-获得各实验中力矩变化情况后，将各消旋实验中的目标所受外力矩减去自由旋转实验中外力矩，即可获得不同消旋实验中电磁消旋力矩随目标角速度的变化情况。设定计算步长为$0.1\ \rm{(s)}$，目标初始角速度为$3.3\pi\ \rm{(rad/s)}$，角速度降至$1.5\ \rm{(^\circ/s)}$时完成消旋，无空气阻力和摩擦力矩时不同消旋策略的消旋耗时如图\ref{fig:exp_simu_detum_time}所示。由图可知，切换构型消旋策略耗时$1374\ \rm{(s)}$，固定构型消旋策略起始时刻消旋效率与切换构型消旋策略一致，但当目标章动角增大时，该构型下安全距离增大，导致消旋效率急剧下降，总耗时$6803\ \rm{(s)}$；固定位姿消旋策略由于距离较远，能产生的消旋力矩较小，消旋耗时$17710\ \rm{(s)}$。各消旋策略的消旋耗时与第四章的消旋仿真结果基本吻合，表明相比传统的电磁消旋方法，基于本文方法的切换构型消旋策略能有效缩短消旋时间，提高电磁消旋效率，有助于空间电磁消旋的实际应用。
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width = 3.55in]{picture/exp_simu_detum_time.eps}
-	\caption{各消旋策略理想条件下消旋耗时}
-	\label{fig:exp_simu_detum_time}
-\end{figure}
+Gazebo 平台概述
+Gazebo 是一个通用的开源仿真框架，它将刚体物理引擎（例如本文使用的开放动力学引擎 ODE）与图形用户界面（GUI）相结合，并提供大量插件用于仿真各种机器人组件（如电机、螺旋桨的空气动力、接触力学、刚体力学、传感器噪声和摄像头等）。类似于 Drake，Gazebo 能够接收以 SDF 文件定义的多体机器人（如图 3.16 所示），并与之进行动力学交互。
 
-\subsection{实验环境与空间环境差异分析}
-由于地面实验环境与实际空间环境不同，章动目标电磁消旋地面实验系统中目标的尺寸、所受外部干扰、服务星的运动方式等与空间真实情况间存在一定差异，对其分析讨论如下：
+缆绳建模
+由于 Gazebo 和许多其他机器人仿真器只能模拟刚体，因此柔性缆绳动力学需要通过多段刚体链接进行建模（如图 3.17 所示）。影响该缆绳模型精确度的五个关键参数包括：
 
-\begin{enumerate}
-	
-	\item 受磁场源、机械臂等设备的尺寸限制，地面实验系统中的模拟目标为实际空间目标的缩比模型，其材质为铝合金，电导率与空间目标基本一致，地面实验中空气的相对磁导率近似为1，即与空间环境基本一致。若地面实验结果能够验证电磁涡流消旋的有效性，则说明电涡流法能对空间旋转目标进行消旋。
-	
-	\item 地面实验中模拟目标无最小惯量轴方向的转动，角动量轴固定，与空间目标章动运动存在一定差异。但本文方法确定的最优消旋位姿对空间章动目标施加的消旋力矩始终平行于目标角动量轴，由仿真结果可知，章动目标消旋过程中角动量轴方向基本恒定。同时，地面实验系统通过电机改变模拟目标章动角，使得模拟目标安全区域与空间章动目标基本一致，地面实验中服务星需执行的极近距离逼近与消旋轨迹与空间电磁消旋场景中基本一致，对极近距离消旋任务的实施有一定的参考意义。
-	
-	\item 与空间环境不同，地面实验中旋转的模拟目标将受到轴承的摩擦阻力与空气阻力，模拟目标的角速度将逐渐减小。因此地面实验中设置了模拟目标自由旋转的对照组实验，用于估计模拟目标转动过程中所受的阻力大小，进而获得地面实验中模拟目标所受的电磁消旋力矩大小，以验证本文方法的有效性，并对空间电磁消旋任务的耗时进行估计。
-	
-	\item 地面实验中采用七自由度机械臂抓取磁场源以模拟服务星的运动，本文中假定空间中的服务星采用连续动力推进，故地面实验中轨迹可行即可保证轨迹的连续性、平滑度满足要求，但空间环境中服务星动力学、最大驱动力与地面实验中不同，需调整服务星的速度、加速度限制使本文规划方法给出的轨迹满足服务星驱动力限制。
+链接数量：缆绳中包含的刚性圆柱体数量。更多的圆柱体能更接近真实缆绳，但会增加计算资源消耗。经验表明，使用 10 个链接可以在精度和计算资源之间实现平衡。
+关节类型：选择哪种类型的关节（如球铰、滑动关节或万向节）。由于连续缆绳没有刚性关节，最优选项是约束最少的球铰。然而，考虑到阻尼系数对缆绳动力学的影响，实际使用的关节是万向节。
+关节阻尼系数：描述关节运动中的能量损失速率。阻尼系数过大会减少能量传递，而阻尼系数过小则可能导致持续振荡甚至不稳定。研究表明，阻尼系数的最佳值为 0.01 N·s/m，这是允许的最小非零值。阻尼值低于此（即无阻尼）会导致振荡失控，而高于此则会削弱预期的运动传递效果。
+该仿真平台结合了高效的动力学建模和视觉数据生成，适用于多无人机吊挂载荷系统的研究与验证。
 
-\end{enumerate}
+\subsection{高保真度MuJoCo仿真引擎}
+\section{试验验证系统介绍}
+试验验证系统主要分为硬件环境配置和软件环境配置两部分，
+\section{试验系统介绍}
 
+\section{本章总结}
 
-\section{本章小结}
-%为验证所提出方法的可行性与有效性，本章对章动目标消旋地面实验系统进行了搭建。实验系统主要由目标章动旋转模拟装置、磁场源、机械臂和计算机组成，通过目标章动模拟装置模拟空间目标的章动旋转运动，通过机械臂抓取磁场源模拟服务星的运动。采用不同消旋轨迹进行了多组实验，记录目标角速度变化情况并对结果进行了比较分析。
-基于前文提出的章动目标极近距离逼近与消旋策略，本章对章动目标电磁消旋地面实验系统进行了设计，对系统中各设备进行了选型分析，并对系统软硬件进行了整合搭建，实现了空间章动目标的两轴转动模拟以及磁场源的位姿控制。根据实验中的模拟目标与磁场源的尺寸，基于第三章提出的GMMCRA法构建了安全区域与避撞约束，并根据第四章提出的极近距离逼近与消旋轨迹规划方法给出了磁场源的运动轨迹。将磁场源位姿轨迹转化为机械臂关节角，并在仿真环境中验证了机械臂轨迹的安全性和可行性后，本章开展了不同消旋策略下的电磁消旋实验，实验结果表明，基于GMMCRA法的安全约束有效可行，且精度相比传统约束有明显提高，为复杂外形目标的极近距离逼近奠定了基础；所提出的极近距离逼近与消旋轨迹规划方法能给出安全可行的位姿轨迹，且消旋效率相比传统方法大幅提升。
 
 \cleardoublepage
 
