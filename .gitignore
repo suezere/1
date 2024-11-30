@@ -3,6 +3,7 @@
 *.bbl
 *.blg
 *.glo
+*.cls
 *.ist
 *.log
 *.out
