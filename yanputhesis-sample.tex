@@ -90,33 +90,49 @@ A data-driven research on tethered hoisting \\ control of unmanned aerial vehicl
 }
 %%-----------------------------------------------------------------------------%
 \begin{abstract}                                            % 中文摘要开始
-    近年来人类航天事业高速发展，各类航天活动使得空间大型非合作目标数量大幅增加，占用了宝贵的轨道资源，也严重威胁了轨道安全。受残余角动量和重力梯度等太空摄动力影响，非合作目标通常存在高速翻滚运动，使现有移除手段如机械臂、飞网、飞爪等难以实施。因此，有必要先对目标进行消旋操作以将其角速度降低至容许范围。基于安培力的电磁涡流消旋具有可行性高、适用范围广、无额外工质消耗等优势，已得到广泛关注。
+    凭借优异的垂直起降能力和高机动性，四旋翼无人机在军事和民用领域得到了广泛应用。在工业巡检和物流运输等领域中，利用四旋翼无人机开展空中吊运任务，不仅能够有效应对复杂的地面环境，还可以替代传统机械设备完成物资搬运和投放等工作。绳系无人机凭借其灵活性、通用性、简便性等优势，逐渐成为无人机运输领域的新兴研究热点。然而，由于无人机本身是一个欠驱动控制系统，加之携带载荷的系绳吊挂结构，使得其运动特性更加复杂。在多无人机系统中，吊挂载荷的质量、尺寸不都是完全规则的，系统内不确定系绳拉力对无人机稳定飞行造成影响。因此，无人机绳系吊运系统的稳定控制是一个值得研究的具有挑战性的复杂问题。
     
-    为实施电磁涡流消旋操作，服务星需携带磁场源，通过调整与章动目标间的相对位置和姿态对目标施加合适的磁场。相关理论表明，电磁消旋力矩正比于磁场强度的平方，而磁场强度随距离衰减快，导致消旋力矩也迅速衰减。为获得期望的消旋效率，服务星应尽可能靠近章动目标，这使得碰撞风险大大增加。为保证电磁涡流消旋操作的安全，同时最大化提升消旋效率，本文开展下述研究：
+近年来，数据驱动方法因其能够避免复杂系统高昂的建模成本、适应未知环境和动态变化、实现自主优化等特点，逐渐成为控制领域的重要方法。与传统的基于模型的控制方法相比，数据驱动控制不依赖精确的物理模型，能够直接从数据中学习控制策略，具有更强的适应性、灵活性和优化能力，特别适用于复杂、高维、不确定或动态变化的系统。
+
+本文将探讨数据驱动控制在无人机绳系吊运系统中的应用，重点研究单无人机吊装载荷的高精度跟踪与多无人机协同稳定控制问题，并通过物理引擎仿真和试验验证其有效性。基于以上研究框架，本文的具体研究内容如下：
+
+首先推导了无人机绳系吊运系统的动力学模型。从单个无人机出发，基于牛顿-欧拉法建立了单个四旋翼飞行器的动力学方程，并通过拉格朗日法推导出了单个无人机吊装载荷的混合动力学模型并进行了简化。对于多无人机绳系吊运系统，基于拉格朗日法方程求解了系统的动力学模型，并推导了在载荷状态未知情况下的简化动力学模型。
+
+针对单无人机吊装载荷中的不确定非线性项干扰问题，提出了一种基于数据驱动的控制框架，用于四旋翼飞行器在激进飞行条件下的绳系吊挂载荷控制。受Koopman算子理论启发，设计损失函数并通过深度神经网络进行学习，将有效载荷及无人机自身空气动力产生的力和扭矩建模为一个升维的显式线性动力系统，并通过Lipschitz常数从理论上保证了预测误差的界限，显着提高了预测模型的准确性；将学习得到的动力学模型与无人机的名义动力学系统相结合形成了完整的系统模型，并应用到非线性模型预测控制框架中，验证了方案的有效性。
+
+为了实现多无人机协同吊装系统的稳定控制，结合上述数据驱动的模型预测控制，自动调整系统的模型预测控制器并解决各无人机系绳上拉力分配问题。开发了一种分布式策略梯度算法。采用多层感知网络在线生成自适应归一化超参数，以闭环方式有效地训练这些深度神经网络，直接从轨迹跟踪误差中学习自适应模型预测控制的权重，提高了系统训练时的稳定性和跟踪性能；通过分析系绳上的张力，在多无人机协同吊装系统数据驱动控制方法的基础上提出了一种基于优化的系绳拉力分配方法，在保持系统稳定的同时对编队构型进行优化。
+
+最后，搭建了无人机绳系吊运系统的物理引擎仿真平台和实物试验平台对算法进行了验证。在仿真中，通过多种开源物理引擎对系统进行建模并进行了对比，结果表明，设计的数据驱动控制算法能够有效实现系统对期望轨迹的精确跟踪；在实物试验中，提出了系统的总体设计方案，并进一步细化了器件选型和机构设计，试验结果也验证了算法的有效性。
+
+综上所述，本文对无人机绳系吊运载荷进行了全面的研究，建立了单无人机和多无人机系统的动力学模型，对模型进行了进一步简化；利用了数据驱动方法对单无人机吊装载荷的不确定非线性项干扰进行预测，并补偿到非线性模型预测控制中；设计了一种基于数据驱动的神经网络学习自适应参数，并结合基于优化的系绳拉力分配方法用于多无人机协同吊装搬运系统的稳定控制；搭建了多个物理引擎和真实试验并对所提出算法进行了验证。
+
     
-    针对现有避碰方法保守性大、判定精度不足的问题，引入混合高斯模型构建了任意外形姿态稳定物体的精确安全区域，并通过全运动周期包络，构建了任意外形章动旋转目标的角动量定向安全区域；进而，提出基于混合高斯模型的碰撞危险度，对航天器间碰撞风险大小进行了定量描述；通过仿射变换与合理放缩等获得了服务星与目标之间的碰撞危险度阈值，实现了两任意外形物体间的准确碰撞判定，为极近距离消旋操作的安全实施提供了必要支撑。
-    
-    针对磁场强度衰减快、远距离消旋效率低的问题，通过规划极近距离逼近与消旋轨迹，极大提高了章动目标的电磁消旋效率。极近距离逼近阶段和极近距离消旋阶段位姿轨迹规划均采用引导优化的框架。在极近距离逼近阶段，使用霍尔顿序列实现相对位置和姿态数据的低差异采样。基于该采样结果，利用快速行进树算法给出渐近最优的参考逼近路径，并通过优化路径点与时间分配使逼近轨迹高阶平滑且满足避碰约束；在极近距离消旋阶段，章动目标状态逐渐变化，对期望位姿进行更新以避免发生碰撞，并最大化消旋力矩。设计梯度搜索算法，实现无碰撞参考转移路径的实时计算，并对其进行优化使电磁消旋效率最大化。
-    
-    为验证上述方法的有效性，搭建了章动目标电磁消旋地面实验系统。其中，消旋目标为带太阳帆板的立方星模型，使用步进电机改变目标的章动角，通过无刷电机和电磁离合器实现目标的启旋与自由旋转，采用光电编码器获得目标角速度；磁场源采用永磁体，安装在Kuka机械臂的末端。将永磁体和机械臂末端关节视为服务星，驱动机械臂以模拟空间实际卫星的运动。使用本文方法为章动目标和服务星建立安全区域，给出逼近及消旋阶段位姿轨迹，并转换为机械臂关节角。通过仿真验证其安全性后，进行了章动目标逼近与电磁消旋试验，并与使用椭球形安全区域、轴向安全走廊等传统方法的电磁消旋效率进行了对比，结果表明本文所提出方法可实现章动目标的极近距离逼近与消旋，消旋效率具有明显提升。            %
     \begin{keywords}                                        % 中文关键词开始
-        电磁涡流消旋 \sep 空间翻滚目标 \sep 碰撞避免\sep 航天器近距离操作\sep 消旋实验系统                   %
+        无人机运输 ，  数据驱动控制， 模型预测控制， 模型自适应控制  ， 物理引擎与试验                   %
     \end{keywords}                                          % 中文关键词结束
 \end{abstract}                                              % 中文摘要结束
 %%-----------------------------------------------------------------------------%
-\begin{engabstract}                                         % 英文摘要开始
-%    \noindent \blindtext                                    %
-    In recent years, the rapid advancement of human space exploration activities has significantly increased the number of large non-cooperative targets in space, occupying valuable orbital resources and posing a serious threat to orbital safety. Due to the effects of residual angular momentum and space perturbations such as gravity gradients, non-cooperative targets often exhibit high-speed tumbling motion, rendering existing removal methods such as manipulators, tethered space nets, and grippers impractical. It is imperative to perform de-tumbling operations on these targets first to reduce their angular velocity to the permissible range. The eddy current de-tumbling method based on Ampère force has attracted much interest due to its practicability, feasibility, and sustainability. 
-    
-    To perform eddy current de-tumbling operation, the servicing spacecraft needs to carry a magnetic field source and apply an appropriate magnetic field by altering the relative distance and orientation with respect to the target. The eddy current de-tumbling torque is proportional to the square of the magnetic field intensity, nevertheless, the magnetic field intensity decays rapidly as the distance increases, which results in a swift decay of the de-tumbling torque as well. To reach the desired de-tumbling efficiency, the servicing spacecraft is supposed to approach the tumbling target as closely as possible, thereby significantly increasing the risk of collision. In order to ensure the safety of the eddy current de-tumbling operation while maximizing de-tumbling efficiency, this paper undertakes the following research:
-    
-    To address the issues of conservatism and insufficient accuracy in the existing collision avoidance methods, this study introduces the Gaussian mixture model to construct a precise keep-out zone for the attitude-stabilized object of arbitrary shape. Additionally, an inertial-oriented keep-out zone for the tumbling target is constructed through the calculation of swept volume. Subsequently, a collision incidence based on the Gaussian mixture model is introduced to quantitatively describe the magnitude of collision risk between spacecrafts. The collision incidence's threshold is determined through affine transformations and appropriate scaling, enabling accurate collision detection between two arbitrarily shaped objects, which provides essential support for the secure implementation of ultra-close range de-tumbling operations.
-    
-    To address the issues of fast decay of magnetic field and low de-tumbling efficiency at distant ranges, this study plans the ultra-close range proximity and de-tumbling trajectories, which significantly improves the de-tumbling efficiency. The trajectories in the ultra-close range proximity stage and ultra-close range de-tumbling stage are planned within the guided optimization framework. In the ultra-close range proximity stage, the Halton sequence is utilized to obtain the low-discrepancy samples of relative pose. Based on these samples, the Fast Marching Tree algorithm is employed to provide an asymptotically optimal reference proximity path, which is further optimized to ensure smoothness and adherence to constraints. In the ultra-close range de-tumbling stage, as the tumbling target's state gradually changes, the desired pose is updated to avoid collisions and maximize de-tumbling torque. A gradient-guided search algorithm is designed to achieve the in-time calculation of a collision-free reference transfer path, which is then optimized to maximize the de-tumbling efficiency.
-    
-    To validate the effectiveness of the proposed approachs, a tumbling target eddy current de-tumbling ground experimental system is built. The tumbling target is a cubic satellite model with solar panels, a stepper motor is utilized to change its nutation angle, a brushless motor and an electromagnetic clutch are used to achieve the target's rotational movement, an optical encoder is used to measure the angular velocity. A permanent magnet serves as the magnetic field source, mounted at the end of a Kuka robotic arm. Treating the magnet and the end of the robotic arm as the servicing spacecraft, the robotic arm is manipulated to simulate the motion of the in-orbit spacecraft. The keep-out zones for both the target and the servicing spacecraft are established using the aforementioned method. Pose trajectories for the proximity and de-tumbling stages are planned and translated into joint angles of the robotic arm. After verifying the safety in the simulation environment, ultra-close range proximity and eddy current de-tumbling experiments for tumbling target were conducted. Comparisons of the de-tumbling efficiency with traditional methods such as the ellipsoidal keep-out zone and the safe corridor are presented. The results suggested the feasibility of the proposed de-tumbling strategy, demonstrating its ability to significantly reduce the time required for de-tumbling missions.
+\begin{engabstract}                                         
+	Unmanned aerial vehicles (UAVs), known for their excellent vertical take-off and landing capabilities and high maneuverability, are widely used in both military and civilian applications. In industrial inspection and logistics, these UAVs are employed for aerial lifting tasks. They can efficiently handle complex ground environments and replace traditional mechanical equipment for material transport and delivery. Tethered-UAV systems, with their flexibility, versatility, and simplicity, have gradually become a hot research topic in the field of UAV transportation research. However, UAVs are inherently underactuated systems, and the addition of a tethered load complicates their motion characteristics. In multi-UAV systems, the mass and size of the suspended payload are not all completely regular, and the uncertainty of the tether pull within the system has an impact on the stable flight of the UAV. Therefore, stabilizing the control of tethered-UAV systems is a complex and challenging problem that warrants further investigation.
+		
+	In recent years, data-driven methods have become a key approach in control systems. They offer advantages such as avoiding the high cost of modeling complex systems, adapting to unknown environments, and enabling autonomous optimization. Unlike traditional model-based control methods, data-driven control does not rely on precise physical models. It learns control strategies directly from data. This approach offers better adaptability, flexibility, and optimization. It is especially suitable for complex, high-dimensional, uncertain, or dynamically changing systems.
+	
+	This paper explores the application of data-driven control in tethered-UAV systems. It focuses on high-precision tracking for a single tethered-UAV systems and the cooperative stabilization control for multi-tethered-UAV systems. The effectiveness of the proposed methods is verified through both physics engine simulations and real-world experiments. Based on the above research framework, the specific research content of this paper is as follows:
+	
+	First, the dynamic model of the tethered-UAV system is derived. Starting from a single UAV, he kinetic equations of the single UAV are developed based on the Newton-Euler method, and a hybrid kinetic model for a single tethered-UAV systems is derived and simplified by the Lagrange method. For multi-tethered-UAV systems, the dynamics model of the system is modeled based on the Lagrange method, and a simplified dynamics model is derived for the case where the payload state is unknown.
+	
+	A data-driven control framework based on the uncertain nonlinear term interference problem in single tethered-UAV systems is proposed for tethered-UAV systems control of a UAV under aggressive flight conditions. Inspired by the Koopman operator theory, we design a loss function and use a deep neural network to model the forces and torques generated by the payload and the UAV's aerodynamic forces. This model is treated as an explicit lifted linear system in elevated dimensions. The Lipschitz constant is theoretically employed to bound the prediction error, significantly improving the accuracy of the model. The learned dynamical model is combined with the UAV's nominal dynamical system to form a complete system model. This model is then applied within a nonlinear model predictive control framework to verify the scheme's effectiveness.
+	
+	In order to realize the stabilization control of multi-tethered-UAV systems, the data-driven model predictive control described above is combined to automatically adjust the model predictive control parameters of the system and to solve the problem of tension distribution on the tethers of each UAV. A distributed strategy gradient algorithm is developed. Adaptive normalized hyperparameters are generated online using multilayer perceptual networks, and these deep neural networks are effectively trained in a closed-loop manner to learn the weights of adaptive model predictive control directly from the trajectory tracking error, which improves the stability and tracking performance of the system during training. By analyzing the tension on the tether, an optimization-based tethering-tension distribution method is proposed on the basis of the data-driven control method of multi-tethered-UAV systems. tension distribution method to optimize the formation configuration while maintaining system stability.
+	
+	Finally, a physical engine simulation and real-world experiments of tethered-UAV systems are built to verify the algorithm. In the simulation, the system is modeled and compared by a variety of open-source physics engines, and the results show that the designed data-driven control algorithm can effectively realize the system's accurate tracking of the desired trajectory. In the real-world experiments, the overall design scheme of the system is proposed and the device selection and mechanism design are further refined. Test results validate the effectiveness of the algorithm.
+	
+	In conclusion, this paper provides a comprehensive study of the tethered-UAV system. The dynamical models for both single tethered-UAV systems and multi-tethered-UAV systems are established and further simplified. A data-driven approach is used to predict the uncertain nonlinear disturbances in a single tethered-UAV systems, which are then compensated in the nonlinear model predictive control. An adaptive parameter learning method based on a data-driven neural network is designed, combined with an optimization-based tether tension distribution method, for the stable control of multi-tethered-UAV systems. Multiple physical engine simulations and real-world experiments are carried out to validate the proposed algorithm.
+	
+   
+   
     \begin{engkeywords}                                     % 英文关键词开始
-        Eddy current detumbling \ensep Space tumbling targets \ensep Collision avoidance \ensep Spacecraft close range operation \ensep De-tumbling experimental system                 %
+        UAV Transportation \ensep Data-driven Control \ensep Model Predictive Control \ensep Model Reference Adaptive Control \ensep Physics Engine and Experiments         %
     \end{engkeywords}                                       % 英文关键词结束
 \end{engabstract}                                           % 英文摘要结束
 %%-----------------------------------------------------------------------------%
@@ -241,9 +257,9 @@ $$\begin{aligned}\boldsymbol{R}_{b-e}&=\bm{R}_{e-b}^\mathrm{T}\\&=\begin{bmatrix
 
 (2)四旋翼无人机的质量、螺旋桨阻力系数和转动惯量等基础参数默认不变；
 
-(3)四旋翼无人机总保持对称结构，其几何中心与重心位置一致；
+(3)四旋翼无人机总保持对称结构，其几何中心与重心位置一致。
 
-(4)四旋翼无人机只受重力和螺旋桨拉力影响，其中重力沿$o_ez_e$轴正方向，螺旋桨拉力沿$o_bz_b$轴负方向。
+
 
 运动学方程描述了无人机位置与速度以及速度和角速度之间的关系，其运动学方程可以表示为：
 
@@ -321,43 +337,36 @@ $y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上�
 	\caption{单无人机吊装载荷受力分析} \label{2_2}
 \end{figure}
 
-在推导对四旋翼无人机绳系吊运系统的动力学模型之前，先做了如下假设：
-
-(1)多无人机协同吊装系统所吊挂的载荷被视为刚体； 
-
-(2)无人机的姿态角不超过$\pi/2$；
-
- 
-通过以上假设对系统的模型进行了简化，使得任务更合理。对于四旋翼无人机绳系吊运系统来说，在轨迹跟踪时其系绳并不一定总是保持绷直状态的，在无人机的高速移动中系绳上的张力可能为零。因此，本文建立四旋翼无人机绳系吊运系统的混合模型，考虑系绳上的张力不为零和张力为零这两种情况。
+对于四旋翼无人机绳系吊运系统来说，在轨迹跟踪时其系绳并不一定总是保持绷直状态的，在无人机的高速移动中系绳上的张力可能为零。因此，本文建立四旋翼无人机绳系吊运系统的混合模型，考虑系绳上的张力不为零和张力为零这两种情况。
 
 \subsubsection{系绳张力不为零时的动力学模型}
 
 四旋翼无人机绳系吊运系统由载荷相对于地面坐标系的位置、载荷姿态和四旋翼飞行器的姿态来定义。当系绳拉紧时，该系统具有八个自由度，并存在四个自由度的欠驱动。四旋翼无人机和载荷的位置之间的关系为：
 
 \begin{equation}
-	\bm p_Q=\bm p_L-l\bm q
+	\bm p_q\bm p_l-l\bm q
 \end{equation}
-其中$\bm p_Q$、$\bm p_L$分别为四旋翼无人机和载荷的位置，$l$为系绳的长度，$\bm q$表示从四旋翼无人机指向载荷的单位向量。本文采用拉格朗日法来推导运动方程。系统的拉氏量 $\mathcal{L}:T\bar{Q}\to\mathbb{R}$ 定义为$\mathcal{L}=\mathcal{T}-\mathcal{U}$，其中$\mathcal{T}:TQ\to\mathbb{R}$和${\mathcal{U}}:Q\to\mathbb{R}$分别是机械系统的动能和势能，它们的定义如下：
+其中$\bm p_q$、$\bm p_l$分别为四旋翼无人机和载荷的位置，$l$为系绳的长度，$\bm q$表示从四旋翼无人机质心指向载荷质心的单位向量。本文采用拉格朗日法来推导运动方程。系统的拉氏量 $\mathcal{L}:T\bar{Q}\to\mathbb{R}$ 定义为$\mathcal{L}=\mathcal{T}-\mathcal{U}$，其中$\mathcal{T}:TQ\to\mathbb{R}$和${\mathcal{U}}:Q\to\mathbb{R}$分别是机械系统的动能和势能，它们的定义如下：
 
 \begin{equation}
 \begin{aligned}
-	\mathcal{T}=\frac{1}{2}&m_{Q}\bm v_{Q}\cdot \bm v_{Q}+\frac{1}{2}m_{L}\bm v_{L}\cdot \bm v_{L}+\frac{1}{2}\langle\hat{\bm  \omega_Q},\widehat{\bm J_{Q}\bm  \omega_Q}\rangle\\
-	&\mathcal{U}=m_{Q}g\bm e_{3}\cdot \bm x_{Q}+m_{L}g\bm e_{3}\cdot \bm x_{L}
+	\mathcal{T}=\frac{1}{2}&m_{q}\bm v_{q}\cdot \bm v_{q}+\frac{1}{2}m_{l}\bm v_{l}\cdot \bm v_{l}+\frac{1}{2}\langle\hat{\bm  \omega_q},\widehat{\bm J_{q}\bm  \omega_q}\rangle\\
+	&\mathcal{U}=m_{q}g\bm e_{3}\cdot \bm x_{Q}+m_{l}g\bm e_{3}\cdot \bm x_{l}
 \end{aligned}
-	\label{2-8}
+	\label{2-9}
 \end{equation}
-其中$\bm v_Q$、$\bm v_L$分别为无人机和载荷的速度，$m_Q$、$m_L$分别为无人机和载荷的质量，$\langle\cdot,\cdot\rangle $表示内积，$\hat{.}$被定义为使得 $\hat{\bm x}\bm y=\bm x\times \bm y$对于所有$\bm x,\bm y\in\mathbb{R}^3$恒成立，$\omega_Q$为四旋翼飞行器在机体坐标系下的角速度。在本文中，$\lambda_m(\cdot)$和 $\lambda_n(\cdot)$ 分别表示矩阵的最小和最大特征值。系统的动力学满足拉格朗日原理：
+其中$\bm v_q$、$\bm v_l$分别为无人机和载荷的速度，$m_q$、$m_l$分别为无人机和载荷的质量，$\langle\cdot,\cdot\rangle $表示内积，$\hat{.}$被定义为使得 $\hat{\bm x}\bm y=\bm x\times \bm y$对于所有$\bm x,\bm y\in\mathbb{R}^3$恒成立，$\omega_q$为四旋翼飞行器在机体坐标系下的角速度。在本文中，$\lambda_m(\cdot)$和 $\lambda_n(\cdot)$ 分别表示矩阵的最小和最大特征值。系统的动力学满足拉格朗日原理：
 \begin{equation}
 	\bm \delta\int_0^\tau\mathcal{L} dt+\int_0^\tau\left(\langle \bm W_1,\hat{\bm \tau}\rangle+\bm W_2\cdot f\bm{R}_{b-e}\bm e_3\right) dt=0
 	\label{2-10}
 \end{equation}
-其中$\bm W_{1}=\bm R_{b-e}^{T}\bm \delta \bm R_{b-e}$是定义在旋转空间上的变分向量场， $ \bm W_{2}=\bm \delta \bm x_{Q}=\bm \delta \bm x_{L}-l\bm \delta q$是定义在平移空间上的变分向量场，两者共同描述刚体系统中的变分动态，并且满足以下条件：
+其中$\bm W_{1}=\bm R_{b-e}^\mathrm{T}\bm \delta \bm R_{b-e}$是定义在旋转空间上的变分向量场， $ \bm W_{2}=\bm \delta \bm x_{Q}=\bm \delta \bm x_{L}-l\bm \delta q$是定义在平移空间上的变分向量场，两者共同描述刚体系统中的变分动态，并且满足以下条件：
 \begin{equation}
 	\begin{aligned}
 	&\bm \delta \bm q = \bm \xi \times \bm q\\
 	\bm \delta \dot{\bm q} = &\dot{\bm \xi} \times \bm q + \bm \xi \times \dot{\bm q} \\
 	\bm \delta\bm  R&_{b-e} = \bm R_{b-e} \hat{\bm \eta} \\
-	\bm \delta \hat{\bm  \omega _Q}& = \widehat{\hat{\bm  \omega_Q} \bm \eta} + \hat{\dot{\bm \eta}}
+	\bm \delta \hat{\bm  \omega _q}& = \widehat{\hat{\bm  \omega_q} \bm \eta} + \hat{\dot{\bm \eta}}
 \end{aligned}
 \end{equation}
 其中$\bm \delta \bm q$为二维球面上的变分，$\bm \delta \bm R$为三维空间上的变分。
@@ -367,29 +376,29 @@ $y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上�
 
 \begin{equation}
 	\begin{aligned}
-		&\dot{\bm x}_{L}=\bm v_{L} \\
-		(m_Q+m_L)(\dot{\bm v}_L+g\bm e_3)& =(\bm q\cdot f\bm R\bm e_3-m_Ql(\dot{\bm q}\cdot\dot{\bm q}))\bm q \\
-		&\dot{\bm q}=\bm \omega_L\times \bm q \\
-		m_{Q}l \dot{\bm \omega_L}&=-\bm q\times f\bm R\bm e_{3} \\
-		&\dot{\bm R_{b-e}}=\bm R_{b-e}\hat{\bm  \omega_Q} \\
-		\bm J_{Q}\dot{\bm  \omega_Q}+&\bm  \omega_Q\times \bm J_{Q}\bm  \omega_Q=\bm \tau
+		&\dot{\bm x}_{l}=\bm v_{l} \\
+		(m_q+m_l)(\dot{\bm v}_L+g\bm e_3)& =(\bm q\cdot f\bm R\bm e_3-m_Ql(\dot{\bm q}\cdot\dot{\bm q}))\bm q \\
+		&\dot{\bm q}=\bm \omega_l\times \bm q \\
+		m_{q}l \dot{\bm \omega_l}&=-\bm q\times f\bm R\bm e_{3} \\
+		&\dot{\bm R_{b-e}}=\bm R_{b-e}\hat{\bm  \omega_q} \\
+		\bm J_{q}\dot{\bm  \omega_q}+&\bm  \omega_q\times \bm J_{q}\bm  \omega_q=\bm \tau
 	\end{aligned}
 \end{equation}
 
-上述动力学可以写成标准形式 $\dot{\bm X}_n=\bm f_n(\bm X_n)+\bm g_n(\bm X_n)\bm u$ ，其中 $\bm X_n = \{\bm x_L,\bm q,\bm R_{b-e},\bm v_L,\bm \omega_L,\bm \omega_Q\}$ 是系统的状态，$\bm u = \left[f,\bm \tau \right]$是系统的输入。
+上述动力学可以写成标准形式 $\dot{\bm X}_n=\bm f_n(\bm X_n)+\bm g_n(\bm X_n)\bm u$ ，其中 $\bm X_n = \{\bm x_l,\bm q,\bm R_{b-e},\bm v_l,\bm \omega_l,\bm \omega_q\}$ 是系统的状态，$\bm u = \left[f,\bm \tau \right]$是系统的输入。
 \subsubsection{系绳张力为零时的动力学模型}
 当系绳张力趋于零时，四旋翼飞行器和吊挂载荷作为独立系统，载荷处于自由落体状态。在这种情况下，四旋翼无人机绳系吊运系统的运动方程为：
 \begin{equation}
 	\begin{aligned}
-	&\dot{\bm x}_{L}=\bm v_{L}\\
-	\quad m_{L}(&\dot{\bm v}_{L}+g\bm e_{3})=0\\
-	&\dot{\bm x}_{Q}=\bm v_{Q}\\
-	\quad m_{Q}(\dot{\bm v}_{Q}&+g\bm e_{3})=f\bm R_{b-e}\bm e_{3}\\
+	&\dot{\bm x}_{l}=\bm v_{l}\\
+	\quad m_{l}(&\dot{\bm v}_{l}+g\bm e_{3})=0\\
+	&\dot{\bm x}_{q}=\bm v_{q}\\
+	\quad m_{q}(\dot{\bm v}_{q}&+g\bm e_{3})=f\bm R_{b-e}\bm e_{3}\\
 	&\dot{\bm R_{b-e}}=\bm R_{b-e}\hat{\Omega}\\
-	\quad \bm J_{Q}\dot{\bm \Omega}+&\bm \Omega\times \bm J_{Q}\bm \Omega=\bm \tau
+	\quad \bm J_{q}\dot{\bm \Omega}+&\bm \Omega\times \bm J_{q}\bm \Omega=\bm \tau
 \end{aligned}
 \end{equation}
-上述方程也可以写成标准形式$\dot{\bm X}_n=\bm f_n(\bm X_n)+\bm g_n(\bm X_n)\bm u$，其中中$\bm X_n = \{\bm x_L,\bm x_Q,\bm R_{b-e},\bm v_L,\bm v_Q,\bm \omega_b\}$为状态。
+上述方程也可以写成标准形式$\dot{\bm X}_z=\bm f_z(\bm X_z)+\bm g_z(\bm X_z)\bm u$，其中中$\bm X_z = \{\bm x_L,\bm x_q,\bm R_{b-e},\bm v_l,\bm v_q,\bm \omega_b\}$为状态。
 
 \subsubsection{混合系统的动力学模型}
 系绳悬挂载荷的四旋翼飞行器是一个混合系统，因为当缆索中的张力降为零或当张力恢复时松弛的缆索变得绷紧时，动力学会发生切换。混合模型可以写成，
@@ -399,26 +408,32 @@ $y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上�
 其中集合$\mathbb S_z = \{ \bm X_n \mid  T \equiv 0 \}$，$\mathbb S_n = \{ \bm X_z \mid \|\bm x_Q - \bm x_L\| \equiv l, d \|\bm x_Q - \bm x_L\| /dt> 0 \}$，系绳上的张力定义为$T = \|m_L (\ddot{\bm x}_L + g\bm{e}_3)\|$，状态转移映射$\Delta_{n\to z}$为单位映射，$\Delta_{z\to n}$为两个物体非弹性碰撞的模拟，并满足条件$\dot{\bm x}_Q^+-\dot{\bm x}_L^+=0$。
 
 \section{多无人机绳系吊运系统的动力学模型}
-在本文中，我们采用三个无人机吊挂载荷的方式来运输载荷。该吊运系统
-由三个四旋翼无人机、三根绳索和一个需要被运输的重物组成。其吊运结构如图 \ref{2_3} 所示，三架无人机保持水平高度一致，无人机之间的相对距离为$d$。为建
-立多机吊运系统的动力学模型，本章采用了两个坐标系，即惯性坐标系和机体
-坐标系。
+由于单个无人机的承载能力有限，提出了多无人机协同吊装运输方案，显著提升系统的承载能力。当无人机数量$n\geq3$时，多架无人机可以协同对载荷进行精准控制。本文研究由三架规格型号相同的四旋翼无人机协同运输吊挂负载的问题。该吊运系统
+由三个四旋翼无人机、三根系绳和需要被运输的载荷组成。三个四旋翼无人机协同吊装运输载荷的飞行系统示意图如图 \ref{2_3} 所示，每个四旋翼无人机用
+$q1$，$q2$，$q3$ 表示，吊挂负载用$p$表示，三架无人机保持水平高度一致，无人机之间的相对距离为$d$。
+
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=28pc]{picture/2_3.png} 
+	\caption{多无人机吊运系统} \label{2_3}
+\end{figure}
+
+在推导多无人机绳系吊运系统的动力学模型之前，先做了如下假设：
 
 
-基于以下几个假设条件对三机吊运系统进行动力学建模：
-（1）四旋翼无人机是一个刚体模型，有效载荷被视为一个质点；
-（2）连接无人机与有效载荷之间的绳索为无弹性绳索，且质量可忽略；
-（3）不考虑空气阻力等环境扰动。
-在多无人机吊挂载荷运输系统中，对四旋翼无人机进行受力分析，与单机
-模型相比不同的是，吊运无人机承受了额外的绳子拉力，因此其运动学和动力学模型表达式为：
 
-\begin{equation}
-	\begin{cases}{}^{e}\dot{\boldsymbol{p}}={}^{e}\boldsymbol{v}\\{}^{e}\dot{\boldsymbol{v}}=-g\boldsymbol{e}_{3}+\frac{f_{T}}{m}\boldsymbol{R}_{b}^{e}\boldsymbol{e}_{3}-\frac{f_{L}}{m}\\\dot{\boldsymbol{\Theta}}=\boldsymbol{W}\cdot^{b}\boldsymbol{\omega}\\\boldsymbol{J}\cdot^{b}\dot{\boldsymbol{\omega}}+^{b}\boldsymbol{\omega}\times(\boldsymbol{J}\cdot^{b}\boldsymbol{\omega})=\boldsymbol{\tau}+\boldsymbol{\tau}_{L}\end{cases}
-\end{equation}
+(1)无人机绳系吊运系统所吊挂的载荷被视为刚体； 
 
-其中$f_{L}=[f_{L_{-}x},f_{L_{-}y},f_{L_{-}z}]^{\mathrm{T}}$表示惯性系下绳子产生的拉力向量。$\tau_{L}$表示绳子拉力对四旋翼无人机机体产生的力矩向量。
 
-在惯性坐标系下，载荷位置向量为$p_{l}=[p_{lx},p_{ly},p_{lz}]^{\mathrm{T}}$，三个无人机的位置向
+(2)连接无人机与有效载荷之间的系绳没有质量，且不会发生缠绕；
+
+(3)所有系绳都连接在无人机的质心处，系绳的牵引力能够影响无人机的平
+动，但是不影响无人机的转动。 
+
+基于上述假设，本小节将建立多无人机绳系吊运系统的动力学模型。
+
+
+在地面坐标系下，载荷位置向量为$p_{l}=[p_{lx},p_{ly},p_{lz}]^{\mathrm{T}}$，三个无人机的位置向
 量分别用$p_{q1}$、$p_{q2}$、$p_{q3}$来表示，吊绳长度为$L$。对悬吊的载荷进行受力分析，由牛顿第二定律可得出：
 \begin{equation}
 	\begin{aligned}
@@ -428,11 +443,93 @@ $y$、$z$机体坐标轴方向的线速度分量，$\boldsymbol{R}_{b-e}$为上�
 \end{equation}
 其中$f_{Li}$表示第i根绳子在惯性坐标系下所提供的拉力向量；$T_{i}$表示第$i$根绳子提供的拉力值标量。
 
-\begin{figure}[hbt!]
-	\centering
-	\includegraphics[width=23pc]{picture/2_3.png} 
-	\caption{多无人机吊运系统} \label{2_3}
-\end{figure}
+对于系统来说，$\alpha_{i}$和$\beta_i$分别描述了系绳在地面坐标系 下相对于吊挂载荷的偏角，从载荷
+质心到无人机质心的单位方向向量为：
+\begin{equation}
+	\boldsymbol{q}_i=\left[\cos\alpha_i\cos\beta_i,\sin\alpha_i\cos\beta_i\,\sin\beta_i\right]^\mathrm T
+\end{equation}
+
+默认在实际过程中吊挂负载始终位于三架四旋翼无人机之间，$\alpha_{i}$和$\beta_i$满足条件：
+$0^\circ\leq\alpha_i\leq360^\circ$，$0^\circ\leq\beta_i\leq90^\circ$，再考虑到各个无人机在飞行中可能碰撞的情况，实际的$\beta_i$应该处在一个更小的合理范围内。
+
+类似(2-5)，确定吊挂载荷的位置后，可以确定三架无人机的位置：
+\begin{equation}
+\begin{aligned}
+	\boldsymbol{p}_{l}=&\left[p_{l_{x}},p_{l_{y}},p_{l_{z}}\right]^{\mathrm{T}} \\
+	\boldsymbol{p}_{q1}&=\boldsymbol{p}_l+l\boldsymbol{q}_1 \\
+	\boldsymbol{p}_{q2}&=\boldsymbol{p}_{l}+l\boldsymbol{q}_{2} \\
+	\boldsymbol{p}_{q3}&=\boldsymbol{p}_l+l\boldsymbol{q}_3
+\end{aligned}
+\end{equation}
+上式中，$\bm{p}_{q1}$，$\bm{p}_{q2}$，$\bm{p}_{q3}$和$\bm{p}_l$分别表示三个无人机和吊挂载荷的位置，$l$是系
+绳长度。
+
+与前文类似，无人机的控制输入为$\bm{U}=\left[U_1,U_2,U_3,U_4\right]^\mathrm{T}=\left[f_i,\tau_{x_i},\tau_{y_i},\tau_{z_i}\right]^\mathrm{T}$，其中$f_{i}$，$\tau_{x_i}$，$\tau_{y_i}$，$\tau_{z_i}$表示第 $i$ 个无人机的控制力和控制力矩大小，具体表述参
+考式(\ref{2-5})和(\ref{2-6})。
+同时，为了模拟系统受到的未知扰动（四旋翼无人机的诱导气流等），考虑有一个直接作用在吊挂载荷上的外界干扰力${\boldsymbol{f}}_{w}=\left[F_{xw},F_{yw},F_{zw}\right]^\mathrm{T}$。
+
+在三个绳系四旋翼无人机吊挂负载系统中，存在三个非零张力系绳产生的完整约束，不考虑负载的刚体转动情况下，整个系统自由度为18（6×3+3-3）。本文为方便后续多机吊挂研究，选择吊挂负载的位置，三个无人机的姿态角以及三根系绳与吊挂负载形成的偏离角度作为系统的广义坐标，记作：
+$$\boldsymbol{X}_n=
+\left[
+	p_{l_x} , p_{l_y} , p_{l_z},\alpha_1,\beta_1,\phi_1,\theta_1,\psi_1,\alpha_2,\beta_2,\phi_2,\theta_2,\psi_2,\alpha_3,\beta_3,\phi_3,\theta_3,\psi_3
+\right]^\mathrm T$$
+
+类似式(\ref{2-9})，三个无人机吊挂负载系统的动能和势能可分别表示如下：
+\begin{equation}
+	\begin{aligned}
+	\mathcal{T}=\frac{1}{2}m_{l}{\boldsymbol{v}}_{l}^\mathrm{T}{\boldsymbol{v}}_{l}+&\frac{1}{2}\left[\sum_{i=1}^{3}\left(m_{q_{i}}\dot{\boldsymbol{v}}_{q_{i}}^{T}\dot{\boldsymbol{v}}_{q_{i}}+\boldsymbol{\omega}_{q_{i}}^{T}\boldsymbol{J}_{q_{i}}\boldsymbol{\omega}_{q_{i}}\right)\right] \\
+	\mathcal{U}=\sum_{i=1}^{3}&m_{q_{i}}g\boldsymbol{e}_3\cdot\boldsymbol{x}_{q_{i}}+m_{l}g\boldsymbol{e}_3\cdot\boldsymbol{x}_{l}
+\end{aligned}
+\label{2-18}
+\end{equation}
+其中，$m_{q_{i}}$,$m_l$ 表示第 $i$ 个无人机和吊挂载荷的质量，
+
+$\boldsymbol{J}_{q_{i}}$ 为无人机的转动惯量。
+可以得到系统的欧拉-朗格朗日方程为:
+\begin{equation}
+\begin{aligned}
+	&\mathcal{L}=\mathcal{T}-\mathcal{U} \\
+	\boldsymbol{F}_{\boldsymbol{X}_n}=&\frac{\mathrm{d}}{\mathrm{d}t}\left(\frac{\partial\mathcal{L}}{\partial\dot{\boldsymbol{X}_n}}\right)-\frac{\partial\mathcal{L}}{\partial\boldsymbol{X}_n}
+\end{aligned}
+\label{2-19}
+\end{equation}
+
+
+把式(\ref{2-18})代入式(\ref{2-19})中可得到如下二阶非线性微分方程：
+\begin{equation}	
+	\dot{\bm X}_n=\bm f_n(\bm X_n)+\bm g_n(\bm X_n)\bm u+\bm k_{n}\left(\bm f_{w}\right)
+\end{equation}
+其中$\bm k_{z}\left(\bm F_{p}\right)$为未知的外部干扰。
+进一步选择状态向量为：$$\bm X=\left[x_{p},x_{p},y_{p},y_{p},z_{p},z_{p},\alpha_{i},\dot{\alpha}_{i},\beta_{i},\dot{\beta}_{i},\phi_{i},\dot{\phi}_{i},\theta_{i},\dot{\theta}_{i},\psi_{i},\dot{\psi}_{i}\right]^\mathrm{T}$$
+记$\bm{U}=\left[f_i,\tau_{x_i},\tau_{y_i},\tau_{z_i}\right]^\mathrm{T}$作为控制力、力矩向量，${\boldsymbol{U}}_{w}=\left[F_{xw},F_{yw},F_{zw}\right]^\mathrm{T}$为外部干扰输入，从而把式(2-24)转换为一阶非线性微分方程：
+\begin{equation}
+	\dot{\boldsymbol{X}}=\bm f\left(\boldsymbol{X},\boldsymbol{U}\right)+\bm f_w\left(\boldsymbol{U}_w\right)
+	\label{2-21}
+\end{equation}
+
+式(\ref{2-21})可以完整地描述出三个四旋翼无人机运输吊挂负载的动力学模型，而且当无
+人机数量增加时，只需在状态变量中相应增加系绳偏角α、β即可。但是在实际运输控制中，无人机的控制器很难获取系绳偏角和吊挂载荷的位置信息，依照现有模型无法进
+行控制器设计，因
+此需要一个不包含载荷信息的简化模型，可以将系绳拉力可以被当作对无人机平动运动
+的一个干扰力，绳子牵引力作用下的第$i$架无人机动力学模型为： 
+\begin{equation}
+	\left\{
+	\begin{aligned}
+		&\ddot{x}=\frac{U_{1i}\left(\cos\phi_i\cos\psi_i\sin\theta_i+\sin\phi_i\sin\psi_i\right)-f_{xi}}{m}+d_{xi}\\
+		&\ddot{y}=\frac{U_{1i}\left(\cos\phi_i\sin\psi_i\sin\theta_i-\cos\psi_i\sin\phi_i\right)-f_{yi}}{m}+d_{yi}\\
+		&\ddot{z}=\frac{U_{1i}\cos\phi_i\cos\theta_i-f_{zi}}{m}-g+d_{zi}\\
+		&\ddot{\phi}=\frac{(I_{y}-I_{z})\cdot \dot{\theta}_i\dot{\psi}_i+U_{2i}}{I_{x}}\\
+		&\ddot{\theta}=\frac{(I_{z}-I_{x})\cdot \dot{\phi}_i\dot{\psi}_i+U_{3i}}{I_{y}}\\
+		&\ddot{\psi}=\frac{(I_{x}-I_{y})\cdot \dot{\phi}_i\dot{\theta}_i+U_{4i}}{I_{z}}\end{aligned}
+	\right.
+	\label{2-22}
+\end{equation}
+其中为$\boldsymbol{f}_{i}=
+\left[f_{xi} , f_{yi} , f_{zi}\right]^\mathrm{T}$系绳拉力，$\bm d_i=\left[d_{xi},d_{yi},d_{zi}\right]^T$为系统受到的未知干扰，其中包括未知风扰等。 
+
+式(\ref{2-22})表示了对各个无人机而言的简化模型，可以看出，式(\ref{2-22})中不包含载荷信息和其他无人机的状态耦合，而是用一个位置干扰力$\boldsymbol{d}_{i}$来表示。
+
+
 
 \section{本章总结}
 
@@ -919,773 +1016,7 @@ $。
 \chapter{多无人机吊运控制}
 \chaptermark{多无人机吊运控制}
 
-\section{引言}
-建立航天器间精确碰撞约束后，服务星极近距离消旋位姿轨迹的规划得以进行。本章根据消旋任务的特点，将其划分为不同的阶段，针对不同阶段的任务需求，基于引导优化的规划框架，结合第三章所提出的碰撞风险评估方法，给出了各阶段位姿轨迹的规划方法，并通过仿真算例验证了所提极近距离消旋位姿轨迹规划方法的有效性。
 
-\section{任务流程分析}
-
-
-
-
-\section{极近距离逼近段位姿轨迹规划}
-\subsection{逼近阶段参考路径搜索}
-航天器轨迹规划领域常用的随机搜索方法主要为快速拓展随机树法（RRT*）及其衍生算法如informed-RRT*、RRT-Connect等，具有概率完备、渐近最优等优良特性，但对于高维问题，RRT*算法存在计算负荷、耗时较大等问题。针对高维构型空间中的复杂运动规划问题，Janson等提出快速行进树算法（FMT*）\cite{jansonFastMarchingTree2015}，与RRT*算法相比，FMT*保留了渐近最优等特性，同时显著提升了收敛速度，具有较大的应用潜力。
-
-基于FMT*算法的基本框架，本文所使用的针对航天器极近距离逼近问题的改进FMT*算法伪代码如表\ref{FMT}所示，主要分为初始化、节点搜索、反向链接、行进树拓展、节点更新等步骤。
-
-%\renewcommand{\algorithmcfname}{算法4 -}
-%\renewcommand{\algorithmicfname}{\textbf{算法4}}
-\begin{algorithm}[htb]  
-	\caption{FMT*搜索算法}  
-	\label{FMT}  
-	\begin{algorithmic}[1]  
-		\Require  
-		初始点$\boldsymbol{q}_{init}$,
-		目标点$\boldsymbol{q}_{goal}$,
-		样本点集$\mathbb{Q}_{sample}$
-		\Ensure  
-		从$\boldsymbol{q}_{init}$到$\boldsymbol{q}_{goal}$的最优位姿路径$\Gamma_{P}$
-		\State $\operatorname{AddToTree}\left(\Lambda,\boldsymbol{q}_{init}\right)$
-		\State$\mathbb{Q}=\boldsymbol{q}_{init}\cup \boldsymbol{q}_{goal}\cup \mathbb{Q}_{sample}$
-		\State $\mathbb{Q}_{unvisited}=\mathbb{Q} \backslash \boldsymbol{q}_{init}$
-		\State $\mathbb{Q}_{active}=\boldsymbol{q}_{init}$
-		\State $\mathbb{Q}_{finished}=\emptyset$ 
-		\State $\boldsymbol{q}_{serach}$=$\boldsymbol{q}_{init}$
-		\State $\mathbb{Q}_{child} = \operatorname{Near}\left(\mathbb{Q}_{unvisited}, \boldsymbol{q}_{serach}, r_n\right)$
-		\While {$\boldsymbol{q}_{serach}\neq \boldsymbol{q}_{goal}$}
-		\For {$\boldsymbol{q}_{child,i}\in \mathbb{Q}_{child}$}
-		\State $\mathbb{Q}_{parent} = \operatorname{Near}\left(\mathbb{Q}_{active}, \boldsymbol{q}_{child,i}, r_n\right)$
-		\State $\boldsymbol{q}_{parent,j_{\min}}=\arg \min \limits_{\boldsymbol{q}_{parent,j} \in \mathbb{Q}_{parent}}\{c(\boldsymbol{q}_{parent,j})+\operatorname{Cost}\left(\boldsymbol{q}_{parent,j}, \boldsymbol{q}_{child,i}\right)\} \quad$
-		\If {$\operatorname{CollisionFree}\left(\boldsymbol{q}_{parent,j_{\min}},\boldsymbol{q}_{child,i} \right)$}
-		\State $\operatorname{AddToTree}\left(\Lambda,\boldsymbol{q}_{child,i}\right)$
-		\State $\mathbb{Q}_{active}=\mathbb{Q}_{active}\cup \boldsymbol{q}_{child,i}$
-		\State $\mathbb{Q}_{unvisited}=\mathbb{Q}_{unvisited}\backslash \boldsymbol{q}_{child,i}$
-		\EndIf
-		\EndFor
-		\State $\mathbb{Q}_{finished}=\mathbb{Q}_{finished}\cup \boldsymbol{q}_{serach}$
-		\If {$\mathbb{Q}_{active}=\empty$}
-		\State \Return Failure
-		\EndIf
-		\State $\boldsymbol{q}_{serach}=\arg \min \limits_{\boldsymbol{q}_{sample} \in \mathbb{Q}_{active}}\{c(\boldsymbol{q}_{sample})\} \quad$
-		\EndWhile
-		\State $\Gamma_{P}=\operatorname{GetPath}\left(\Lambda \right)$
-		\State \Return $\Gamma_{P}$
-	\end{algorithmic}
-\end{algorithm}
-
-由于需对位姿进行同步规划，为便于遍历，采用欧拉角来描述章动目标和追踪星间的相对姿态，故样本点$\boldsymbol{q}=[{\boldsymbol{x}}_{\mathcal{B}}^{\mathcal{L}};\boldsymbol{\varphi}_{\mathcal{B}}^{\mathcal{L}}]$，其中$\boldsymbol{\varphi}_{\mathcal{B}}^{\mathcal{L}}$为$\mathcal{B}$系到$\mathcal{L}$系的欧拉角。
-
-在初始化阶段，与RRT*算法在搜索过程中生成样本点不同，FMT*算法需使用预先生成的样本点，为保证样本点能充分遍历状态空间，本文采用霍尔顿序列（Halton sequence）生成样本点。霍尔顿序列是一种常用的低差异序列，任意一个质数都可以作为基底生成一组霍尔顿序列，其原理是根据所选基底对区间进行逐次分割，通过这种方式获得的伪随机数分布较为均匀，如图\ref{fig-halton}所示。
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=2.8 in]{picture/haltonset.eps}
-	\caption{二维霍尔顿序列示意图}
-	\label{fig-halton}
-\end{figure}
-
-随后，通过\autoref{eq76}判别各样本点的可行性，删去不可行的样本点，把剩余的样本点和起始点、目标点输入FMT*算法中。建立$\mathbb{Q}_{unvisited}$，$\mathbb{Q}_{active}$和$\mathbb{Q}_{finished}$三个集合，将起始点$\boldsymbol{q}_{init}$添加至集合$\mathbb{Q}_{active}$中，其余节点添加至集合$\mathbb{Q}_{unvisited}$中。
-
-节点间代价定义为：
-\begin{equation}
-	cost(\boldsymbol{q}_{i}-\boldsymbol{q}_{j}) =\Vert {\boldsymbol{x}}_{\mathcal{B},i}^{\mathcal{L}}-{\boldsymbol{x}}_{\mathcal{B},j}^{\mathcal{L}}\Vert_2+K_{\varphi}\Vert \boldsymbol{\varphi}_{\mathcal{B},i}^{\mathcal{L}}-\boldsymbol{\varphi}_{\mathcal{B},j}^{\mathcal{L}}\Vert_2
-\end{equation}
-
-采用Kd树结构存储节点信息，称$cost(\boldsymbol{q}_{i}-\boldsymbol{q}_{j})<r_{n}$的两节点为相邻节点，算法示意图如图\ref{Fig.fmt}所示。首先记$\mathbb{Q}_{active}$中到达代价最小的点为当前搜索节点$\boldsymbol{q}_{serach}$，通过Near函数将$\boldsymbol{q}_{serach}$的相邻节点中位于$\mathbb{Q}_{unvisited}$的节点记为待选子节点$\boldsymbol{q}_{child,i}$。
-
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/FMT1.png}
-			\caption{ }
-			\label{fig:FMT(1)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/FMT2.png}
-			\caption{ }
-			\label{fig:FMT(2)}
-		\end{subfigure}
-		
-		\vspace{10pt}
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/FMT3.png}
-			\caption{ }
-			\label{fig:FMT(3)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/FMT4.png}
-			\caption{ }
-			\label{fig:FMT(4)}
-		\end{subfigure}
-	\end{minipage}
-	\caption{快速行进树算法示意图\label{Fig.fmt}}
-\end{figure*}
-
-接着在反向链接阶段，对各待选子节点进行遍历，在$\mathbb{Q}_{active}$中搜索$\boldsymbol{q}_{child,i}$的相邻节点，将其记为待选父节点$\boldsymbol{q}_{parent,j}$并确定代价最小的$\boldsymbol{q}_{parent,j_{\min}}$。
-
-随后，CollisionFree函数将在$\boldsymbol{q}_{parent,j_{\min}}$和$\boldsymbol{q}_{child,i}$间均匀取点，判断二者连线是否无碰撞。若无碰撞，将$\boldsymbol{q}_{child,i}$加入行进树中，其父节点记为$\boldsymbol{q}_{parent,j_{\min}}$，完成行进树拓展，否则将跳转至下一个待选子节点。
-
-所有待选子节点遍历完成后，对节点状态进行更新，将添加到行进树中的$\boldsymbol{q}_{child,i}$从$\mathbb{Q}_{unvisited}$中移除并添加至$\mathbb{Q}_{active}$中，将$\boldsymbol{q}_{serach}$加入$\mathbb{Q}_{finished}$中。到达目标点或$\mathbb{Q}_{active}$中无节点后算法结束，得到逼近阶段服务星参考路径。
-
-从上述过程中不难看出，FMT*算法采用了惰性的拓展策略，只有当前最优路径可行时才把节点加入树中，否则就跳过该节点继续搜索其他节点，直到后续遍历过程中找到该节点的最优路径。这种策略省去了RRT*算法中的父节点重选步骤，且添加新节点时仅需进行一次碰撞检测，大大降低了碰撞检测的次数，因此在处理高维复杂问题时FMT*算法具有更好的表现\cite{jansonFastMarchingTree2015}，与本文中约束复杂、位姿耦合的规划问题匹配度较好，可以给出一条无碰撞的距离最优参考轨迹。
-
-\subsection{逼近阶段轨迹优化}
-上述改进FMT*算法给出了逼近阶段的参考路径$\Gamma_{P}$，但该路径在各节点处不光滑，且未对速度、加速度进行约束，因此需要对其进行优化。本章采用B样条曲线构造光滑轨迹，并对其控制点参数进行优化，使其轨迹安全可行。
-
-如前所述，B样条曲线的参数包括控制点集$\mathbb{C}=\{\boldsymbol{C}_{i}|i=1,2,\cdots,N_c\}$，节点向量$\boldsymbol{t}_{c}=[t_1,t_2,\cdots,t_{M_{t}}]$与曲线阶数$k_{o}$等。本文以控制点集\footnote{为保证轨迹经过给定的起始点与终点，取控制点集中的${c}_{1},{c}_{2}$和${c}_{N_c-1},{c}_{N_c}$为参考路径上的对应点，不进行优化}及节点向量为优化变量，将逼近阶段轨迹优化分为两个部分，第一部分的优化目标是在保证轨迹平滑度的前提下尽可能接近上一节给出的参考逼近路径$\Gamma_{P}$；第二部分的优化目标是进一步保证轨迹安全可行，同时对最小化所需的性能指标。考虑到优化变量数量较多，约束较为复杂，为保证问题求解的成功率与效率，两部分都采取软约束的方式将约束作为罚函数放入代价函数中，优化问题可表示为：
-\begin{equation}
-	\label{tra_cost_func}
-	\mathop{\arg\min}\limits_{\mathbb{C},\boldsymbol{t}_{c}} \sum_{j=1}^{L_c} \pi_{j}f_{j}(\mathbb{C},\boldsymbol{t}_{c})
-\end{equation}
-其中$L_c$为待优化的指标数量，$f_{j}$为优化指标，$\pi_{j}$为权重值。
-
-第一部分的优化指标包括轨迹平滑度$f_{s}$和路径相似度指标$f_{d}$，此部分不涉及节点向量的优化，故通过控制点间的几何关系来衡量轨迹平滑度$f_{s}$\cite{zhijiezhuConvexOptimizationApproach2015}：
-\begin{equation}
-	\label{smooth}
-	f_{s}=\sum_{i=k_{o}-1}^{N_{c1}-k_{o}+1}\Vert\boldsymbol{C}_{i+1}-2 \boldsymbol{C}_i+\boldsymbol{C}_{i-1}\Vert_2
-\end{equation}
-该指标将使控制点尽可能处在前后控制点的连线上，减少不必要的波动以提升轨迹的平滑度。
-
-同时，根据控制点的数量，在参考逼近路径$\Gamma_{P}$上均匀取点作为参考点$\boldsymbol{G}_{P,i}(i=1,2,\cdots,N_{c1})$，定义路径相似度$f_{d}$为：
-\begin{equation}
-	f_{d}=\sum_{i=k_{o}-2}^{N_{c1}-k_{o}+2}\Vert \boldsymbol{C}_i-\boldsymbol{G}_{P,i}\Vert_2
-\end{equation}
-
-故由\autoref{tra_cost_func}，第一部分的优化问题可表示为：
-\begin{equation}
-	\begin{aligned}
-		\label{proximity_phase1}
-		\mathop{\arg\min}\limits_{\mathbb{C}} f_{P1}=&\pi_{s}f_{s}+\pi_{d}f_{d}\\
-		=&\pi_{s}\sum_{i=k_{o}-1}^{N_{c1}-k_{o}+1}\Vert\boldsymbol{C}_{i+1}-2 \boldsymbol{C}_i+\boldsymbol{C}_{i-1}\Vert_2+\pi_{d}\sum_{i=k_{o}-2}^{N_{c1}-k_{o}+2}\Vert \boldsymbol{C}_i-\boldsymbol{G}_{P,i}\Vert_2
-	\end{aligned}
-\end{equation}
-
-从上式中不难看出，该优化问题为无约束二次规划问题，其最优解具有解析表达式，将其解记为$\mathbb{C}_{Pw}$，代入\autoref{Bspline}中可得一条在参考路径附近的平滑轨迹$\mathbb{T}_{Pw}$。该轨迹无法保证各部分均无碰撞，且未对各项性能指标进行优化，因此不能作为最终轨迹。但由于参考路径是无碰撞的，$\mathbb{T}_{Pw}$的主体部分也是无碰撞的，可将$\mathbb{C}_{Pw}$作为下一部分优化的初值以降低下一部分优化失败的概率\cite{zhouRobustRealtimeUAV2020}。
-
-逼近阶段轨迹优化第二部分的目标是保证轨迹安全可行，并减少轨迹的耗时与控制消耗，优化变量为控制点集$\mathbb{C}$及节点向量$\boldsymbol{t}_{c}$，优化指标包括轨迹平滑度$f_{s}$、碰撞惩罚$f_{c}$、速度及角速度平滑度$f_{vs}$、速度及加速度可行度$f_{f}$、耗时$f_{t}$等。同时，为保证轨迹起点和终点速度可为$\boldsymbol{0}$，本部分的首末控制点具有二阶重复度，即控制点数量$N_c=N_{c1}+2$。
-
-各项优化指标中，碰撞惩罚项根据上一章定义的碰撞危险度及其阈值计算。常见的障碍势函数仅能将轨迹推离障碍物，避障效果与权重值直接相关，难以确定合适的权重值保证轨迹不与障碍物碰撞。而本文中碰撞危险度阈值$P_{ts}$可由\autoref{eq72}计算，故将其引入碰撞惩罚项中，定义碰撞惩罚项$f_{c}$为：
-\begin{equation}
-	\label{collision_cost}
-	f_{c}=\sum_{i=k_{o}-2}^{N_c-k_{o}+2}\left(\frac{\pi_{sc} P_c({\boldsymbol{x}}_{i},\boldsymbol{\varphi}_{i})}{P_{ts}(\boldsymbol{\varphi}_{i})}\right)^2
-\end{equation}
-其中，$\pi_{sc}$为安全裕度系数，通常为略大于$1$的常数。
-
-由第三章仿真部分可知，碰撞危险度为距离的指数函数，两航天器距离较远时碰撞危险度极小，因而轨迹保守性较小，参数鲁棒性高，以满足极近距离操作任务的需求。当两航天器安全区域接近时，碰撞危险度将迅速增大，以碰撞危险度阈值为分母，当控制点处的碰撞危险度接近碰撞危险度阈值时，$f_{c}$将以指数级增大，变化量远高于其他指标，能有效保证轨迹的安全性。若考虑测量误差、控制偏差等因素需增大轨迹保守性时，可采用碰撞危险度全局极小值或增大$\pi_{sc}$的数量级，以增加航天器间的安全裕度。
-
-为减小服务星的燃料消耗，应尽可能降低逼近轨迹中速度及角速度的变化量。B样条曲线各点处的速度与速度控制点$\boldsymbol{V}_i$和节点向量$\boldsymbol{t}_{c}$有关，仿照轨迹平滑度的定义，本文定义速度平滑度代价$f_{vs}$为：
-\begin{equation}
-	f_{vs}=\sum_{i=2}^{N_c-2}(\Vert\boldsymbol{v}_{i+1}-2 \boldsymbol{v}_i+\boldsymbol{v}_{i-1}\Vert_2+\Vert\boldsymbol{\omega}_{i+1}-2 \boldsymbol{\omega}_i+\boldsymbol{\omega}_{i-1}\Vert_2)+\pi_{ts}\sum_{i=pb+1}^{N_c}(\Vert t_{i+1}-2 t_i+t_{i-1}\Vert_2)
-\end{equation}
-
-如前所述，该指标将使速度控制点尽可能处于前后控制点的连线上，而B样条曲线具有凸包性，故该指标可减少轨迹的速度变化量，同时，节点向量间隔变化平缓能保证各轨迹点速度变化平缓，提升轨迹的速度平滑度。
-
-考虑到服务星能提供的推力有限，为保证轨迹可行，需对轨迹的速度和加速度进行限制。设速度、角速度及对应的加速度限制分别为：$v_{\max}$，$\omega_{\max}$，$a_{\max}$，$\dot{\omega}_{\max}$，定义速度及加速度可行度$f_{f}$为：
-\begin{equation}
-	f_{f}=\sum_{i=1}^{N_c-1}\left(\left(\frac{\Vert\boldsymbol{v}_{i}\Vert_2}{v_{\max}}\right)^{2}+\left(\frac{\Vert\boldsymbol{\omega}_{i}\Vert_2}{\omega_{\max}}\right)^{2}\right)+\sum_{i=1}^{N_c-2}\left(\left(\frac{\Vert\boldsymbol{a}_{i}\Vert_2}{a_{\max}}\right)^{2}+\left(\frac{\Vert\boldsymbol{\dot{\omega}}_{i}\Vert_2}{\dot{\omega}_{\max}}\right)^{2}\right)
-\end{equation}
-
-此外，为避免对速度平滑度进行优化时无限制的增大节点向量，增加耗时指标$f_{t}$以保证轨迹耗时合理：
-\begin{equation}
-	f_{t}=t_{M_{t}}-t_{1}.
-\end{equation}
-
-综上所述，第二部分的轨迹优化问题可表示为：
-\begin{equation}
-	\begin{aligned}
-		\label{proximity_phase2}
-		\mathop{\arg\min}\limits_{\mathbb{C},\boldsymbol{t}_{c}} f_{P2}=&\pi_{s}f_{s}+\pi_{c}f_{c}+\pi_{vs}f_{vs}+\pi_{f}f_{f}+\pi_{t}f_{t}
-	\end{aligned}
-\end{equation}
-
-将$\mathbb{C}_{Pw}$作为\autoref{proximity_phase2}中优化问题的初值进行求解，获得优化后的控制点集$\mathbb{C}_{Pf}$与节点向量$\boldsymbol{t}_{Pf}$，代入\autoref{Bspline}中，可得满足各项指标的服务星逼近位姿轨迹$\mathbb{T}_{Pf}$。
-
-\section{极近距离消旋位姿轨迹规划}
-当服务星完成极近距离逼近，开始对章动目标消旋后，目标的状态会逐渐发生变化，服务星当前位姿已不再是最佳消旋位姿，甚至可能与章动目标发生碰撞，因此需先求解新的最优消旋位姿，再给出一条安全的消旋轨迹。本文中认为目标章动角变化超过$1\ (^{\circ})$时需要对最优消旋位姿进行更新并机动至新的最优消旋位姿，由于服务星此时在对章动目标进行极近距离操作，最优消旋位姿和消旋轨迹的求解都需在给定时限内完成。
-
-由于目标全运动周期型安全区域具有对称性，最优消旋位姿可能具有多组解，为减少不必要的机动，同时加快求解速度，将最优消旋位姿求解问题改为以下形式：
-\begin{equation}
-	\begin{aligned}
-		\mathop{\arg\min}\limits_{{\boldsymbol{x}_{\mathcal{B}}^{\mathcal{L}}},{\boldsymbol{\varphi}_{\mathcal{B}}^{\mathcal{L}}}} &-\pi_{tor}\left(\Vert \boldsymbol{T}^{\mathcal{L}}_{Bt}\Vert_2 \right)+\pi_{tord}\left(\Vert \boldsymbol{T}^{\mathcal{L}}_{Bt} \times {\boldsymbol{\hat l}}_x \Vert_2\right)+\\
-		&\pi_{dis}\left(\Vert {\boldsymbol{x}_{\mathcal{B}}^{\mathcal{L}}}-\boldsymbol{x}_{prev} \Vert_2+\Vert {\boldsymbol{\varphi}_{\mathcal{B}}^{\mathcal{L}}}-\boldsymbol{\varphi}_{prev} \Vert_2\right)+\pi_{col}\left(\frac{\pi_{sc} P_c({\boldsymbol{x}_{\mathcal{B}}^{\mathcal{L}}},{\boldsymbol{\varphi}_{\mathcal{B}}^{\mathcal{L}}})}{P_{ts,\min}}\right)^2
-	\end{aligned}
-\end{equation}
-其中$\boldsymbol{x}_{prev}$和$\boldsymbol{\varphi}_{prev}$为服务星当前的相对位置和姿态。
-
-求解上述问题获得新的最优消旋位姿后，就可以开始消旋轨迹的求解。多数时刻消旋位姿的变化不大，但当目标的章动角与初始时刻相比变化较大时，服务星可能需要进行机动以切换消旋构型，即本文采用切换构型的消旋策略，采用直线轨迹连接前后消旋位姿无法满足要求，需设计相应的轨迹规划方法。本文中消旋阶段服务星位姿轨迹的规划仍采用引导优化的框架，与上一阶段一致，但相比最优性此阶段更加强调规划的实时性，对轨迹的性能要求也有所不同，故本节对相关方法进行了修改以满足消旋阶段轨迹的要求。
-
-\subsection{消旋阶段参考路径搜索}
-为提高求解速度，消旋阶段的参考路径不再追求最优性，仅要求给出一条无碰撞的参考路径，故本文给出一种简单的路径生成算法PPO，其伪代码如表\ref{pull_out}所示。
-\begin{algorithm}[htb]  
-	\caption{Path Push Out算法（PPO）}  
-	\label{pull_out}  
-	\begin{algorithmic}[1]  
-		\Require  
-		初始点$\boldsymbol{q}_{init}$,
-		目标点$\boldsymbol{q}_{goal}$,
-		等分数$n_c$
-		\Ensure  
-		从$\boldsymbol{q}_{init}$到$\boldsymbol{q}_{goal}$的安全位姿路径$\Gamma_{D}$
-		\State $\mathbb{Q}_{ori}=\operatorname{LinePoint}(\boldsymbol{q}_{init},\boldsymbol{q}_{goal},n_c)$
-		\State $\boldsymbol{q}_{prev}=\boldsymbol{q}_{init}$
-		\State $\mathbb{Q}_{free}=\boldsymbol{q}_{init}$
-		\State $\boldsymbol{d}_{dec}=\operatorname{DescendDir}(\mathbb{Q}_{ori})$
-		\For {$\boldsymbol{q}_{ori,i}\in \mathbb{Q}_{ori}$}
-		\State $\boldsymbol{q}_{free}=\operatorname{PushOut}(\boldsymbol{q}_{ori,i},\boldsymbol{d}_{dec})$
-		\If {$\operatorname{CollisionFree}(\boldsymbol{q}_{prev},\boldsymbol{q}_{free})$}
-		\State $\mathbb{Q}_{free}=\mathbb{Q}_{free}\cup \boldsymbol{q}_{free}$
-		\State $\boldsymbol{q}_{prev}=\boldsymbol{q}_{free}$
-		\Else
-		\State $\mathbb{Q}_{SubLine}=\operatorname{LinePoint}(\boldsymbol{q}_{prev},\boldsymbol{q}_{free},n_c)$
-		\State $\boldsymbol{d}_{Subdec}=\operatorname{DescendDir}(\mathbb{Q}_{SubLine})$
-		\For {$\boldsymbol{q}_{SubLine,i}\in \mathbb{Q}_{SubLine}$}
-		\State $\boldsymbol{q}_{free}=\operatorname{PushOut}(\boldsymbol{q}_{SubLine,i},\boldsymbol{d}_{Subdec})$
-		\State $\mathbb{Q}_{free}=\mathbb{Q}_{free}\cup \boldsymbol{q}_{free}$
-		\EndFor
-		\State $\boldsymbol{q}_{prev}=\boldsymbol{q}_{free}$
-		\EndIf
-		\EndFor
-		\State $\Gamma_{D}=\operatorname{LinePath}(\mathbb{Q}_{free})$
-		\State \Return $\Gamma_{D}$
-	\end{algorithmic}
-\end{algorithm}
-
-算法首先将初始点记为$\boldsymbol{q}_{prev}$，存入$\mathbb{Q}_{free}$中。通过LinePoint函数在起始点和目标点间进行线性插值，获取该直线路径上的等分点，并将这些点存入集合$\mathbb{Q}_{ori}$中。
-
-随后通过DescendDir函数计算各路径点碰撞梯度确定搜索的方向。其中，路径点$\boldsymbol{q}$中的姿态项仅用于计算位置项的梯度$\boldsymbol{g}_{x}$，不对姿态项的梯度进行计算，梯度计算公式如\autoref{grad_p}所示。考虑到平行于路径方向的梯度分量仅会使路径点间隔被拉大，导致路径搜索失败，仅保留由\autoref{verti_grad}计算的垂直路径方向的梯度分量$\boldsymbol{g}_{xv}$。同时，为避免搜索后各路径点的分布过于分散，算法中各路径点采用相同的搜索方向$\boldsymbol{d}_{dec}$，该向量为各路径点梯度的加权求和，由\autoref{dec_vec}计算。
-
-\begin{equation}
-	\begin{aligned}
-		\label{grad_p}
-		\boldsymbol{g}_{x}=&\frac{\partial{P_c({\boldsymbol{x}}_{\mathcal{B}}^{\mathcal{L}},\boldsymbol{\varphi}_{\mathcal{B}}^{\mathcal{L}})}}{\partial{{\boldsymbol{x}}_{\mathcal{B}}^{\mathcal{L}}}}\\
-		=&-\sum\limits_{f = 1}^F {\sum\limits_{j = 1}^J {{\pi _f}} } {\pi _j}N(\boldsymbol{x}_{\mathcal{B}}^{\mathcal{L}}|{{\boldsymbol{\mu }}_f} - {\boldsymbol{R}}_{\mathcal{B}}^{\mathcal{L}}{{\boldsymbol{\mu }}_j},{{\boldsymbol{\Sigma }}_f} + {\boldsymbol{R}}_{\mathcal{B}}^{\mathcal{L}}{{\boldsymbol{\Sigma }}_j}{({\boldsymbol{R}}_{\mathcal{B}}^{\mathcal{L}})^{\top}})\\
-		&\left({{\boldsymbol{\Sigma }}_f} + {\boldsymbol{R}}_{\mathcal{B}}^{\mathcal{L}}{{\boldsymbol{\Sigma }}_j}{({\boldsymbol{R}}_{\mathcal{B}}^{\mathcal{L}})^{\top}}\right)^{-1}\left({\boldsymbol{x}}_{\mathcal{B}}^{\mathcal{L}}-{{\boldsymbol{\mu }}_f} + {\boldsymbol{R}}_{\mathcal{B}}^{\mathcal{L}}{{\boldsymbol{\mu }}_j}\right)
-	\end{aligned}
-\end{equation}
-
-\begin{equation}
-	\label{verti_grad}
-	\boldsymbol{g}_{xv}=\boldsymbol{g}_{x}-(\boldsymbol{d}_{l}^{\top}\boldsymbol{g}_{x})\boldsymbol{d}_{l}
-\end{equation}
-其中，$\boldsymbol{d}_{l}$是由起始位置指向目标位置的单位向量。
-
-\begin{equation}
-	\label{dec_vec}
-	\boldsymbol{d}_{dec}=\sum_{i=1}^{n_c} \pi_{g,i}\boldsymbol{g}_{xv,i}
-\end{equation}
-其中$\pi_{g,i}$为第$i$个路径点的权重，由下式计算：
-\begin{equation}
-	\pi_{g,i}= \log\left(\frac{P_c({\boldsymbol{x}}_i,\boldsymbol{\varphi}_i)}{P_{ts}(\boldsymbol{\varphi}_i)}\right)
-\end{equation}
-
-确定路径搜索方向后，调用PushOut函数对点集$\mathbb{Q}_{ori}$中的每个路径点进行检测。通过\autoref{eq76}进行碰撞判定，若该路径点无碰撞，则保持不变，否则沿$\boldsymbol{d}_{dec}$方向进行一维搜索，找到对应的无碰撞点，记为$\boldsymbol{q}_{free}$。若$\boldsymbol{q}_{free}$与$\boldsymbol{q}_{prev}$间无碰撞，将$\boldsymbol{q}_{free}$添加至$\mathbb{Q}_{free}$中，对$\boldsymbol{q}_{prev}$进行更新并进行下一次遍历；否则在$\boldsymbol{q}_{free}$与$\boldsymbol{q}_{prev}$间均匀取点，重复上述过程以给出$\boldsymbol{q}_{free}$与$\boldsymbol{q}_{prev}$间的无碰撞路径。遍历结束后，LinePath函数将连接$\mathbb{Q}_{free}$中的各路径点给出一条无碰撞位姿路径$\Gamma_{D}$，如图\ref{Fig.PPO}所示。
-
-\begin{figure}[hbt!]
-	\centering
-	\includegraphics[width=2.5 in]{picture/PPO_pic.png}
-	\caption{PPO算法示意图\label{Fig.PPO}}
-\end{figure}
-
-可以看出，当起始点与目标点相距较近，二者间连线无碰撞时，PPO算法将直接给出一条连接起始点和目标点的直线路径。当直线路径无法满足要求时，PPO对路径点中的姿态项仍进行直线插值，随后对位置项沿计算的梯度下降方向进行一维搜索，在至多$n_c^2$次遍历内给出一条参考路径，保证了算法收敛的快速性。
-
-\subsection{消旋阶段轨迹优化}
-与逼近阶段类似，获得无碰撞的参考消旋路径后，本节将采用基于B样条曲线的轨迹优化方法，依次求解两个优化问题给出一条满足要求的消旋轨迹。
-
-消旋轨迹优化第一部分的优化目标是在保证轨迹平滑度的前提下尽可能接近给出的参考路径$\Gamma_{D}$，与逼近阶段一致，优化问题可表示为：
-\begin{equation}
-	\begin{aligned}
-		\label{detumbing_phase1}
-		\mathop{\arg\min}\limits_{\mathbb{C}} f_{D1}=&\pi_{s}f_{s}+\pi_{d}f_{d}\\
-		=&\pi_{s}\sum_{i=k_{o}-1}^{N_{c1}-k_{o}+1}\Vert\boldsymbol{C}_{i+1}-2 \boldsymbol{C}_i+\boldsymbol{C}_{i-1}\Vert_2+\pi_{d}\sum_{i=k_{o}-2}^{N_{c1}-k_{o}+2}\Vert \boldsymbol{C}_i-\boldsymbol{G}_{D,i}\Vert_2
-	\end{aligned}
-\end{equation}
-其中$\boldsymbol{G}_{D,i}$为参考消旋路径$\Gamma_{D}$上均匀选取的参考点。
-
-求解\autoref{detumbing_phase1}可得与参考路径接近的控制点集，将其记为$\mathbb{C}_{Dw}$。
-
-消旋轨迹优化第二部分的优化目标是保证轨迹安全，同时最大化所施加的消旋力矩。为加快求解速度，优化变量仅包括控制点集$\mathbb{C}$，不对节点向量进行优化，优化指标包括轨迹平滑度$f_{s}$、碰撞惩罚$f_{c}$、有效力矩$f_{tor}$。
-
-其中，轨迹平滑度$f_{s}$仍由\autoref{smooth}计算，碰撞惩罚项$f_{c}$中的碰撞危险度阈值改为由\autoref{ptsmin}确定的全局阈值以提高求解速率：
-\begin{equation}
-	\label{collision_cost2}
-	f_{c}=\sum_{i=k_{o}-2}^{N_c-k_{o}+2}\left(\frac{\pi_{sc} P_c({\boldsymbol{x}}_{i},\boldsymbol{\varphi}_{i})}{P_{ts,\min}}\right)^2
-\end{equation}
-
-有效力矩$f_{tor}$为各控制点处能产生的消旋力矩之和，可表示为：
-\begin{equation}
-	f_{tor}=\sum_{i=k_{o}}^{N_c-k_{o}+1} -\Vert \boldsymbol{T}^{\mathcal{L}}_{Bt,i} \Vert_2
-\end{equation}
-其中$\boldsymbol{T}^{\mathcal{L}}_{Bt,i}$为控制点$\boldsymbol{C}_{i}$处能产生的消旋力矩。
-
-故消旋轨迹优化第二部分的优化问题可表示为：
-\begin{equation}
-	\begin{aligned}
-		\label{detumbing_phase2}
-		\mathop{\arg\min}\limits_{\mathbb{C}} f_{D2}=\pi_{s}f_{s}+\pi_{c}f_{c}+\pi_{tor}f_{tor}
-	\end{aligned}
-\end{equation}
-
-将$\mathbb{C}_{Dw}$作为\autoref{detumbing_phase2}中优化变量的初值，对\autoref{detumbing_phase2}进行求解，可得优化后的控制点集$\mathbb{C}_{Df}$。但\autoref{detumbing_phase2}中未对节点向量进行优化，各控制点的速度、加速度可能不在限制范围内，因此需对轨迹时间进行重分配，适当增大不可行控制点对应的时间间隔以保证轨迹可行。
-
-由\autoref{vec_cal}可知，若第$i$个控制点的速度由时间间隔$\Delta t_{v} =t_{i+k_{o}+1}-t_{i+1}$决定，将$\Delta t$调整为$\pi_{ve}$倍后，其速度$\boldsymbol{V}_{i}$将变为：
-\begin{equation}
-	\begin{aligned}
-		\boldsymbol{V}_{i}^{\prime}=\frac{k_{o}\left(\boldsymbol{C}_{i+1}-\boldsymbol{C}_i\right)}{\pi_{ve}t_{i+k_{o}+1}-t_{i+1}}
-		=\frac{\boldsymbol{V}_{i}}{\pi_{ve}}
-	\end{aligned}
-\end{equation}
-
-故对于速度超限的控制点，取$\pi_{ve}=\frac{\vert \boldsymbol{V}_{i}\vert_2}{v_{max}}+t_{\delta}$，并将$\Delta t_{v}$增大为$\pi_{ve}$倍即可使其速度满足约束，其中$t_{\delta}$为一微小正值。
-
-类似的，第$i$个控制点的加速度由时间间隔$\Delta t_{a} =t_{i+k_{o}+2}-t_{i+1}$决定，将$\Delta t$调整为$\pi_{ae}$倍后，其加速度$\boldsymbol{A}_{i}$将变为
-\begin{equation}
-	\begin{aligned}
-		\boldsymbol{A}_{i}^{\prime}=\frac{\left(k_{o}-1\right)\left(\boldsymbol{V}_{i+1}^{\prime}-\boldsymbol{V}_i^{\prime}\right)}{\pi_{ae}(t_{i+k_{o}+1}-t_{i+2})}
-		=\frac{\left(k_{o}-1\right)\left(\boldsymbol{V}_{i+1}-\boldsymbol{V}_i\right)}{(\pi_{ae})^2(t_{i+k_{o}+1}-t_{i+2})}
-		=\frac{\boldsymbol{A}_{i}}{(\pi_{ae})^2}
-	\end{aligned}
-\end{equation}
-
-则取$\pi_{ae}=\sqrt{\frac{\vert \boldsymbol{V}_{i}\vert_2}{v_{max}}}+t_{\delta}$并将时间间隔$\Delta t_{a}$增大为$\pi_{ae}$倍即可保证该控制点的加速度满足约束。
-
-通过上述公式对一个控制点对应的时间间隔进行调整后，会对其前后的控制点也产生影响，本文参考\cite{zhouRobustEfficientQuadrotor2019}采用迭代法调整节点向量，以保证各控制点的速度、角速度、加速度以及角加速度均满足约束，如表\ref{retime}所示。
-
-\begin{algorithm}[htb]  
-	\caption{控制点时间重分配算法}
-	\label{retime}  
-	\begin{algorithmic}[1]  
-		\Require  
-		控制点集$\mathbb{C}$,
-		节点向量$\boldsymbol{t}_{Do}$,
-		速度及加速度限制$\boldsymbol{B}=[v_{\max},\omega_{\max},a_{\max},\dot{\omega}_{\max}]$
-		\Ensure  
-		调整后满足约束的节点向量$\boldsymbol{t}_{Df}$
-		\State $[\mathbb{V},\mathbb{A}]=\operatorname{FindInfeasible}(\mathbb{C},\boldsymbol{t}_{Do},\boldsymbol{B})$
-		\State $\boldsymbol{t}_{Df}=\boldsymbol{t}_{Do}$
-		\While{$ !\operatorname{IsEmpty}(\mathbb{V},\mathbb{A})$}
-		\For{$\boldsymbol{V}_{i} \in \mathbb{V}$}
-		\State $[\pi_{ve},\pi_{\omega e}]=\operatorname{InfeasibleRate}(\boldsymbol{V}_{i})$
-		\State $\pi_{V}=\operatorname{Max}(\pi_{ve},\pi_{\omega e})$
-		\State $\boldsymbol{t}_{Df}=\operatorname{KnotSpanAdjust}(\boldsymbol{V}_{i},\boldsymbol{t}_{Df},\pi_{V})$
-		\EndFor
-		\For{$\boldsymbol{A}_{i} \in \mathbb{A}$}
-		\State $[\pi_{ae},\pi_{\dot{\omega} e}]=\operatorname{InfeasibleRate}(\boldsymbol{V}_{i})$
-		\State $\pi_{A}=\operatorname{Max}(\pi_{ae},\pi_{\dot{\omega} e})$
-		\State $\boldsymbol{t}_{Df}=\operatorname{KnotSpanAdjust}(\boldsymbol{A}_{i},\boldsymbol{t}_{Df},\pi_{A})$
-		\EndFor
-		\State $[\mathbb{V},\mathbb{A}]=\operatorname{FindInfeasible}(\mathbb{C},\boldsymbol{t}_{Df},\boldsymbol{B})$
-		\EndWhile
-		\State \Return $\boldsymbol{t}_{Df}$
-	\end{algorithmic}
-\end{algorithm}
-
-该算法将依次判断各控制点的速度、加速度是否可行，对于不可行的控制点，将在位置项和姿态项中取一个较大的时间间隔以保证二者均满足约束，并迭代数次保证各控制点均满足要求。
-
-相较于在优化问题中对节点向量进行优化，该算法显著提升了求解效率。将获得的$\mathbb{C}_{Df}$和$\boldsymbol{t}_{Df}$代入\autoref{Bspline}中可得消旋阶段位姿轨迹$\mathbb{T}_{Df}$。
-
-\section{数值仿真}
-为说明本章所提出方法的有效性，本节进行了章动目标极近距离逼近及消旋过程的仿真验证。所使用的目标和服务星点云如图\ref{Fig.processedpointcloud}所示，其物理参数取自文献\oldcite{Liuprec2022}和文献\oldcite{LUO2018823}，如表\ref{Table_phi_para}所示。认为目标处于地球同步轨道中，其轨道参数及初始状态如表\ref{Table_ini_para}所示。
-
-\begin{table}[!htb]
-	\caption{章动目标和服务星的物理参数}
-	\label{Table_phi_para}
-	\centering
-	\begin{tabularx}{\textwidth}{CCC}
-		\toprule
-		% after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
-		参数 									      & 数值 					& 单位 					  \\
-		\midrule
-		目标转动惯量$\boldsymbol{J}_{t}$		&	$\mathrm{diag}(4513.20,3282.50,4138.10)$	    	&	$\mathrm{kg\cdot m^2}$		\\
-		服务星转动惯量$\boldsymbol{J}_{c}$		&	$\mathrm{diag}(83.92,63.24,84.68)$	    	&	$\mathrm{kg\cdot m^2}$		\\
-		目标质量$m_{t}$		                &	$2086.3$	                                   	&	$\mathrm{kg}$		\\
-		服务星质量$m_{c}$		                &	$200$	                                     	&	$\mathrm{kg}$		\\
-		服务星最大控制力$\boldsymbol{u}_{F,\max}$    &  ${\left[5,5,5\right]^{\top}}$        &        $\mathrm{N}$  \\
-		服务星最大控制力矩$\boldsymbol{u}_{T,\max}$    &  ${\left[0.6,0.6,0.6\right]^{\top}}$        &        $\mathrm{N\cdot m}$  \\
-		目标等效磁张量$\boldsymbol{M}_{eff}$	&	$0.89\cdot\mathrm{diag}(5.91,5.91,1.95)\cdot 10^6$	 	&	$\mathrm{S\cdot m^4}$		\\
-		服务星线圈位置$\boldsymbol{d}_{m}^{\mathcal{B}}$	 &	${\left[0.80,0,0\right]^{\top}}$	    	&	$\mathrm{m}$		        \\
-		线圈半径$r$			     	&	$1$							 	&	$\mathrm{m}$				\\
-		线圈匝数$T_i$			&	$500$									&	$-$							\\
-		线圈电流$I$					&	$80$								&	$A$							\\
-		\bottomrule
-	\end{tabularx}
-\end{table}
-
-\begin{table}[!htb]
-	\caption{轨道参数与状态初值}
-	\label{Table_ini_para}
-	\centering
-	\begin{tabularx}{\textwidth}{CCC}
-		\toprule
-		% after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
-		参数 									      & 数值 					& 单位 					  \\
-		\midrule
-		轨道周期$T_{circle}$		&	$23.934$	    	&	$\mathrm{h}$		\\
-		轨道半径$r_{circle}$		&	$42164$	    	&	$\mathrm{km}$		\\
-		目标欧拉角$\boldsymbol{\varphi}_{\mathcal{P}}^{\mathcal{N}}$   &  ${\left[0,0,0\right]^{\top}}$   &  $\mathrm{rad}$  \\
-		目标角速度$\boldsymbol{\omega}_t^{\mathcal{P}}$	    	&	${\left[10,26,12\right]^{\top}}$	      	&	$^\circ/{\rm s}$     \\
-		服务星欧拉角$\boldsymbol{\varphi}_{\mathcal{B}}^{\mathcal{N}}$  &  ${\left[\pi,0,0\right]^{\top}}$   &  $\mathrm{rad}$  \\
-		相对距离$\boldsymbol{d}^{\mathcal{N}}$  &  ${\left[18,6,4\right]^{\top}}$   &  $\mathrm{m}$  \\
-		相对速度$\boldsymbol{v}^{\mathcal{N}}$     &  ${\left[0,0,0\right]^{\top}}$   &  $\mathrm{m/s}$  \\
-		\bottomrule
-	\end{tabularx}
-\end{table}
-
-将目标相关参数代入\autoref{nutationangle}中，可得目标当前章动角为$38.2\ (^\circ)$，通过算法\ref{alg2}建立其章动区域点云${\mathbb{X}_F}$，通过期望最大化算法构建对应的混合高斯模型记为${G_F}({{\boldsymbol{x}}^{\mathcal{L}}}|{\Theta _F})$，服务星点云对应的混合高斯模型记为${G_J}({{\boldsymbol{x}}^{\mathcal{B}}}|{\Theta _J})$。将相关参数代入\autoref{opti_detum_final}中，通过CasADi求解器\cite{Andersson2019}对该优化问题进行求解可得当前状态目标角动量系$\mathcal{L}$下的最优消旋位姿${\boldsymbol{x}}_{\mathcal{B}}^{\mathcal{L}}=\left[0.006,3.835,0\right]^{\top}$和${\boldsymbol{\varphi}}_{\mathcal{B}}^{\mathcal{L}}=\left[-0.0511,0.927,1.565\right]^{\top}$，通过坐标变换得惯性系$\mathcal{N}$下服务星的期望位姿为${\boldsymbol{x}}_{\mathcal{B}}^{\mathcal{N}}=\left[0.0025,1.9344,-3.3112\right]^{\top}$和${\boldsymbol{\varphi}}_{\mathcal{B}}^{\mathcal{N}}=\left[1.6392,1.0617,-0.247\right]^{\top}$。
-
-考虑到服务星需施加一部分控制力用于抵消电磁力、力矩，用于跟踪轨迹的最大控制力、力矩设定为$\boldsymbol{u}_{Ff,\max}={\left[2,2,2\right]^{\top}}\ (\mathrm{N})$和$\boldsymbol{u}_{Tf,\max}={\left[0.3,0.3,0.3\right]^{\top}}\ (\mathrm{N\cdot m})$，故服务星轨迹的加速度、角加速度限制为$a_{\max}=0.01\ (\mathrm{m/s^2})$和$\dot{\omega}_{\max}=0.0035\ (\mathrm{rad/s^2})$。给定服务星轨迹速度、角速度限制为$v_{\max}=0.1\ (\mathrm{m/s})$和${\omega}_{\max}=0.1\ (\mathrm{rad/s})$，仿真步长为$0.1\ (\mathrm{s})$，利用算法\ref{FMT}给出惯性系下服务星逼近参考路径如图\ref{fig.fmtpath}，再通过所提出的逼近轨迹优化方法对其进行优化，给出服务星逼近期望位姿轨迹如图\ref{fig.proximity-tra}中绿色曲线所示，轨迹总用时$335.4\ (\mathrm{s})$。同时，为验证轨迹的可行性，采用比例微分（PD）控制器控制服务星跟踪期望轨迹，所得实际轨迹如图\ref{fig.proximity-tra}中红色曲线所示。可以看出，由于建立了精确的碰撞约束，且对服务星位姿进行了同步规划，所提出的极近距离逼近轨迹规划方法减少了不必要的机动，逼近位姿轨迹平滑，实现了复杂外形章动目标的极近距离逼近。
-
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.95in]{picture/FMT_path.pdf}
-			\caption{服务星极近距离逼近参考路径\label{fig.fmtpath}}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.95in]{picture/proximity_tra.pdf}
-			\caption{服务星极近距离逼近最终轨迹\label{fig.proximity-tra}}
-		\end{subfigure}
-	\end{minipage}
-	\caption{服务星极近距离逼近轨迹\label{Fig.proximity-tra}}
-\end{figure*}
-
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width= 3.55 in]{picture/FMT_path.eps}
-%	\caption{服务星极近距离逼近参考路径}
-%	\label{fig.fmt-path}
-%\end{figure}
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width= 3.55 in]{picture/proximity_tra.eps}
-%	\caption{服务星极近距离逼近最终轨迹}
-%	\label{fig.proximity-tra}
-%\end{figure}
-
-逼近过程中碰撞危险度$P_c$及其阈值$P_{ts}$的变化情况如图\ref{fig.Ps_pts}所示，各轨迹点处碰撞危险度均小于阈值，故给出的逼近轨迹能保证服务星不与章动目标碰撞。
-
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width= 3.55 in]{picture/pts_ps.eps}
-	\caption{逼近过程碰撞危险度变化情况}
-	\label{fig.Ps_pts}
-\end{figure}
-
-逼近轨迹的速度、角速度变化如图\ref{fig:proximi_vec}所示，加速度、角加速度变化如图\ref{fig:proximi_acc}所示，各轨迹点处的速度、加速度、角速度、角加速度均满足限制要求。同时，为验证方法具有速度平滑效果，去除速度平滑项给出对比轨迹，其速度变化情况如图\ref{fig:proximi_vec}中点划线所示。可以看出，具有速度平滑项的轨迹速度波动明显小于对比轨迹，有助于减少服务星的燃料消耗。
-%\begin{figure*}[htb!]
-%	\centering
-%	\begin{minipage}[t]{0.96\textwidth}
-%		\centering
-%		\begin{subfigure}[t]{0.47\textwidth}
-%			\centering
-%			\includegraphics[width = 2.6in]{picture/proximity_vec_all.eps}
-%			\caption{ }
-%			\label{fig:proximi_vec}
-%		\end{subfigure}\hfill
-%		\begin{subfigure}[t]{0.47\textwidth}
-%			\centering
-%			\includegraphics[width = 2.6in]{picture/proximity_acc_all.eps}
-%			\caption{ }
-%			\label{fig:proximi_acc}
-%		\end{subfigure}
-%	\end{minipage}
-%	\caption{逼近过程服务星速度、加速度变化\label{Fig:proximi_vec}}
-%\end{figure*}
-
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width = 4.2in]{picture/proximity_vec_all.eps}
-	\caption{逼近过程服务星速度变化情况}
-	\label{fig:proximi_vec}
-\end{figure}
-
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width = 4.2in]{picture/proximity_acc_all.eps}
-	\caption{逼近过程加速度变化情况}
-	\label{fig:proximi_acc}
-\end{figure}
-
-到达期望位姿后，服务星开启磁场对章动目标进行消旋，规定当目标章动角变化超过$2\  (^\circ)$时需对章动区域点云${\mathbb{X}_F}$及其混合高斯模型${G_F}({{\boldsymbol{x}}^{\mathcal{L}}}|{\Theta _F})$进行更新，并通过所提出的消旋阶段位姿轨迹规划方法给出服务星的机动轨迹。当目标角速度降至$1.5\ (\mathrm{^\circ/s})$（直接抓捕允许的最大角速度）以下时消旋结束，消旋过程中服务星与章动目标间相对位姿变化情况如图\ref{Fig.detumble_pose}所示。其中，图\ref{Fig.detumble_pose}左下角轨迹表示消旋开始$1.72$小时后，最优消旋位姿变为垂直构型，服务星根据给出的轨迹机动至新的最优消旋位姿。
-
-%其中，图\ref{Fig.detumble_pose}左下角轨迹表示消旋开始$1.72$小时后，最优消旋位姿变为垂直构型，服务星根据给出的轨迹机动至新的最优消旋位姿。
-
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/detumble_time1.eps}
-			\caption{ }
-			\label{fig:detumbletime1}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/detumble_time2.eps}
-			\caption{ }
-			\label{fig:detumbletime2}
-		\end{subfigure}
-		
-		\vspace{10pt}
-		\centering
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/detumble_tra.pdf}
-			\caption{ }
-			\label{fig:detumbletra}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/detumble_time4.eps}
-			\caption{ }
-			\label{fig:detumbletime4}
-		\end{subfigure}
-	\end{minipage}
-	\caption{切换构型消旋过程中的相对位姿情况\label{Fig.detumble_pose}}
-\end{figure*}
-
-消旋全过程中服务星相对位姿变化情况如图\ref{Fig.detumble_posiandpose}所示。可以看出，除$1.72\ (\mathrm{h})$时服务星从平行构型切换到垂直构型外，消旋过程中服务星位姿均无大幅变化，未因目标旋转进行不必要的机动。表明服务星所施加的消旋力矩始终平行目标角动量轴，使得目标角动量方向恒定，所提出的目标角动量定向安全区域能有效避免服务星的无效机动。
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.2in]{picture/detumble_posi.eps}
-			\caption{ }
-			\label{fig:detumbleposi}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.2in]{picture/detumble_pose.eps}
-			\caption{ }
-			\label{fig:detumblepose}
-		\end{subfigure}
-	\end{minipage}
-	\caption{惯性系下服务星相对位置与欧拉角变化情况\label{Fig.detumble_posiandpose}}
-\end{figure*}
-
-消旋过程中服务星的速度、角速度变化情况如图\ref{Fig.detumble_Vec_C}所示，而加速度、角加速度变化情况如图\ref{Fig.detumble_Acc_C}所示。从图中可以看出，整个消旋过程中，服务星的速度、加速度等均满足约束条件，表明轨迹各控制点处速度、加速度等均小于限制值，算法\ref{retime}可行有效，所给出的消旋轨迹服务星可执行。
-%\begin{figure*}[htb!]
-%	\centering
-%	\begin{minipage}[t]{0.96\textwidth}
-%		\centering
-%		\begin{subfigure}[t]{0.23\textwidth}
-%			\centering
-%			\includegraphics[width = 1.475in]{picture/chaser_detumble_vec.eps}
-%			\caption{ }
-%			\label{fig:detumble_vec_c}
-%		\end{subfigure}\hfill
-%		\begin{subfigure}[t]{0.23\textwidth}
-%			\centering
-%			\includegraphics[width = 1.475in]{picture/chaser_detumble_ang_vec.eps}
-%			\caption{ }
-%			\label{fig:detumble_angvec_c}
-%		\end{subfigure}\hfill
-%		\begin{subfigure}[t]{0.23\textwidth}
-%			\centering
-%			\includegraphics[width = 1.475in]{picture/chaser_detumble_acc.eps}
-%			\caption{ }
-%			\label{fig:detumble_acc_c}
-%		\end{subfigure}\hfill
-%		\begin{subfigure}[t]{0.23\textwidth}
-%			\centering
-%			\includegraphics[width = 1.475in]{picture/chaser_detumble_ang_acc.eps}
-%			\caption{ }
-%			\label{fig:detumble_angacc_c}
-%		\end{subfigure}
-%	\end{minipage}
-%	\caption{惯性系下服务星速度及角速度变化情况\label{Fig.detumble_Vec_C}}
-%\end{figure*}
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.2in]{picture/chaser_detumble_vec.eps}
-			\caption{ }
-			\label{fig:detumble_vec_c}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.2in]{picture/chaser_detumble_ang_vec.eps}
-			\caption{ }
-			\label{fig:detumble_angvec_c}
-		\end{subfigure}\hfill
-	\end{minipage}
-	\caption{惯性系下服务星速度及角速度变化情况\label{Fig.detumble_Vec_C}}
-\end{figure*}
-
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-			\centering
-			\begin{subfigure}[t]{0.47\textwidth}
-					\centering
-					\includegraphics[width = 2.2in]{picture/chaser_detumble_acc.eps}
-					\caption{ }
-					\label{fig:detumble_acc_c}
-				\end{subfigure}
-			\begin{subfigure}[t]{0.47\textwidth}
-					\centering
-					\includegraphics[width = 2.2in]{picture/chaser_detumble_ang_acc.eps}
-					\caption{ }
-					\label{fig:detumble_angacc_c}
-				\end{subfigure}
-		\end{minipage}
-	\caption{惯性系下服务星加速度及角加速度变化情况\label{Fig.detumble_Acc_C}}
-\end{figure*}
-
-多次测试得消旋过程轨迹规划耗时如图\ref{Fig.PlantimeConsum}所示，规划最大耗时为$0.59\ (\mathrm{s})$，平均耗时为$0.38\ (\mathrm{s})$，由于目标章动角变化相对缓慢，故该耗时能满足消旋任务需求，可实现在线规划。
-
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.2in]{picture/plantimeconsum.eps}
-			\caption{ }
-			\label{fig:plantimeconsum}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.2in]{picture/plantimeconsum_boxline.eps}
-			\caption{ }
-			\label{fig:plantimeconsum_boxline}
-		\end{subfigure}
-	\end{minipage}
-	\caption{消旋轨迹规划耗时\label{Fig.PlantimeConsum}}
-\end{figure*}
-
-随后，本文选取固定构型的消旋策略\cite{Liuprec2022}与采用椭球安全区域的固定位姿消旋策略\cite{gomezGuidanceNavigationControl2017}进行比较。其中，固定构型消旋策略仍采用本文提出的GMMCRA法确定安全位姿，但限定其构型为平行构型，服务星起始位姿为${\boldsymbol{x}}_{\mathcal{B}}^{\mathcal{N}}=\left[0.0025,1.934,-3.311\right]^{\top}$和${\boldsymbol{\varphi}}_{\mathcal{B}}^{\mathcal{N}}=\left[1.639,1.062,-0.247\right]^{\top}$，终止位姿为${\boldsymbol{x}}_{\mathcal{B}}^{\mathcal{N}}=\left[0,3.565,-6.416\right]^{\top}$和${\boldsymbol{\varphi}}_{\mathcal{B}}^{\mathcal{N}}=\left[1.511,1.161,0.231\right]^{\top}$。固定位姿消旋策略中服务星位姿始终为${\boldsymbol{x}}_{\mathcal{B}}^{\mathcal{N}}=\left[0,3.599,-6.477\right]^{\top}$和${\boldsymbol{\varphi}}_{\mathcal{B}}^{\mathcal{N}}=[1.511,1.161$ $,0.231]^{\top}$。这两种消旋策略下服务星的相对位姿情况如图\ref{Fig.posefix_detumble_pose}所示。
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/posefix_detumble_time.eps}
-			\caption{ }
-			\label{fig:posefix_detumble_pose}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.47\textwidth}
-			\centering
-			\includegraphics[width = 2.5in]{picture/fix_detumble_time.eps}
-			\caption{ }
-			\label{fig:fix_detumble_pose}
-		\end{subfigure}
-	\end{minipage}
-	\caption{固定构型及固定位姿策略消旋过程中的相对位姿情况\label{Fig.posefix_detumble_pose}}
-\end{figure*}
-
-三种消旋策略的消旋效果如图\ref{Fig.posechangedetumb_time}、图\ref{Fig.posefixdetumb_time}和图\ref{Fig.fixdetumb_time}所示，对比各图可以看出，本文提出的切换构型消旋策略在平行构型效率较低时切换至垂直构型，保证消旋全过程均具有理想的消旋效率，总耗时$3.6\ (\mathrm{h})$。固定构型的消旋策略起始时刻消旋效率与本文方法一致，但随着目标章动角的增大，该构型下目标与服务星间的安全距离增大，目标质心处磁场强度迅速下降，导致消旋效率急剧降低，耗时$39.2\ (\mathrm{h})$将目标角速度降至容许范围。而采用椭球安全区域的固定位姿消旋策略，由于安全约束保守性较大，服务星所能产生的消旋力矩较小，消旋总耗时$101.4\ (\mathrm{h})$。因此相比现有方法，本文提出的消旋策略能在保证服务星安全的前提下显著提升电磁消旋的效率，有助于电磁消旋任务的具体实施。
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/posechange_omega_x.eps}
-			\caption{ }
-			\label{fig:posechangedetumb_time(a)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/posechange_omega_y.eps}
-			\caption{ }
-			\label{fig:posechangedetumb_time(c)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/posechange_omega_z.eps}
-			\caption{ }
-			\label{fig:posechangedetumb_time(e)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/posechange_omega_norm.eps}
-			\caption{ }
-			\label{fig:posechangedetumb_time(g)}
-		\end{subfigure}
-	\end{minipage}
-	\caption{切换构型消旋耗时\label{Fig.posechangedetumb_time}}
-\end{figure*}
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/posefix_omega_x.eps}
-			\caption{ }
-			\label{fig:posefixdetumb_time(a)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/posefix_omega_y.eps}
-			\caption{ }
-			\label{fig:posefixdetumb_time(c)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/posefix_omega_z.eps}
-			\caption{ }
-			\label{fig:posefixdetumb_time(e)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/posefix_omega_norm.eps}
-			\caption{ }
-			\label{fig:posefixdetumb_time(g)}
-		\end{subfigure}
-	\end{minipage}
-	\caption{固定构型消旋耗时\label{Fig.posefixdetumb_time}}
-\end{figure*}
-\begin{figure*}[htb!]
-	\centering
-	\begin{minipage}[t]{0.96\textwidth}
-		\centering
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/fix_omega_x.eps}
-			\caption{ }
-			\label{fig:fixdetumb_time(a)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/fix_omega_y.eps}
-			\caption{ }
-			\label{fig:fixdetumb_time(c)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/fix_omega_z.eps}
-			\caption{ }
-			\label{fig:fixdetumb_time(e)}
-		\end{subfigure}\hfill
-		\begin{subfigure}[t]{0.23\textwidth}
-			\centering
-			\includegraphics[width = 1.475in]{picture/fix_omega_norm.eps}
-			\caption{ }
-			\label{fig:fixdetumb_time(g)}
-		\end{subfigure}
-	\end{minipage}
-	\caption{固定位姿消旋耗时\label{Fig.fixdetumb_time}}
-\end{figure*}
-
-\section{本章总结}
-本章针对复杂外形章动目标极近距离逼近与消旋过程中的位姿轨迹规划问题展开研究。两阶段均采用引导优化的规划框架，并根据二者对轨迹要求的不同对相关方法进行了调整。极近距离逼近阶段轨迹采用FMT*算法计算参考路径，随后对各控制点及轨迹时间进行优化，以给出满足各项约束的速度平滑位姿轨迹，有效减少了无效机动。极近距离消旋阶段为减少轨迹规划耗时，设计PPO算法以给出参考路径，随后对轨迹的控制点进行优化以满足碰撞约束并最大化消旋力矩，通过时间重分配算法保证轨迹速度、加速度可行，保证了消旋轨迹规划耗时满足要求，并极大提升了消旋效率。最后，进行了相关仿真验证，结果表明所提出的方法能在考虑章动目标、服务星复杂外形的前提下，给出安全无碰撞的可行位姿轨迹，实现章动目标的极近距离逼近，相比现有方法能有效减少电磁消旋所需时间。
 
 
 \cleardoublepage
@@ -1724,7 +1055,7 @@ MuJoCo 是一个高性能的物理引擎，专注于多关节系统的动力学�
 \subsection{动力学与环境模型的构建}
 在仿真平台中，首先对四旋翼无人机及其绳系吊运系统进行动力学建模，包括无人机主体的刚体模型、旋翼的气动力模型，以及绳系的柔性力学模型。接着，在环境建模中引入以下关键要素：
 
-绳系的约束建模：模拟绳索在受力、摆动及碰撞等情况下的动力学行为。
+绳系的约束建模：模拟系绳在受力、摆动及碰撞等情况下的动力学行为。
 外部环境扰动：包括风场、气流湍动等干扰因素，用以测试控制算法的鲁棒性。
 目标物体：模拟无人机需吊运的目标物体，其质量、重心及几何特性对吊运系统的稳定性影响显著。
 \subsection{仿真系统的功能验证与优化}
@@ -1736,16 +1067,14 @@ MuJoCo 是一个高性能的物理引擎，专注于多关节系统的动力学�
 通过对上述平台的综合使用和比对分析，仿真系统为后续试验验证及算法优化提供了可靠的基础和参考数据。
 
 \subsection{低保真度Drake仿真引擎}
-Drake 是麻省理工大学联合丰田研究院制作的一个强大的开源物理仿真和控制工具，专注于动力学建模、优化和精确控制仿真平台，尤其适合复杂机器人系统和高自由度系统的研究。与simulink相似，Drake 强调模块化设计，并提供灵活的接口和先进的数学工具，是学术研究和工业应用的理想选择。同时，其高效的优化工具可以辅助实现控制算法的验证与性能优化。
+Drake 是麻省理工大学的计算机科学与人工智能实验室联合丰田研究院开发的一个强大的开源物理仿真和控制工具，专注于动力学建模、优化和精确控制仿真平台，用于分析机器人的动力学并为它们构建控制系统，尤其适合高自由度系统的研究。Drake 旨在模拟包括摩擦、接触、空气动力学等在内的机器人复杂动力学，并将这些信息提供给高级规划、控制和分析算法。与simulink相似，Drake 强调模块化设计，并提供灵活的接口和先进的数学工具，是学术研究和工业应用的理想选择。同时，其高效的优化工具可以辅助实现控制算法的验证与性能优化。
 
-Drake 的学习曲线较陡，主要因为其功能复杂且面向高级用户。用户需要一定的动力学建模、优化理论以及编程基础（尤其是C++和Python）来高效使用 Drake 的工具集。
-
-Drake 提供了较为详细的官方文档和教程，同时还包含多种示例代码。然而，与更广泛应用的仿真工具（如Gazebo）相比，社区规模较小，第三方教程和用户案例相对较少。
-
-Drake 具备高精度的动力学仿真能力，能够模拟复杂多体系统中的力、扭矩和接触力场景。尤其在研究机器人柔性控制和优化控制的场景中，Drake 提供了独特的建模和分析工具，非常适合力控仿真任务。
+本节讨论尝试使用 Drake 验证四旋翼无人机绳系吊运系统中控制系统的稳定性
+多无人机悬挂负载系统中控制系统稳定性的一些挑战。选择 Drake 是因为它是一个流行的开源工具箱，专注于接触力学仿真并提供许多预实现的控制器。
 
 
-本节讨论尝试使用 Drake 验证多无人机悬挂负载系统中控制系统稳定性的一些挑战。选择 Drake 是因为它是一个流行的开源工具箱，专注于接触力学仿真并提供许多预实现的控制器。主要结果的视频概述可以在这里找到：https://youtu.be/NR5nPiXb5wU，而相应的代码可以在这里找到：https://github.com/hmer101/6.8210_drake_slung_load。请注意，视频清晰地展示了该项目的三个组成部分：差分平坦度、状态调节和轨迹稳定。这里仅讨论状态调节和轨迹稳定组件（如图 3.11 所示），因为微分平坦度模块主要由合作者开发。
+
+主要结果的视频概述可以在这里找到，而相应的代码可以在这里找到。请注意，视频清晰地展示了该项目的三个组成部分：差分平坦度、状态调节和轨迹稳定。这里仅讨论状态调节和轨迹稳定组件（如图 3.11 所示），因为微分平坦度模块主要由合作者开发。
 Drake 工具箱提供了三个核心组件，用于实现高效、灵活的动力学系统建模：
 (1)动力学系统建模
 Drake 的核心功能是允许用户通过大量的动力学组件构建系统模型。这些组件包括传感器、执行器、估计器和控制器等模块，能够满足复杂系统建模的需求。
@@ -1780,10 +1109,108 @@ Gazebo 是一个通用的开源仿真框架，它将刚体物理引擎（例如�
 该仿真平台结合了高效的动力学建模和视觉数据生成，适用于多无人机吊挂载荷系统的研究与验证。
 
 \subsection{高保真度MuJoCo仿真引擎}
-\section{试验验证系统介绍}
-试验验证系统主要分为硬件环境配置和软件环境配置两部分，
+
+\section{无人机绳系吊运系统控制仿真验证}
 \section{试验系统介绍}
 
+试验系统主要分为硬件环境配置和软件环境配置两部分，硬件环境配置根据试验方案和算法需求，选择适配的机载设备型号，并配套选取合适的无人机机架、动力系统和电池容量。同时，设计和改装结构件以安装合作标识及机载计算设备，并配置用于测量真值的外部设备等，确保硬件的整体性能满足试验需求。软件环境配置为算法运行提供必要的软件支持，包括底层驱动支持与其他硬件设备的通信等。整体设计以硬件和软件的协同配合为核心，确保试验系统能够高效支持算法的开发与验证。
+\subsection{硬件配置}
+由于无人机吊运控制算法在实机测试中需要精确获取自身位置，而室外环境受地形复杂、信号干扰及气候条件等因素的限制，难以实现高精度的绝对位置测量。为此，试验选择在室内环境开展测试，采用光学定位系统进行无人机位置的测定。光学定位系统通过高精度相机阵列实时跟踪目标，能够提供亚毫米级的精确位置数据，具有抗干扰能力强、稳定性高的特点，为算法的验证和性能评估提供了可靠的参考基准。系统的硬件框架如图 \ref{framework} 所示。
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=36pc]{picture/5_4.png} 
+	\caption{室内试验系统硬件配置} \label{framework}
+\end{figure}
+
+光学定位系统选用Optitrack。Optitrack 使用复数摄像头从不同角度识别安装在待跟
+54 
+第5章  仿真与试验 
+踪物体上的特殊反射球，并通过计算机视觉方法跟踪这些反射球在空间中的位置。通过
+在刚体上安装4个非共面反射球的方法。Optitrack可以解算出刚体的位姿，并提供具有
+亚毫米级精度[74]的高频实时位姿估计。 
+地面站通过路由器提供的局域网，使用SSH连接到无人机的机载计算机上，发布指
+令并监控无人机状态。同时，机载计算机也通过局域网与工作站建立连接，通过VRPN
+协议获取室内定位数据。 
+接下来确定无人机平台上主要的硬件设备型号。综合算力、重量和接口数量等因素，
+试验平台选用如图5-2(a)所示的 NUC 作为机载计算设备（上位机）。NUC 上装载的 i7
+芯片保证了强劲的CPU计算性能，且相比其他ARM平台，x86_64的架构拥有更好的
+软件兼容性。此外，薄款的NUC整机高度不到40mm，且采用塑料外壳，重量较轻，可
+以方便地装载到无人机平台上。在下位机的选择上，如图5-2(b)所示，平台选用基于PX4
+开源项目的雷迅 CUAV V5+飞控作为下位机，负责底层的控制工作。V5+在 Pixhawk 
+FMUv5标准上改进而来，选用速度更快的STM32F765芯片作为主处理器，并设计了冗
+余的传感器组，能最大化保障飞行任务的执行。 
+UWB模块选用空循环（Nooploop）的LinkTrack P模块，该模块工作在4GHz频段
+附近，能提供高频的测距和数据通信功能，同时具有极低的工作功耗，如图5-2(c)所示。
+LTP 被广泛应用于室内外的机器人导航、集群系统编队、测距防撞系统等场景中，受到
+用户的广泛认可。机载相机模块选用4个全局快门CCD摄像头和FOV120°的广角镜
+头组合，获取全向视野，使用720p的视频流以兼顾更新频率、解算精度和解算距离。
+
+随后，对无人机平台的机械部分进行设计。无人机的机架决定了无人机能选装的最
+大桨叶型号，从而决定了其载荷上限，因此在无人机方案设计中被第一个确定。本文选
+择使用JMRRC 360机架，电机轴距为360mm，机臂和中心板采用双层碳板结构，中间
+使用铝柱连接。这种设计常见于小型四旋翼的结构设计中，相比起使用碳管作为机臂的
+方案，能省去碳管管夹（通常是铝制铣件）的重量，兼具轻便和强度。 
+在确定了机架型号后，动力配置也随之确定。飞行平台选用T-Motor Air Gear 350动
+力套件，包括4个2213 KV920的无刷电机、对应的20A电子调速器（Electronic Speed 
+Controller，ESC）和 2 对 9545 自锁尼龙桨。官方建议无人机总重控制在1.2-1.5kg之间，
+55 
+西北工业大学硕士学位论文 
+但在实测中发现，在不要求大幅度机动和长航时的情况下，可以做到2.2kg附近的满载
+起飞，悬停油门约在60%附近。电池选用格氏ACE系列的4s1p 4000mAh 25C锂电池
+组，相比3s电池，4s电池可以提供更强的动力，且4s电池可以直接给NUC供电，不
+需要转接升压模块。续航方面，满载测试续航在8分钟附近，可以满足试验要求。最后，
+对其他的安装件进行设计，包括NUC固定件、视觉合作标识和相机的安装件等。最终
+的设计图和实物图如图5-3所示。 
+Optitrack
+反射球
+UWB模块
+CUAV V5+
+合作标识
+广角摄像头
+(a)                                             
+(b) 
+图5-3 无人机平台设计图和实物图 
+NUC
+无人机的线路和信号关系并不复杂，图5-4中列出了无人机上主要原件的关系图，
+注明了通信线上的通信内容或协议，并用虚线和实线区分了供电线和信号线：
+
+
+\subsection{软件配置}
+系绳收放机构的软件部分使用C语言编程，设计包括主程序和子程序部分。主程序
+内初始化各个子模块，包括延时函数初始化、串口初始化、指示灯初始化以及定时器初
+始化。子程序部分包括了定时器周期中断、张力传感器数据读取、伺服电机驱动和状态
+反馈。当主程序完成各个子模块初始化后，便会循环进入定时器中断响应，一旦中断发
+生，则立即响应中断请求执行相应任务。 
+需要说明的是波特率是指每秒传送的字节数，读取张力传感器数据时串口的波特率
+设置为9600，默认情况下驱动直流伺服电机时的波特率为57600。当主程序经过中断使
+能后，定时器1ms中断一次，并以10ms的周期完成张力值读取、控制器运算和电机力
+矩输出。为了检测程序实时运行情况，正常状态下板载LED灯每1s亮灭交替一次，如
+发生程序堵塞，则LED灯出现状态异常。程序流程图如图5-12所示。 
+60 
+第5章  绳系无人机试验系统设计与试验验证 
+中断开始
+清除中断标志
+10ms
+N
+Y
+读取张力值
+N
+控制器计算
+控制伺服电机
+转矩
+1s
+Y
+LED灯亮灭交替
+中断返回
+图5-12 系绳收放机构软件逻辑 
+四旋翼控制代码程序由C++编写，板载计算机NUC与飞行控制器通过USB转串口
+线相连，波特率为921600。主程序首先定义发送和接收数据类型，包括输出的推力和姿
+态角、位置数据和以四元数表示的姿态数据。定时器以10ms的周期运行控制算法并将
+运算结果交由飞行控制器执行。 
+
+
+
+\section{绳系无人机协调规划控制试验验证}
 \section{本章总结}
 
 
@@ -1791,28 +1218,16 @@ Gazebo 是一个通用的开源仿真框架，它将刚体物理引擎（例如�
 
 \chapter{总结与展望}
 \chaptermark{总结与展望}
-空间章动目标消旋操控是大型非合作目标维修、回收或离轨等操作的必要前序步骤，其中电磁涡流消旋具有非接触、无额外工质消耗、适用性强等优势，受到广泛关注，极具发展与应用潜力。本文面向空间章动目标电磁消旋场景，主要研究任意形状目标间的碰撞风险分析问题、复杂章动目标极近距离逼近与消旋轨迹规划问题，并搭建地面实验系统以验证相关模型方法，全文工作总结如下：
+
 
 \section{本文工作总结}
-\begin{enumerate}
-	\item 描述了空间目标电磁消旋任务场景与涉及的坐标系定义，针对电磁消旋场景中的相互机理，基于磁张量理论，给出了任意外形目标在非均匀磁场下所受电磁力和力矩的机理模型；在此基础上建立了惯性系下服务星与目标间的相对位置动力学方程和各自的姿态动力学方程。随后对相关概念进行了介绍，给出了本文中最优消旋位姿与位姿同步规划问题的定义。
-	
-	\item 针对任意外形航天器间的碰撞风险评估问题，在目标与服务星点云均已获得的前提下，通过混合高斯模型获得航天器外形的拓扑化描述，并在此基础上给出了精确安全区域的构建方法。对于章动旋转目标，根据其运动特点设计了角动量定向安全区域，避免了体固连安全区域的时变问题。随后，提出了基于混合高斯模型的碰撞危险度定义与其解析计算式，以评估航天器间的碰撞风险，并对碰撞危险度阈值的确定进行了分析，获得了两任意外形航天器间的准确碰撞约束。仿真分析表明所提出的GMMCRA法能对复杂外形航天器间的碰撞风险进行准确评估，求解迅速且精度明显高于传统的椭球安全区域。
-	
-	\item 针对复杂外形章动目标极近距离逼近与消旋过程中的位姿轨迹规划问题，基于引导优化的规划框架，通过B样条曲线构造轨迹，根据任务中极近距离逼近和极近距离消旋过程中对服务星轨迹的不同需求，结合GMMCRA法分别对其进行了设计。极近距离逼近阶段采用FMT*算法给出渐近最优的服务星逼近位姿参考路径，并设计优化问题对曲线的控制点和时间间隔进行优化，给出满足各项约束的速度平滑位姿轨迹，有效减少了无效机动。极近距离消旋阶段为提高轨迹规划的实时性，设计PPO算法计算参考位姿路径，并对控制点进行优化以满足碰撞约束并最大化消旋力矩，随后通过时间重分配算法保证轨迹的速度、加速度满足要求。通过相关仿真验证了所提出轨迹规划方法能给出安全无碰撞的可行位姿轨迹，实现复杂外形章动目标的极近距离逼近，有效提高了电磁消旋效率。
-	
-	\item 基于所提出的章动目标极近距离逼近与消旋方法，设计并搭建了由章动旋转模拟装置、磁场源、七自由度Kuka iiwa机械臂组成的章动目标电磁消旋地面实验系统，实现了空间章动目标的两轴转动模拟以及磁场源的位姿运动控制。随后，通过所提出的方法建立了实验系统中模拟目标和服务星的安全区域与避撞约束，给出了服务星的逼近与消旋轨迹。在仿真环境中验证了机械臂轨迹的安全性和可行性后，进行了章动旋转目标逼近与电磁消旋实验，并与采用其它方法的消旋策略进行了对比，实验结果表明，本文所提出的方法能够实现章动旋转目标的极近距离逼近，消旋效率相比传统电磁消旋方法有显著提升。
-\end{enumerate}
+
 
 \section{未来工作展望}
-本文针对空间任意形状章动目标电磁消旋问题展开研究，主要目标是在保障服务星安全的情况下显著提高电磁消旋效率，这一场景中仍有许多问题值得进一步研究，后续研究工作可以从以下几方面展开：
-\begin{enumerate}
-	\item 设计针对外形建模的混合高斯建模方法，以提高混合高斯模型的参数鲁棒性，同时考虑目标与服务星参数不确定度对碰撞风险的影响，使方法更贴近实际空间环境。
-	
-	\item 将服务星的相对位姿动力学引入轨迹规划问题中，以进一步优化逼近与消旋过程中服务星的燃料消耗，提高轨迹的可行性。
-	
-	\item 对地面实验系统进行进一步优化，实现章动旋转目标的三轴转动模拟与轨迹在线规划测试，使地面实验中模拟目标的转动模式与空间章动目标基本一致，进一步提高实验的参考价值。
-\end{enumerate}
+
+
+
+
 %%=============================================================================%
 %% 参考文献以及附录
 %%-----------------------------------------------------------------------------%
@@ -1827,17 +1242,22 @@ Gazebo 是一个通用的开源仿真框架，它将刚体物理引擎（例如�
 %\bibliography{ref}
 
 \begin{acknowledgements}                                    % 致谢开始
-日月如梭，三年的研究生时光转瞬即逝，我在\blackbox{RCIR智能机器人研究中心}收获颇多，得到了许多人的关怀与帮助，在此向他们表达我最真挚的谢意。
+时光如白驹过隙，转眼间我的研究生生活即将画上句号。在西北工业大学航天学院的三年求学岁月里，我不仅收获了专业知识，锻炼了科研能力，更收获了无数宝贵的友情和深厚的师生情谊。在此，我怀着感恩的心情，衷心感谢所有在我的成长过程中给予帮助、支持和鼓励的每一位老师、同学和家人。
 
-首先感谢我的导师 \blackbox{黄攀峰教授}，\blackbox{黄}老师始终秉持着认真负责的态度指导学生，为我指明了研究方向，并一步步引领我踏上科研之路，使我得以初窥门径。 同时，\blackbox{黄}老师为论文中实验系统的搭建提供了充分支持，使我得以进行消旋实验探究，极大提升了我的工程实践能力。老师治学严谨，学识渊博，并十年如一日地保持奋发向上的工作态度，深深鼓舞激励着我。感谢\blackbox{智能机器人研究中心}的\blackbox{沈刚辉}老师对我的悉心指导，\blackbox{沈}老师在生活中对我关照有加，在项目中亲力亲为，带领我攻坚克难，提出了诸多宝贵意见；感谢\blackbox{董刚奇}老师对我研究内容的斟酌把关，让我沿着正确的路线前进；感谢\blackbox{常海涛}老师、\blackbox{马志强}老师在项目研究中的悉心指导；感谢\blackbox{张帆}老师、\blackbox{张夷斋}老师、\blackbox{刘正雄}老师、\blackbox{刘星}老师等各位老师对我的支持与帮助，祝\blackbox{智能机器人研究中心}越办越好！
+首先，我要衷心感谢我的导师张帆教授。张老师严谨的治学态度和孜孜不倦的工作精神一直是我学习的榜样。作为我的导师，张老师不仅在学术上给予我无微不至的指导，还为我提供了优越的科研条件，并始终关心和支持我的成长。在张老师的教诲和引导下，我不断完善自己的专业技能，逐步迈向科研的高峰。在此，向张老师表达我最深的感激之情。
 
-感谢\blackbox{刘习尧}师兄对我的全方位指导，入学时我的知识储备、工程经验均较为薄弱，是\blackbox{刘习尧}师兄的无数次指导使我迅速成长，让我少走了很多弯路。感谢\blackbox{黄冰潇}师兄对我的关心帮助，时常为我指点迷津。感谢\blackbox{翟晨萌}师兄、\blackbox{王勇杰}师兄对我学习生活上的交流帮助，让我融入\blackbox{RCIR}的大家庭中。感谢\blackbox{文思捷}师兄对项目实验的大力支持，帮助我解决了许多技术问题。感谢\blackbox{宋梦实、赵亚坤、李陇南、刘亚}等师兄师姐们对我的关心、照顾。师兄师姐们都已毕业或即将毕业，祝愿他们在新的旅途中一帆风顺！
+其次，我要感谢张帆老师，张老师的支持与鼓励在我的研究生生涯中占据了重要的位置。她不仅是我的学术导师，更像是我亲切的大姐姐。无论是在课题的设计、实施过程中，还是在面对困惑和挫折时，张帆老师始终给予我极大的关怀和帮助。她总是耐心地为我解答问题，鼓励我在科研上不断突破自我，从不因困难而气馁。我深深感激张帆老师对我个人成长的悉心帮助与关爱。
 
-感谢我的同窗\blackbox{徐永佳、金澳、曹睿}等，在研究与生活中我们一起前行，为我的生活增添了许多快乐。感谢\blackbox{徐佳、朱庭西、刘怡帆、张泽妮}等师弟师妹对项目工作的支持，我们共同应对项目中的各种困难，使项目工作得以顺利完成。祝他们在今后的日子里思如泉涌，快乐科研！
-    
-感谢我的父母、家人一直以来对我的关心、照顾和支持，让我能专心于学业，他们是我最坚实的后盾，让我在前行路上充满动力。祝愿他们岁岁平安！
 
-最后，感谢阅读本文的评审专家在百忙之中阅读本文并提出宝贵意见。
+最深沉的感激，属于我的父母。感谢他们一直以来对我的无私支持和鼓励。无论是生活中的点滴关怀，还是学业上的悉心照顾，父母为我提供了坚强的后盾。正是因为他们的辛勤付出和无怨无悔的奉献，才让我能够在求学的道路上无所畏惧、勇往直前。父母的恩情，我将铭刻一生，终身难忘。
+
+在学术和生活上，我还要感谢王通师兄、刘习尧师兄、刘亚师姐。感谢你们在我遇到学术难题时耐心的解答和指导。你们不仅帮助我解决了实验中的技术问题，也让我在学术研究中不断完善自我。还要特别感谢我的同门杨立、文思捷和师弟金澳，感谢你们在我的实验研究过程中提供的宝贵意见和支持，帮助我克服了诸多技术和设计难题。
+
+此外，我的室友、老大哥粟刚，是我研究生期间的另一位重要人物。感谢你在我忙碌的学术生活中，给予我生活上的关心与支持。你的乐观与积极，深深感染了我，带我领略了西安的风土人情，品尝了无数美食，让我在繁重的课业中，依然保持了热情与动力。
+
+我还要感谢课题组的各位老师：马志强老师、常海涛老师、刘星老师、沈刚辉老师、张夷斋老师、刘正雄老师，感谢你们在科研工作中的指导和帮助。你们的经验和建议让我在科学研究的道路上少走了许多弯路。还要感谢韩冬、陈海飞、黄冰潇、李陇南、李沅澔、赵亚坤、王志祥、宋梦实、张校祯、余航、高家乐、裴崇旭、翟晨萌、杨通等师兄师姐，感谢你们在学术上和生活中给予的帮助与关怀，让我的研究生生活更加丰富多彩。
+
+再次感谢所有在我求学旅程中给予过帮助的人。你们的支持与鼓励，是我不断前行的不竭动力。未来的路上，我将继续努力，不忘初心，勇敢追求更高的目标。
 \end{acknowledgements}                                      % 致谢结束
 %%-----------------------------------------------------------------------------%
 \begin{accomplishments}                                     % 参加科研情况开始
