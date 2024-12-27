@@ -18,6 +18,8 @@
 *.idx
 *.nlo
 *.hd
+*.history
+*.synctex
 zhmakeindex
 yanputhesis.pdf
 yanputhesis-sample.pdf
