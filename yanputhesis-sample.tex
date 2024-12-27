@@ -1124,7 +1124,7 @@ $。
 
 
 \section{问题描述}
-本文考虑 $n$ 架无人机协同运输一个载荷，吊挂载荷通过 $n$ 根等长系绳与$n$ 架无人机相连.
+本文考虑 $n$ 架无人机协同运输一个载荷，吊挂载荷通过 $n$ 根等长系绳与$n$ 架无人机相连。
 % 可以通过对第3章的数据驱动的模型预测控制算法进行延伸，应用到本章的多无人机绳系吊运系统中。
 
 对于多无人机系统，控制策略通常可以分为集中式和分布式两种方式。
@@ -1188,30 +1188,30 @@ $。
 
 
 基于上述定义，可以将多无人机系统集中式模型预测控制问题表述为：
-
 \begin{equation}
 	\begin{aligned} 
-	&\operatorname*{minimize}_{X,U}& & J_l(X_l, U_l) + \sum_{i=1}^n J_i(X_i, U_i)  \\
+	&\operatorname*{minimize}_{\bm{X}, \bm{U}}& & J_l(\bm{X}_l, \bm{U}_l) + \sum_{i=1}^n J_i(\bm{X}_i, \bm{U}_i)  \\
 	&\text{subject to}& & \begin{aligned}
-& x_i^{k+1} = \bar{f}_i^k(x_i^k, u_i^k, \Delta t; x_l^k, u_l^k), \quad \forall i \in \mathcal{I}_q \\
-& x_l^{k+1} = \bar{f}_l^k(x_l^k, u_l^k, \Delta t; x_1^k, \cdots, x_n^k) \\
-& x_i^0 = x_i^t, \quad \forall i \in \mathcal{I}_q \\
-& x_l^0 = x_l^t \\
-& u_i^{\min} \leq u_i^k \leq u_i^{\max}, \quad \forall i \in \mathcal{I}_q \\
-& 0 < \bar{T}_i \leq \bar{T}_{\max}, \quad \forall i \in \mathcal{I}_q \\
-& \|p_i^k - p_l^k - R_l^k r_i\|^2 = l_0, \quad \forall i \in \mathcal{I}_q \\
-& 2d_\text{quad} - \|p_i^k - p_j^k\|^2 < 0, \quad \forall i, j \in \mathcal{I}_q, i \neq j \\
-& d_\text{quad} + d_\text{obs} - \|p_i^k - p_\text{obs}\|^2 < 0, \quad \forall i \in \mathcal{I}_q \\
-& d_\text{load} + d_\text{obs} - \|p_l^k - p_\text{obs}\|^2 < 0        
+	& \bm{x}_{i,k+1} = \bar{\bm{f}}_i^k(\bm{x}_{i,k}, \bm{u}_{i,k}, \Delta t; \bm{x}_{l,k}, \bm{u}_{l,k}), \quad \forall i \in \mathcal{I}_q \\
+	& \bm{x}_{l,k+1} = \bar{\bm{f}}_l^k(\bm{x}_{l,k}, \bm{u}_{l,k}, \Delta t; \bm{x}_{1,k}, \cdots, \bm{x}_{n,k}) \\
+	& \bm{x}_{i,0} = \bm{x}_{i,t}, \quad \forall i \in \mathcal{I}_q \\
+	& \bm{x}_{l,0} = \bm{x}_{l,t} \\
+	& \bm{u}_{i}^{\min} \leq \bm{u}_{i,k} \leq \bm{u}_{i}^{\max}, \quad \forall i \in \mathcal{I}_q \\
+	& 0 < \bar{T}_i \leq \bar{T}_{\max}, \quad \forall i \in \mathcal{I}_q \\
+	& \|\bm{p}_{i,k} - \bm{p}_{l,k} - \bm{R}_{l,k} \bm{r}_i\|^2 = l_0, \quad \forall i \in \mathcal{I}_q \\
+	& 2d_\text{quad} - \|\bm{p}_{i,k} - \bm{p}_{j,k}\|^2 < 0, \quad \forall i, j \in \mathcal{I}_q, i \neq j \\
+	& d_\text{quad} + d_\text{obs} - \|\bm{p}_{i,k} - \bm{p}_\text{obs}\|^2 < 0, \quad \forall i \in \mathcal{I}_q \\
+	& d_\text{load} + d_\text{obs} - \|\bm{p}_{l,k} - \bm{p}_\text{obs}\|^2 < 0        
 	\end{aligned}	
 \end{aligned}
 \label{multimpc}
 \end{equation}
-其中，\( X_i = \left[ x_i^0, \cdots, x_i^N \right] \) 和 \( X_l = \left[ x_l^0, \cdots, x_l^N \right] \) 分别表示第 \( i \) 个无人机和载荷的长度为 \( N+1 \) 的状态轨迹，
-\( U_i = \left[ u_i^0, \cdots, u_i^{N-1} \right] \) 和 \( U_l = \left[ u_l^0, \cdots, u_l^{N-1} \right] \) 表示相应的控制轨迹，\( X \) 和 \( U \) 是整个系统的状态与控制轨迹集合。
+
+其中，\( \bm X_i = \left[ \bm x_{i,0}, \cdots, \bm x_{i,N} \right] \) 和 \( \bm X_l = \left[ \bm x_{l,0}, \cdots, \bm x_{l,N} \right] \) 分别表示第 \( i \) 个无人机和载荷的长度为 \( N+1 \) 的状态轨迹，
+\( \bm U_i = \left[ \bm u_{i,0}, \cdots, \bm u_{i,{N-1}} \right] \) 和 \( \bm U_l = \left[ \bm u_{l,0}, \cdots, \bm u_{l,{N-1}} \right] \) 表示相应的控制轨迹，\( \bm X \) 和 \( \bm U \) 是整个系统的状态与控制轨迹集合。
 
 公式 (\ref{multimpc}) 中的约束从上到下分别表示：
-无人机与载荷的离散动态方程，载荷张力的虚拟控制 \( u_l \) 用作优化变量；初始条件；
+无人机与载荷的离散动态方程，载荷张力的虚拟控制 \( \bm u_l \) 用作优化变量；初始条件；
 无人机的控制约束；
 系绳张力约束，用于保持系绳绷紧；
 系绳长度约束，防止无人机与载荷之间的碰撞；
@@ -1219,94 +1219,96 @@ $。
 无人机和载荷的障碍物避让约束。
 
 \subsection{分布式模型预测控制}
-解决集中式模型预测控制问题 (\ref{multimpc}) 的计算复杂度较高，同时对通信带宽和系统可靠性要求较高，在多无人机绳系吊运系统中扩展性较差，难以满足实时性的需求。为此，提出了一种分布式的模型预测控制方法，该方法通过将问题分解到各个无人机无人机中实现并行计算，从而降低整体计算复杂度并提高系统的扩展性。
+解决集中式模型预测控制问题 (\ref{multimpc}) 的计算复杂度较高，同时对通信带宽和系统可靠性要求较高，在多无人机绳系吊运系统中扩展性较差，难以满足实时性的需求。为此，本文提出了一种分布式的模型预测控制方法，该方法通过将问题分解到各个无人机无人机中实现并行计算，从而降低整体计算复杂度并提高系统的扩展性。
 
-在设计分布式模型预测控制时，需要对集中式模型预测控制问题 (\ref{multimpc}) 的特性进行分析。首先，该目标函数具有分离性，因为载荷与无人机的状态和控制变量之间没有直接耦合，因此目标函数可以按每个无人机独立分离，减少耦合度；其次，无人机之间的动力学通过系绳张力（即载荷状态和控制量的函数）以及系绳的长度约束间接耦合；此外，无人机的状态之间的状态仅通过安全间距约束耦合。
+在设计分布式模型预测控制时，需要对式 (\ref{multimpc}) 中若干特性进行进一步分析。首先，集中式模型预测控制中的目标函数具有分离性，因为载荷与无人机的状态和控制变量之间没有直接耦合，目标函数在各个无人机之间是可分离的；此外，无人机之间的动力学通过系绳张力（即载荷状态和控制变量的函数）和系绳长度约束间接耦合，无人机状态之间的耦合仅通过安全间距约束来体现。这些特点为分布式优化提供了理论依据。
 
-这些特点为分布式优化提供了理论依据，基于这些观察，通过将所有其他无人机的模型预测控制轨迹视为单个无人机进行模型预测控制开环预测时的外部信号，可以实现问题的分解。在此基础上，通过独立更新所有模型预测控制的轨迹直至收敛，得以实现分布式形式。
+因此，基于上述分析，可以通过将其它无人机的模型预测控制轨迹视为外部信号来对问题进行分解，在每个无人机进行模型预测控制的开环预测时，其他无人机的轨迹保持不变。基于此，分布式控制方法通过独立更新所有MPC轨迹直到收敛，从而实现多无人机的控制。
 
-为了有效提升收敛性，将方程 (\ref{multimpc}) 中的约束转换为软约束，并将其引入到目标函数中。同时，受内点法的启发，软约束通过障碍函数表述，使用充分小的障碍参数可逼近原始约束问题。障碍参数 $\gamma > 0$ 控制约束满足程度和计算效率之间的权衡。
+\textbf{注：}为了有效提升收敛性，将式 (\ref{multimpc}) 中的约束转换为软约束，并将其引入到目标函数中。同时，可以采用障碍函数来表述软约束，障碍参数足够小的情况下可以逼近原始约束问题。障碍参数 $\gamma > 0$ 控制约束满足程度和计算效率之间的权衡。
 
 软约束的定义如下：
 
-    (1) \textbf{系绳长度约束}：$h_i^k = \|p_{l,i}\|^2 - l_0$；
+    (1) \textbf{系绳长度约束}：$h_i^k = \|p_{l-i}\|^2 - l_0$；
 
-    (2)\textbf{安全间距约束}：$g_j^k = 2d_{\text{quad}} - \|p_i^k - p_j^k\|^2$；
+    (2)\textbf{安全间距约束}：$g_{j,k} = 2d_{\text{quad}} - \|p_{i,k} - p_{j,k}\|^2$；
 
-    (3)\textbf{避障约束}：$g_{o,i}^k = d_{\text{quad}} + d_{\text{obs}} - \|p_i^k - p_{\text{obs}}\|^2$。
+    (3)\textbf{避障约束}：$g_{{o-i},k}= d_{\text{quad}} + d_{\text{obs}} - \|p_{i,k} - p_{\text{obs}}\|^2$。
 
-
-上述软约束通过对约束违规情况进行对数函数的惩罚引入到目标函数中。
-
-具体而言，对于第 $i$ 个无人机，其分解后的模型预测控制问题定义如下，其中其他无人机的轨迹 $X_j, \forall j \neq i, X_l$ 和 $U_l$ 被视为外部信号，在开放式预测中保持不变：
+具体而言，对于第 $i$ 个无人机，其它 $X_j, \forall j \neq i$、载荷的轨迹 $X_l$ 和 载荷的输入$U_l$ 都被视为该无人机的外部信号，在开环预测过程中保持不变，分解后的模型预测控制问题定义如下，
 \begin{equation}
 	\begin{aligned} 
-	&\operatorname*{minimize}_{X^i,U^i}& & J_i + \sum_{k=0}^{N} \left( \frac{1}{2\gamma} h_i^k{}^2 - \gamma \sum_{j \neq i} \ln(-g_j^k) + J_{o,i}^k \right)\\
+	&\operatorname*{minimize}_{X_i,U_i}& & J_i + \sum_{k=0}^{N} \left( \frac{1}{2\gamma} h_{i,k}{}^2 - \gamma \sum_{j \neq i} \ln(-g_{j,k}) -\gamma \ln(-g_{{o-i},k}) \right)\\
 	&\text{subject to}& & \begin{aligned}
-& x_i^{k+1} = \bar{f}_i^k(x_i^k, u_i^k, \Delta t; x_l^k, u_l^k) \\
-& x_i^0 = x_i^t\\
-& u^i_{\text{min}} \leq u^i_k \leq u^i_{\text{max}}		\end{aligned}	
+& x_{i,{k+1}} = \bar{f}_{i,k}(x_{i,k}, u_{i,k}, \Delta t; x_{l,k}, u_{l,k}) \\
+& x_{i,0} = x_{i,t}\\
+& u_{i,{\text{min}}} \leq u_{i,k} \leq u_{i,{\text{max}}}		\end{aligned}	
 \end{aligned}
 \label{multiuav}
 \end{equation}
 其中
-$\gamma \in \mathbb{R}^+$ 为障碍参数，
-$h_i^k = \|p_{l,i}\|^2 - l_0$，$p_{l,i}$ 见公式 (4)，
-$g_j^k = 2d_{\text{quad}} - \|p_i^k - p_j^k\|^2$，
-$J_{o,i}^k = -\gamma \ln(-g_{o,i}^k)$，
-$g_{o,i}^k = d_{\text{quad}} + d_{\text{obs}} - \|p_i^k - p_{\text{obs}}\|^2$。
+$\gamma \in \mathbb{R}^+$ 为障碍参数，$p_{l-i}$ 表示载荷与无人机 $i$ 之间的相对位置。
+$h_{i,k} = \|p_{l-i}\|^2 - l_0$为系绳长度约束，
+$g_{j,k} = 2d_{\text{quad}} - \|p_{i,k} - p_{j,k}\|^2$为无人机之间的安全间距约束，$g_{{o-i},k} = d_{\text{quad}} + d_{\text{obs}} - \|p_{i,k} - p_{\text{obs}}\|^2$为无人机$i$的避障约束。
 
-对于载荷的分解模型预测控制问题，其轨迹 $X_i, \forall i \in I_q$ 被视为外部信号，问题定义如下：
+对于载荷的分解模型预测控制问题，无人机的轨迹 $X_i, \forall i \in I_q$ 被视为外部信号，模型预测控制问题定义如下，
 \begin{equation}
 	\begin{aligned} 
-	&\operatorname*{minimize}_{X^l, U^l}& & \min_{X_l, U_l} J_l + \sum_{k=0}^{N} \left( \frac{1}{2\gamma} \sum_{i=1}^{n} h_i^k{}^2 + J_{o,l}^k \right)\\
+	&\operatorname*{minimize}_{X_l, U_l}& & \min_{X_l, U_l} J_l + \sum_{k=0}^{N} \left( \frac{1}{2\gamma} \sum_{i=1}^{n} h_{i,k}{}^2 - \gamma \ln(-g_{{o-l},k}) \right)\\
 	&\text{subject to}& & \begin{aligned}
-& x_l^{k+1} = \bar{f}_l^k(x_l^k, u_l^k, \Delta t; x_1^k, \cdots, x_n^k) \\
-& x_l^0 = x_l^t\\
-& 0 < u_l^k \leq \bar{T}_{\text{max}}, \forall i \in I_q		\end{aligned}	
+& x_{l,{k+1}} = \bar{f}_{l,k}(x_{l,k}, u_{l,k}, \Delta t; x_{1,k}, \cdots, x_{n,k}) \\
+& x_{l,0} = x_{l,t}\\
+& 0 < u_{l,k} \leq \bar{T}_{\text{max}}, \forall i \in I_q		\end{aligned}	
 \end{aligned}
 \label{multipayload}
 \end{equation}
-其中$J_{o,l}^k = -\gamma \ln(-g_{o,l}^k)$，$g_{o,l}^k = d_{\text{load}} + d_{\text{obs}} - \|p_l^k - p_{\text{obs}}\|^2$。
+其中$g_{{o-l},k} = d_{\text{load}} + d_{\text{obs}} - \|p_{l,k} - p_{\text{obs}}\|^2$为载荷的避障约束。
+
+
+
+分布式模型预测控制由式 (\ref{multiuav}) 和式 (\ref{multipayload}) 组成，二者通过迭代方式求解。设第 $k$ 次迭代时的轨迹为 $X_{i,k}, U_{i,k}, X_{l,k}, U_{l,k}$。在每个采样时刻 $t$，给定初始条件 $X_{i,0}, \forall i \in I_q, X_{l,0}, U_{l,0}$，首先为每个四旋翼求解式 (\ref{multiuav}) ，然后使用更新后的轨迹 $X_i^1, \forall i \in I_q$ 求解问题式 (\ref{multipayload}) 以获得载荷的轨迹。这个过程会持续迭代，直到所有无人机的轨迹误差 $X_i^k - X_i^{k-1}$ 和控制输入误差 $U_i^k - U_i^{k-1}$ 满足预定的阈值 $\delta \in \mathbb{R}^+$。
+
+图 \ref{} 进一步清晰地展示了解决分布式模型预测控制问题中的数据交换过程（即在一个无人机的模型预测控制问题中，将其他无人机的轨迹视为外部轨迹）。由于载荷缺乏计算能力，系统会从四旋翼中随机选择一个“中央”代理来依次求解问题(\ref{multiuav})和问题(\ref{multiuav})。
+分布式模型预测控制的流程总结如算法 \ref{alg:mpc_multilift} 所示。
+
 \begin{algorithm}[h]
 	\caption{多提升系统的分布式 模型预测控制}
 	\label{alg:mpc_multilift}
-	\textbf{输入:} 阈值 $\delta$，最大迭代次数 $k_{\text{max}}$，以及初始条件 $X^i_0$，$U^i_0$，$X^l_0$ 和 $U^l_0$。\\
-	\textbf{输出:} $X^i$ 和 $U^i, \forall i \in \mathcal{I}_A$。
+	\textbf{输入:} 阈值 $\delta$，最大迭代次数 $k_{\text{max}}$，以及初始条件 $X_{i,0}$，$U_{i,0}$，$X_{l,0}$ 和 $U_{l_0}$。\\
+	\textbf{输出：} 轨迹 $X_i$ 和控制输入 $U_i$，对于所有 $i \in I_A$。
 	
 	\begin{algorithmic}[1]
 	\State $k \gets 1$
 	\While{$e \geq \delta$ \textbf{且} $k \leq k_{\text{max}}$}
 		\For{$i \gets 1$ 到 $n$ \textbf{(并行)}}
-			\State 通过外部轨迹求解问题 (10) 计算 $X^i$ 和 $U^i$
-			\Statex \quad 基于外部轨迹 
-			\Statex \quad $X^j_{k-1}, \forall j \in \mathcal{I}_q, j \neq i$, $X^l_{k-1}$ 和 $U^l_{k-1}$；
+			\State 通过外部轨迹求解问题 (10) 计算 $X_i$ 和 $U_i$
+			\Statex \quad 基于外部轨迹 $X^j_{k-1}, \forall j \in \mathcal{I}_q, j \neq i$, $X^l_{k-1}$ 和 $U^l_{k-1}$；
 			\Statex \quad $\triangleright$ 在每个无人机上运行并发送到中央无人机
 		\EndFor
-		\State 更新无人机轨迹: $X^i_k \gets X^i$ 和 $U^i_k \gets U^i, \forall i \in \mathcal{I}_q$；
-		\State 通过 $X^i_k, \forall i \in \mathcal{I}_q$ 求解问题 (11) 计算 $X^l$ 和 $U^l$
-		\State 更新载荷轨迹: $X^l_k \gets X^l, U^l_k \gets U^l$；
+		\State 更新无人机轨迹: $X_{i_k} \gets X_i$ 和 $U_{i,k} \gets U_i, \forall i \in \mathcal{I}_q$；
+		\State 通过 $X_{i,k}, \forall i \in \mathcal{I}_q$ 求解问题 (11) 计算 $X_l$ 和 $U_l$
+		\State 更新载荷轨迹: $X_{l,k} \gets X_l, U_{l,k} \gets U^l$；
 		\Statex \quad $\triangleright$ 在中央无人机中运行
-		\State 计算误差: $e \gets \max \{ e^i_X, e^i_U \}, \forall i \in \mathcal{I}_A$ 
-		\Statex \quad 其中 $e^i_X = \frac{1}{N} \| X^i_k - X^i_{k-1} \|_2$ \textbf{和} 
-		\Statex \quad $e^i_U = \frac{1}{N} \| U^i_k - U^i_{k-1} \|_2$；
+		\State 计算误差: $e \gets \max \{ e_{X_i}, e_{U_i} \}, \forall i \in \mathcal{I}_A$ 
+		\Statex \quad 其中 $e_{X_i} = \frac{1}{N} \| X_{i,k} - X_{i,{k-1}} \|_2$ \textbf{和} 
+		\Statex \quad $e^i_U = \frac{1}{N} \| U_{i,k} - U{i,{k-1}} \|_2$；
 		\State 更新迭代次数: $k \gets k + 1$；
 	\EndWhile
 	\end{algorithmic}
 \end{algorithm}
 
-分布式模型预测控制由式 (\ref{multiuav}) 和式 (\ref{multipayload}) 组成，迭代求解。设第 $k$ 次迭代时的轨迹为 $X_i^k, U_i^k, X_l^k, U_l^k$。在每个采样时刻 $t$，给定初始条件 $X_i^0, \forall i \in I_q, X_l^0, U_l^0$，通过以下步骤实现分布式求解：
+通过上述过程，分布式模型预测控制能够有效地解决多无人机系统中的优化问题，提升计算效率和系统扩展性。
 
-(1) \textbf{并行计算旋翼无人机轨迹}：各旋翼无人机并行求解问题 (10)，使用其他无人机的外部轨迹 $X_j^{k-1}, X_l^{k-1}, U_l^{k-1}$ 进行计算。
+(1) \textbf{并行计算旋翼无人机轨迹}：各旋翼无人机并行求解问题 (10)，使用其他无人机的外部轨迹 $X_{j,{k-1}}, X_{l,{k-1}}, U_{l,{k-1}}$ 进行计算。
 
-(2) \textbf{更新旋翼无人机轨迹}：更新得到的新轨迹 $X_i^k, U_i^k$。
+(2) \textbf{更新旋翼无人机轨迹}：更新得到的新轨迹 $X_{i,k}, U_{i,k}$。
 
-(3) \textbf{计算载荷轨迹}：基于更新后的 $X_i^k$ 求解问题 (11)，得到 $X_l^k, U_l^k$。
+(3) \textbf{计算载荷轨迹}：基于更新后的 $X_{i,k}$ 求解问题 (11)，得到 $X_{l,k}, U_{l,k}$。
 
-(4) \textbf{误差计算与收敛判断}：计算误差 $e = \max(e_X^i, e_U^i, \forall i \in I_A)$，其中：
-    \begin{equation}
-        e_X^i = \frac{1}{N} \|X_i^k - X_i^{k-1}\|^2, \quad e_U^i = \frac{1}{N} \|U_i^k - U_i^{k-1}\|^2
-    \end{equation}
+(4) \textbf{误差计算与收敛判断}：计算误差 $e = \max(e_{i,X}, e_{i,U}, \forall i \in I_A)$，其中：
+\begin{equation}
+    e_{i,X} = \frac{1}{N} \|X_{i,k} - X_{i,{k-1}}\|^2, \quad e_{i,U} = \frac{1}{N} \|U_{i,k} - U_{i,{k-1}}\|^2
+\end{equation}
 
 (5) \textbf{迭代更新}：若误差 $e \geq \delta$ 且迭代次数未超出最大阈值 $k_{\text{max}}$，继续迭代。
 
@@ -1332,7 +1334,7 @@ $\quad \xi^{*,l}_{\theta^l} = \{ X^{*,l}_{\theta^l}, U^{*,l}_{\theta^l} \}$。
 本研究旨在为多机协同提升系统设计自适应的模型预测控制超参数，并开发一种系统化的自动调优方法。由于此类系统的动态行为复杂且难以通过解析模型进行准确描述，使用深度神经网络（DNN）生成控制器的动态权重和参考值，输入特征包括系统状态、障碍物位置等环境信息。数学上，第 \(i\) 个无人机的自适应模型预测控制超参数可表示为：
 \begin{equation}
 	\label{4-7}
-    \boldsymbol{\theta}^i=f_{\boldsymbol{\pi}^i}\left(\boldsymbol{\chi}^i\right),\mathrm{~}\forall i\in\mathcal{I}_A
+    \boldsymbol{\theta}_i=f_{\boldsymbol{\pi}_i}\left(\boldsymbol{\chi}_i\right),\mathrm{~}\forall i\in\mathcal{I}_A
 \end{equation}
 
 
@@ -1341,7 +1343,7 @@ $\quad \xi^{*,l}_{\theta^l} = \{ X^{*,l}_{\theta^l}, U^{*,l}_{\theta^l} \}$。
 \begin{equation}
 	\label{4-8}
 	\begin{aligned} 
-	&\operatorname*{minimize}_{\bm{\pi}}& & L^l+\sum_{i=1}^nL^i  \\
+	&\operatorname*{minimize}_{\bm{\pi}}& & L_l+\sum_{i=1}^nL_i  \\
 	&\text{subject to}& & \begin{aligned}
 		&\boldsymbol{x}_{t+1}^i=\bar{\boldsymbol{f}}_t^i\left(\boldsymbol{x}_t^i,\boldsymbol{u}_{0|t}^{*,i},\Delta t;\boldsymbol{x}_t^l,\boldsymbol{u}_{0|t}^{*,l}\right),\forall i\in\mathcal{I}_q\\&\boldsymbol{u}_{0|t}^{*,i}\text{ generated by QMPC}\left(\boldsymbol{\theta}^i\left(\boldsymbol{\varpi}^i\right)\right)\\&\boldsymbol{x}_{t+1}^l=\bar{\boldsymbol{f}}_t^l\left(\boldsymbol{x}_t^l,\boldsymbol{u}_{0|t}^{*,l},\Delta t;\boldsymbol{x}_t^1,\cdots,\boldsymbol{x}_t^n\right)\\&\boldsymbol{u}_{0|t}^{*,l}\text{ generated by LMPC}\left(\boldsymbol{\theta}^l\left(\boldsymbol{\varpi}^l\right)\right)
 	\end{aligned} \\
@@ -1977,7 +1979,7 @@ MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的
 %     \caption{由无人机、系绳和载荷构成的树图}
 %     \label{fig.proximity.kk}
 % \end{figure}
-
+     
 在无人机平台的机械部分设计中，机架的选择至关重要，其决定了可以安装的最大桨叶尺寸、电池大小等。本文选择了自制的3.5寸机架，采用双层碳板结构的机臂和中心板，并通过铝柱连接，既轻便又具备较高的强度。为了充分利用空间使无人机的结构更加紧凑，机载计算设备置于机架顶部，下位机飞控和电子调速器置于机架底部，并用底层板保护，这样布局可以更好地对无人机的控制能力进行验证。在动力系统方面，电机选用了四个T-Motor F2004无刷电机，电子调速器采用蓝鸟48K 30A四合一电调，桨叶选用了两对QProp DT90自锁3叶正反尼龙桨，为无人机提供平稳、精准的动力输出。电池方面，选择了格氏金砖系列6s1p 1050mAh 95C锂电池组，相比于5s电池，6s电池提供更强的动力，可直接对Orange Pi 5供电，满载测试续航时间为6分钟，能够满足试验需求。定制的无人机重1.0 kg，电机轴距为360 mm。最后， 对其他的安装件位置进行设计，包括电池固定件、接收机、数传和降压模块等。最终得到无人机的设计图和实物图如图 \ref{Fig.proximity} 所示。
 \begin{figure*}[htb!]
 	\centering
