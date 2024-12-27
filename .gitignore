@@ -20,6 +20,7 @@
 *.hd
 *.history
 *.synctex
+*.synctex(busy)
 zhmakeindex
 yanputhesis.pdf
 yanputhesis-sample.pdf
