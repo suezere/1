@@ -835,7 +835,7 @@ $$\bm \Theta=\begin{bmatrix}\tilde{\bm C}_k\tilde{\bm B}_k&0&0&0\\\tilde{\bm C}_
 本节详细阐述了所提出的Neural Predictor框架的原理与实现方法。核心思想是将外力 $\bm{f}_e$ 和力矩 $\bm{\tau}_e$ 建模为动态系统，并通过数据驱动的方法对其进行学习。具体来说，该框架借助由Koopman算子理论导出的升维线性系统（Lifted Linear System, LLS），以显式方式捕获外力和力矩的动态特性。
 
 \subsection{升维线性系统}
-Koopman算子可以从数据中将非线性系统全局映射为线性系统 \cite{Mamakoukas2023}。这一性质为以数据驱动的方式显式捕捉未知非线性动力学（如公式 (\ref{3-1}) 中的$\bm f_e$和$\bm \tau_e$）提供了途径。因此，本文采用这一特性，通过数据驱动的方式学习$\bm f_e$和$\bm \tau_e$。升维线性系统电基本概念简述如下：
+Koopman算子可以从数据中将非线性系统全局映射为线性系统 \cite{Mamakoukas2023}。这一性质为以数据驱动的方式显式捕捉未知非线性动力学（如式 (\ref{3-1}) 中的$\bm f_e$和$\bm \tau_e$）提供了途径。因此，本文采用这一特性，通过数据驱动的方式学习$\bm f_e$和$\bm \tau_e$。升维线性系统电基本概念简述如下：
 
 考虑一个具有控制输入的未知非线性动力学系统： 
 \begin{equation} 
@@ -844,12 +844,12 @@ Koopman算子可以从数据中将非线性系统全局映射为线性系统 \ci
 \begin{equation} 
 	{g}(\bm{x},\bm{u}) = {\Psi}(\bm{x}) + \bm{L}\bm{u} 
 \end{equation} 
-其中$\bm{L}$为常数矩阵。在假设控制输入$\bm{u}$ 不会在Hilbert空间 $\mathcal{H}$ 中演化的条件下，公式(\ref{nonlinear_input})中的非线性动力学系统可以重新表述为： 
+其中$\bm{L}$为常数矩阵。在假设控制输入$\bm{u}$ 不会在Hilbert空间 $\mathcal{H}$ 中演化的条件下，式(\ref{nonlinear_input})中的非线性动力学系统可以重新表述为： 
 \begin{equation} 
 	{\Psi}(\bm{x}(t_0+t_s)) = {\mathcal{K}} {g}(\bm{x}(t_0), \bm{u}(t_0)) = \begin{bmatrix}\bm A&\bm B\end{bmatrix}\begin{bmatrix}\Psi(\bm x)\\\bm u\end{bmatrix}
 \label{3-21} 
 \end{equation} 
-其中，$\bm{x}(t_0+t_s)=\bm{x}(t_0)+\int_{t_0}^{t_0+t_s}{f}(\bm{x},\bm{u}){\mathrm{d}t}$，$t_s$ 为采样时间$t_s$。上述公式描述了升维函数$\bm{g}(\bm{x})$的前向时间演化。令$\bm{z}(t) \triangleq {\Psi}(\bm{x}(t))$，可以将公式(\ref{3-21})改写为： 
+其中，$\bm{x}(t_0+t_s)=\bm{x}(t_0)+\int_{t_0}^{t_0+t_s}{f}(\bm{x},\bm{u}){\mathrm{d}t}$，$t_s$ 为采样时间$t_s$。上述公式描述了升维函数$\bm{g}(\bm{x})$的前向时间演化。令$\bm{z}(t) \triangleq {\Psi}(\bm{x}(t))$，可以将式(\ref{3-21})改写为： 
 \begin{equation} \bm{z}(t_0 + t_s) = \bm{A}\bm{z}(t_0) + \bm{B}\bm{u}(t_0) \label{lls} 
 \end{equation} 
 这被称为未知非线性动力学系统 (\ref{nonlinear_input}) 的升维线性系统（Lifted Linear System, LLS）。
@@ -860,7 +860,7 @@ Koopman算子可以从数据中将非线性系统全局映射为线性系统 \ci
 \end{equation} 
 其中，$\bm{Z}_{1:T-1}= [ \bm{z}_1,\bm{z}_2,\cdots,\bm{z}_{T-1} ]^\mathrm{T}$，$\bm{Z}_{2:T}= [\bm{z}_2,\bm{z}_3,\cdots,\bm{z}_{T}]^\mathrm{T}$，$\bm{U}_{1:T-1}= [\bm{u}_1,\bm{u}_2,\cdots,\bm{u}_{T-1}]^\mathrm{T}$，$\bm{z}_i$ 表示对应于第 $i$ 个样本 $\bm{x}_i\ (i=1,2,\cdots,T)$ 的状态。当$\bm{Z}_{1:T-1}$和$\bm{U}_{1:T-1}$的序列长度$T$有限时，上述优化问题实际上对Koopman算子进行了有限维近似 \cite{Hao2024}。
 
-公式(\ref{lls})是以数据驱动的方式推导得到的离散形式。因此，根据式 (\ref{lls})，未知非线性系统(\ref{nonlinear_input})的连续有限维近似形式可以表示为：
+式(\ref{lls})是以数据驱动的方式推导得到的离散形式。因此，根据式 (\ref{lls})，未知非线性系统(\ref{nonlinear_input})的连续有限维近似形式可以表示为：
 \begin{equation}
 	\begin{gathered}\dot{\boldsymbol{z}}=\boldsymbol{A}_{c}\boldsymbol{z}+\boldsymbol{B}_{c}\boldsymbol{u}\\\boldsymbol{x}=\boldsymbol{C}\boldsymbol{z}\end{gathered}
 	\label{lift_linear}
@@ -873,9 +873,9 @@ Koopman算子可以从数据中将非线性系统全局映射为线性系统 \ci
 \begin{equation}
 	\dot{\bm \chi} = {\xi}(\bm \chi,\bm \zeta) \label{dynamics}
 \end{equation}
-其中 $\bm \chi = [ \bm f_e, \bm \tau_e]^\mathrm{T}$，$\bm{\xi}$ 表示外力和力矩的未知动力学，$\bm{\zeta}$ 表示系统的控制输入，通常是无人机的状态或部分子状态。$\bm{\zeta}$ 的选择将在后续的实现部分讨论。
+其中 $\chi = [ \bm f_e, \bm \tau_e]^\mathrm{T}$，$\bm{\xi}$ 表示外力和力矩的未知动力学，$\bm{\zeta}$ 表示系统的控制输入，通常是无人机的状态或部分子状态。$\bm{\zeta}$ 的选择将在后续的实现部分讨论。
 
-如上所述，类似于公式(\ref{dynamics})这样的未知非线性动力学可以通过有限维的升维线性系统(\ref{lift_linear})从数据中捕捉。然而，寻找合适的升维函数 ${\Psi}$ 并不是一项容易的任务。因此，本文提出了一个由权重$\bm{\theta} = \{W^1, ..., W^{L+1}\}$参数化的深度神经网络，用来近似有限维的升维函数，其表示形式如下：
+如上所述，类似于式(\ref{dynamics})这样的未知非线性动力学可以通过有限维的升维线性系统(\ref{lift_linear})从数据中捕捉。然而，寻找合适的升维函数 ${\Psi}$ 并不是一项容易的任务。因此，本文提出了一个由权重$\bm{\theta} = \{W^1, ..., W^{L+1}\}$参数化的深度神经网络，用来近似有限维的升维函数，其表示形式如下：
 \begin{equation}
 	{\Psi}(\bm \chi;\bm{\theta}) = W^{L+1}\phi(W^L(...\phi(W^1 \bm \chi...)) \label{dnn}
 \end{equation}
@@ -939,7 +939,7 @@ $，
 \end{equation}
 
 
-当 \( n = 1 \) 时，全局误差与局部误差（公式 (\ref{k})）相等。然而需要注意的是，全局误差（公式 (\ref{kk})）并不是局部误差（公式 (\ref{k})）的累积： 
+当 \( n = 1 \) 时，全局误差与局部误差（式 (\ref{k})）相等。然而需要注意的是，全局误差（式 (\ref{kk})）并不是局部误差（式 (\ref{k})）的累积： 
 $
 E_n \neq \sum_{i=1}^n e_i
 $。
@@ -1147,11 +1147,9 @@ $。
 % 在本章中，
 
 \section{多无人机模型预测控制方法}
-我们采用模型预测控制方法来设计多机吊运系统的运动控制与规划策略，目标是跟踪所有无人机（包括载荷）的参考轨迹，并在运输过程中保持载荷的稳定姿态。
+本章继续采用模型预测控制方法来设计多机吊运系统的运动控制与规划策略，目标是跟踪所有无人机（包括载荷）的参考轨迹，并在运输过程中保持载荷的稳定姿态。
 \subsection{集中式模型预测控制}
-
-
-集中式模型预测控制是一种以全局优化为目标的控制策略，适用于多无人机系统的运动控制和路径规划。集中式模型预测控制全局优化能力强，能够协调多主体之间的耦合关系。在本小节中，我们提出了一种集中式的模型预测控制公式，用于为系统生成状态与控制轨迹，并扩展到刚体载荷的情况。
+集中式模型预测控制是一种以全局优化为目标的控制策略，适用于多无人机系统的运动控制和路径规划。集中式模型预测控制全局优化能力强，能够协调多主体之间的耦合关系。在本小节中，介绍了一种集中式的模型预测控制，用于为系统生成状态与控制轨迹。
 
 设第 \( i \) 个无人机的状态为 
 \(
@@ -1210,7 +1208,7 @@ $。
 其中，\( \bm X_i = \left[ \bm x_{i,0}, \cdots, \bm x_{i,N} \right] \) 和 \( \bm X_l = \left[ \bm x_{l,0}, \cdots, \bm x_{l,N} \right] \) 分别表示第 \( i \) 个无人机和载荷的长度为 \( N+1 \) 的状态轨迹，
 \( \bm U_i = \left[ \bm u_{i,0}, \cdots, \bm u_{i,{N-1}} \right] \) 和 \( \bm U_l = \left[ \bm u_{l,0}, \cdots, \bm u_{l,{N-1}} \right] \) 表示相应的控制轨迹，\( \bm X \) 和 \( \bm U \) 是整个系统的状态与控制轨迹集合。
 
-公式 (\ref{multimpc}) 中的约束从上到下分别表示：
+式 (\ref{multimpc}) 中的约束从上到下分别为：
 无人机与载荷的离散动态方程，载荷张力的虚拟控制 \( \bm u_l \) 用作优化变量；初始条件；
 无人机的控制约束；
 系绳张力约束，用于保持系绳绷紧；
@@ -1227,145 +1225,211 @@ $。
 
 \textbf{注：}为了有效提升收敛性，将式 (\ref{multimpc}) 中的约束转换为软约束，并将其引入到目标函数中。同时，可以采用障碍函数来表述软约束，障碍参数足够小的情况下可以逼近原始约束问题。障碍参数 $\gamma > 0$ 控制约束满足程度和计算效率之间的权衡。
 
-软约束的定义如下：
+% 软约束的定义如下：
 
-    (1) \textbf{系绳长度约束}：$h_i^k = \|p_{l-i}\|^2 - l_0$；
+%     (1) \textbf{系绳长度约束}：$h_i^k = \|p_{l-i}\|^2 - l_0$；
 
-    (2)\textbf{安全间距约束}：$g_{j,k} = 2d_{\text{quad}} - \|p_{i,k} - p_{j,k}\|^2$；
+%     (2)\textbf{安全间距约束}：$g_{j,k} = 2d_{\text{quad}} - \|p_{i,k} - p_{j,k}\|^2$；
 
-    (3)\textbf{避障约束}：$g_{{o-i},k}= d_{\text{quad}} + d_{\text{obs}} - \|p_{i,k} - p_{\text{obs}}\|^2$。
+%     (3)\textbf{避障约束}：$g_{{o-i},k}= d_{\text{quad}} + d_{\text{obs}} - \|p_{i,k} - p_{\text{obs}}\|^2$。
 
-具体而言，对于第 $i$ 个无人机，其它 $X_j, \forall j \neq i$、载荷的轨迹 $X_l$ 和 载荷的输入$U_l$ 都被视为该无人机的外部信号，在开环预测过程中保持不变，分解后的模型预测控制问题定义如下，
+具体而言，对于第 $i$ 个无人机，其它无人机的轨迹 $ \bm X_j, \forall j \neq i$、载荷的轨迹 $\bm X_l$ 和 载荷的输入$\bm U_l$ 都被视为该无人机的外部信号，在开环预测过程中保持不变，分解后的模型预测控制问题定义如下：
+
 \begin{equation}
 	\begin{aligned} 
-	&\operatorname*{minimize}_{X_i,U_i}& & J_i + \sum_{k=0}^{N} \left( \frac{1}{2\gamma} h_{i,k}{}^2 - \gamma \sum_{j \neq i} \ln(-g_{j,k}) -\gamma \ln(-g_{{o-i},k}) \right)\\
+	&\operatorname*{minimize}_{\bm{X}_i, \bm{U}_i} & & J_i + \sum_{k=0}^{N} \left( \frac{1}{2\gamma} h_{i,k}{}^2 - \gamma \sum_{j \neq i} \ln(-g_{j,k}) -\gamma \ln(-g_{{o-i},k}) \right)\\
 	&\text{subject to}& & \begin{aligned}
-& x_{i,{k+1}} = \bar{f}_{i,k}(x_{i,k}, u_{i,k}, \Delta t; x_{l,k}, u_{l,k}) \\
-& x_{i,0} = x_{i,t}\\
-& u_{i,{\text{min}}} \leq u_{i,k} \leq u_{i,{\text{max}}}		\end{aligned}	
+& \bm{x}_{i,{k+1}} = \bar{f}_{i,k}(\bm{x}_{i,k}, \bm{u}_{i,k}, \Delta t; \bm{x}_{l,k}, \bm{u}_{l,k}) \\
+& \bm{x}_{i,0} = \bm{x}_{i,t}\\
+& \bm{u}_{i,{\text{min}}} \leq \bm{u}_{i,k} \leq \bm{u}_{i,{\text{max}}}		\end{aligned}	
 \end{aligned}
 \label{multiuav}
 \end{equation}
 其中
-$\gamma \in \mathbb{R}^+$ 为障碍参数，$p_{l-i}$ 表示载荷与无人机 $i$ 之间的相对位置。
-$h_{i,k} = \|p_{l-i}\|^2 - l_0$为系绳长度约束，
-$g_{j,k} = 2d_{\text{quad}} - \|p_{i,k} - p_{j,k}\|^2$为无人机之间的安全间距约束，$g_{{o-i},k} = d_{\text{quad}} + d_{\text{obs}} - \|p_{i,k} - p_{\text{obs}}\|^2$为无人机$i$的避障约束。
+$\gamma \in \mathbb{R}^+$ 为障碍参数，$\bm p_{l-i}$ 表示载荷与无人机 $i$ 之间的相对位置。
+$h_{i,k} = \|\bm p_{l-i}\|^2 - l_0$为系绳长度约束，
+$g_{j,k} = 2d_{\text{quad}} - \|\bm p_{i,k} - \bm p_{j,k}\|^2$为无人机之间的安全间距约束，$g_{{o-i},k} = d_{\text{quad}} + d_{\text{obs}} - \|\bm p_{i,k} - \bm p_{\text{obs}}\|^2$为无人机$i$的避障约束。
 
-对于载荷的分解模型预测控制问题，无人机的轨迹 $X_i, \forall i \in I_q$ 被视为外部信号，模型预测控制问题定义如下，
+对于载荷的分解模型预测控制问题，无人机的轨迹 $\bm X_i, \forall i \in \mathcal{I}_q$ 被视为外部信号，模型预测控制问题定义如下，
+
 \begin{equation}
 	\begin{aligned} 
-	&\operatorname*{minimize}_{X_l, U_l}& & \min_{X_l, U_l} J_l + \sum_{k=0}^{N} \left( \frac{1}{2\gamma} \sum_{i=1}^{n} h_{i,k}{}^2 - \gamma \ln(-g_{{o-l},k}) \right)\\
+	&\operatorname*{minimize}_{\bm{X}_l, \bm{U}_l}& & \min_{\bm{X}_l, \bm{U}_l} J_l + \sum_{k=0}^{N} \left( \frac{1}{2\gamma} \sum_{i=1}^{n} h_{i,k}{}^2 - \gamma \ln(-g_{{o-l},k}) \right)\\
 	&\text{subject to}& & \begin{aligned}
-& x_{l,{k+1}} = \bar{f}_{l,k}(x_{l,k}, u_{l,k}, \Delta t; x_{1,k}, \cdots, x_{n,k}) \\
-& x_{l,0} = x_{l,t}\\
-& 0 < u_{l,k} \leq \bar{T}_{\text{max}}, \forall i \in I_q		\end{aligned}	
+& \bm{x}_{l,{k+1}} = \bar{f}_{l,k}(\bm{x}_{l,k}, \bm{u}_{l,k}, \Delta t; \bm{x}_{1,k}, \cdots, \bm{x}_{n,k}) \\
+& \bm{x}_{l,0} = \bm{x}_{l,t}\\
+& 0 < \bm{u}_{l,k} \leq \bar{T}_{\text{max}}, \forall i \in \mathcal{I}_q		\end{aligned}	
 \end{aligned}
 \label{multipayload}
 \end{equation}
-其中$g_{{o-l},k} = d_{\text{load}} + d_{\text{obs}} - \|p_{l,k} - p_{\text{obs}}\|^2$为载荷的避障约束。
+
+其中$g_{{o-l},k} = d_{\text{load}} + d_{\text{obs}} - \| \bm p_{l,k} - \bm p_{\text{obs}}\|^2$为载荷的避障约束。
 
 
 
-分布式模型预测控制由式 (\ref{multiuav}) 和式 (\ref{multipayload}) 组成，二者通过迭代方式求解。设第 $k$ 次迭代时的轨迹为 $X_{i,k}, U_{i,k}, X_{l,k}, U_{l,k}$。在每个采样时刻 $t$，给定初始条件 $X_{i,0}, \forall i \in I_q, X_{l,0}, U_{l,0}$，首先为每个四旋翼求解式 (\ref{multiuav}) ，然后使用更新后的轨迹 $X_i^1, \forall i \in I_q$ 求解问题式 (\ref{multipayload}) 以获得载荷的轨迹。这个过程会持续迭代，直到所有无人机的轨迹误差 $X_i^k - X_i^{k-1}$ 和控制输入误差 $U_i^k - U_i^{k-1}$ 满足预定的阈值 $\delta \in \mathbb{R}^+$。
+分布式模型预测控制由式 (\ref{multiuav}) 和式 (\ref{multipayload}) 组成，二者通过迭代方式求解。设第 $k$ 次迭代时的轨迹为 $\bm X_{i,k}, \bm U_{i,k}, \bm X_{l,k}, \bm U_{l,k}$。在每个采样时刻 $t$，给定初始条件 $\bm X_{i,0}, \forall i \in I_q, \bm X_{l,0}, \bm U_{l,0}$，首先为每个四旋翼求解式 (\ref{multiuav}) ，然后使用更新后的轨迹 $\bm X_i^1, \forall i \in \mathcal{I}_q$ 求解问题式 (\ref{multipayload}) 以获得载荷的轨迹。这个过程会持续迭代，直到所有无人机的轨迹误差 $\bm X_i^k - \bm X_i^{k-1}$ 和控制输入误差 $\bm U_i^k - \bm U_i^{k-1}$ 满足预定的阈值 $\delta \in \mathbb{R}^+$。
 
-图 \ref{} 进一步清晰地展示了解决分布式模型预测控制问题中的数据交换过程（即在一个无人机的模型预测控制问题中，将其他无人机的轨迹视为外部轨迹）。由于载荷缺乏计算能力，系统会从四旋翼中随机选择一个“中央”代理来依次求解问题(\ref{multiuav})和问题(\ref{multiuav})。
+图 \ref{4_2} 进一步清晰地展示了解决分布式模型预测控制问题中的数据交换过程（即在一个无人机的模型预测控制问题中，将其他无人机的轨迹视为外部轨迹）。由于载荷缺乏计算能力，系统会从四旋翼中随机选择一个“中央”代理来依次求解问题(\ref{multiuav})和问题(\ref{multipayload})。
 分布式模型预测控制的流程总结如算法 \ref{alg:mpc_multilift} 所示。
 
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=26pc]{picture/4_2.png} 
+	\caption{分布式模型预测控制中数据交换与迭代过程示意图
+	} 
+	\label{4_2}
+\end{figure}
+
 \begin{algorithm}[h]
-	\caption{多提升系统的分布式 模型预测控制}
+	\caption{多无人机的分布式模型预测控制}
 	\label{alg:mpc_multilift}
-	\textbf{输入:} 阈值 $\delta$，最大迭代次数 $k_{\text{max}}$，以及初始条件 $X_{i,0}$，$U_{i,0}$，$X_{l,0}$ 和 $U_{l_0}$。\\
-	\textbf{输出：} 轨迹 $X_i$ 和控制输入 $U_i$，对于所有 $i \in I_A$。
+	\textbf{输入:} 阈值 $\delta$，最大迭代次数 $k_{\text{max}}$，以及初始条件 $\bm{X}_{i,0}$，$\bm{U}_{i,0}$，$\bm{X}_{l,0}$ 和 $\bm{U}_{l_0}$。\\
+	\textbf{输出：} 轨迹 $\bm{X}_i$ 和控制输入 $\bm{U}_i$，对于所有 $i \in \mathcal{I}_q$。
 	
 	\begin{algorithmic}[1]
 	\State $k \gets 1$
 	\While{$e \geq \delta$ \textbf{且} $k \leq k_{\text{max}}$}
 		\For{$i \gets 1$ 到 $n$ \textbf{(并行)}}
-			\State 通过外部轨迹求解问题 (10) 计算 $X_i$ 和 $U_i$
-			\Statex \quad 基于外部轨迹 $X^j_{k-1}, \forall j \in \mathcal{I}_q, j \neq i$, $X^l_{k-1}$ 和 $U^l_{k-1}$；
+			\State 通过外部轨迹求解问题 (10) 计算 $\bm{X}_i$ 和 $\bm{U}_i$
+			\Statex \quad 基于外部轨迹 $\bm{X}^j_{k-1}, \forall j \in \mathcal{I}_q, j \neq i$, $\bm{X}^l_{k-1}$ 和 $\bm{U}^l_{k-1}$；
 			\Statex \quad $\triangleright$ 在每个无人机上运行并发送到中央无人机
 		\EndFor
-		\State 更新无人机轨迹: $X_{i_k} \gets X_i$ 和 $U_{i,k} \gets U_i, \forall i \in \mathcal{I}_q$；
-		\State 通过 $X_{i,k}, \forall i \in \mathcal{I}_q$ 求解问题 (11) 计算 $X_l$ 和 $U_l$
-		\State 更新载荷轨迹: $X_{l,k} \gets X_l, U_{l,k} \gets U^l$；
-		\Statex \quad $\triangleright$ 在中央无人机中运行
-		\State 计算误差: $e \gets \max \{ e_{X_i}, e_{U_i} \}, \forall i \in \mathcal{I}_A$ 
-		\Statex \quad 其中 $e_{X_i} = \frac{1}{N} \| X_{i,k} - X_{i,{k-1}} \|_2$ \textbf{和} 
-		\Statex \quad $e^i_U = \frac{1}{N} \| U_{i,k} - U{i,{k-1}} \|_2$；
+		\State 更新无人机轨迹: $\bm{X}_{i_k} \gets \bm{X}_i$ 和 $\bm{U}_{i,k} \gets \bm{U}_i, \forall i \in \mathcal{I}_q$；
+		\State 通过 $\bm{X}_{i,k}, \forall i \in \mathcal{I}_q$ 求解问题 (11) 计算 $\bm{X}_l$ 和 $\bm{U}_l$
+		\State 更新载荷轨迹: $\bm{X}_{l,k} \gets \bm{X}_l, \bm{U}_{l,k} \gets \bm{U}^l$；
+		\Statex \quad $\triangleright$ 在中央“代理”无人机中运行
+		\State 计算误差: $e \gets \max \{ e_{\bm{X}_i}, e_{\bm{U}_i} \}, \forall i \in \mathcal{I}_A$ 
+		\Statex \quad 其中 $e_{\bm{X}_i} = \frac{1}{N} \| \bm{X}_{i,k} - \bm{X}_{i,{k-1}} \|_2$ \textbf{和} 
+		\Statex \quad $e^i_{\bm{U}} = \frac{1}{N} \| \bm{U}_{i,k} - \bm{U}_{i,{k-1}} \|_2$；
 		\State 更新迭代次数: $k \gets k + 1$；
 	\EndWhile
 	\end{algorithmic}
 \end{algorithm}
 
-通过上述过程，分布式模型预测控制能够有效地解决多无人机系统中的优化问题，提升计算效率和系统扩展性。
-
-(1) \textbf{并行计算旋翼无人机轨迹}：各旋翼无人机并行求解问题 (10)，使用其他无人机的外部轨迹 $X_{j,{k-1}}, X_{l,{k-1}}, U_{l,{k-1}}$ 进行计算。
-
-(2) \textbf{更新旋翼无人机轨迹}：更新得到的新轨迹 $X_{i,k}, U_{i,k}$。
-
-(3) \textbf{计算载荷轨迹}：基于更新后的 $X_{i,k}$ 求解问题 (11)，得到 $X_{l,k}, U_{l,k}$。
-
-(4) \textbf{误差计算与收敛判断}：计算误差 $e = \max(e_{i,X}, e_{i,U}, \forall i \in I_A)$，其中：
-\begin{equation}
-    e_{i,X} = \frac{1}{N} \|X_{i,k} - X_{i,{k-1}}\|^2, \quad e_{i,U} = \frac{1}{N} \|U_{i,k} - U_{i,{k-1}}\|^2
-\end{equation}
-
-(5) \textbf{迭代更新}：若误差 $e \geq \delta$ 且迭代次数未超出最大阈值 $k_{\text{max}}$，继续迭代。
-
-
-由载荷本身缺乏计算能力，随机选择一个旋翼无人机作为 "中心无人机"，负责顺序求解式 (\ref{multiuav}) 和式 (\ref{multipayload})。分布式模型预测控制的流程总结如算法 \ref{alg:mpc_multilift} 所示。
-
 \section{自适应学习的控制参数优化}
 
 分布式模型预测控制 如算法 \ref{alg:mpc_multilift} 所述，通过对集中式 模型预测控制 (\ref{multimpc}) 进行近似来提高计算效率。通常，随着阈值 \(\delta\) 的减小和最大迭代次数 \(k_{\text{max}}\) 的增加，这种近似的准确性会得到改善。然而，算法 \ref{alg:mpc_multilift} 的性能（包括预测轨迹的可行性和跟踪精度）依赖于各种超参数的精细调整。这包括选择权重矩阵以及在 (\ref{juav}) 和 (\ref{jpayload}) 中参考轨迹的设计。
 
-为清晰起见，令 \(\theta^i \in \mathbb{R}^{m_i}, \forall i \in \mathcal{I}_q\) 表示第 \(i\) 个无人机的超参数，\(\theta^l \in \mathbb{R}^{m_l}\) 表示载荷的超参数。因此，我们可以将分解后的 模型预测控制 问题参数化为无人机的
-$\text{QMPC}_{\theta^i}, \forall i \in \mathcal{I}_q$和载荷的$\text{LMPC}_{\theta^l}$。
+为清晰起见，令 \(\bm \theta_i \in \mathbb{R}^{m_i}, \forall i \in \mathcal{I}_q\) 表示第 \(i\) 个无人机的超参数，\(\bm \theta_l \in \mathbb{R}^{m_l}\) 表示载荷的超参数。因此，可以将分解后的 模型预测控制 问题参数化为无人机的MPC和载荷的MPC。
 对应的 模型预测控制 预测轨迹分别记为
-$\xi^{*,i}_{\theta^i} = \{ X^{*,i}_{\theta^i}, U^{*,i}_{\theta^i} \}$和
-$\quad \xi^{*,l}_{\theta^l} = \{ X^{*,l}_{\theta^l}, U^{*,l}_{\theta^l} \}$。
+$\xi_{{\theta_i},{*,i}} = \{ X_{{\theta_i},{*,i}}, U_{{\theta_i},{*,i}} \}$和
+$\quad \xi_{{\theta_i},{*,i}} = \{ X_{{\theta_i},{*,i}}, U_{{\theta_i},{*,i}} \}$。
 
 要实现动态耦合的模型预测控制权重的调节，仅通过独立调节各个无人机的 模型预测控制 超参数是不太可能的，且单一固定的超参数集无法普遍适用于所有无人机。手动工程通常依赖于保守的假设，例如均匀的拉力分配和准静态飞行，并且是通过反复试验实现的，这会导致性能不是最优。
 
-\subsection{基于深度神经网络的自适应超参数调整方法}
+\subsection{控制器超参数自适应调节方法}
+考虑一个离散时间的动力学系统:
 
-
-
-本研究旨在为多机协同提升系统设计自适应的模型预测控制超参数，并开发一种系统化的自动调优方法。由于此类系统的动态行为复杂且难以通过解析模型进行准确描述，使用深度神经网络（DNN）生成控制器的动态权重和参考值，输入特征包括系统状态、障碍物位置等环境信息。数学上，第 \(i\) 个无人机的自适应模型预测控制超参数可表示为：
 \begin{equation}
-	\label{4-7}
-    \boldsymbol{\theta}_i=f_{\boldsymbol{\pi}_i}\left(\boldsymbol{\chi}_i\right),\mathrm{~}\forall i\in\mathcal{I}_A
+    \bm x_{t+1} = T(\bm x_t, \bm u_t)
+	\label{1}
+\end{equation}
+其中 \( \bm x_k \in \mathbb{R}^n \) 和 \( \bm u_k \in \mathbb{R}^m \) 分别是状态和控制，初始状态 \( \bm x_0 \) 是已知的。  
+控制由反馈控制器生成，用来追踪目标状态 \( \bm x_{t,\text{ref}} \in \mathbb{R}^n \)，使得
+\begin{equation}
+    \bm u_k = h(\bm x_k, \bm x_{t,\text{ref}}, \bm \theta)
+	\label{2}
 \end{equation}
 
+其中 \( \bm \theta \in \bm \Theta \) 表示控制器的参数，\( \bm \Theta \) 是一个可行的参数集合，可以通过分析或经验确定系统的稳定性。  
+假设状态 \( {\bm x}_k \) 可以直接测量，或者使用适当的状态估计器。此外，假设式(\ref{1}) 和式 (\ref{2}) 是可微的，即雅可比矩阵$\nabla_{\bm x} T$， $\ \bm \nabla_{\bm u} T$， $\ \bm \nabla_{\bm x} h$ 和 $\ \bm \nabla_{\bm \theta} h$
+都存在，这对一般系统广泛适用。
 
-其中，\( \bm \pi_i \) 表示第 \(i\) 个DNN的可学习参数，\( \bm \chi_i \) 包含环境观测数据和系统相关信息，例如系统状态与障碍物信息等。研究的核心问题是，通过优化每个无人机（包括载荷）的DNN参数 \( \pi_i^* \)，最小化一个由所有无人机的损失函数组成的总体损失函数。该问题可以形式化为以下优化问题：
+控制器学习/自调任务调整参数 \( \bm \theta \) 以最小化评估准则，即损失函数 \( L(\cdot) \)，该损失函数是目标状态、实际状态和控制行为在时间间隔 \( N \) 内的函数。  
+一个示例是跟踪误差和控制努力惩罚的二次损失：
+\[
+L(\bm x_{1:N}, \bm x_{{1:N},\text{ref}}, \bm u_{0:N-1}; \bm \theta) = \sum_{k=1}^{N} \| \bm x_k - \bm {x}_{k,\text{ref}} \|^2 + \sum_{k=0}^{N-1} \lambda \| \bm u_k \|^2,
+\]
+其中 \( \lambda > 0 \) 是惩罚系数。在本文的其余部分，我们将使用简写符号 \( L(\bm \theta) \) 来表示损失函数。
+
+总结一下，我们将控制器学习/自调问题表述为以下参数优化问题：
+\[
+\min_{\theta \in \Theta} L(\theta) \quad \text{subject to} \ x_{k+1} = f(x_k, u_k), \ x_0 \ \text{given}, \ u_k = h(x_k, \bar{x}_k, \theta), \ k \in \{0, 1, \dots, N-1\}. \tag{P}
+\]
+
+我们通过 DiffTune 来求解上述问题，DiffTune 使用投影梯度下降算法来迭代更新参数：
+\begin{equation}
+    \bm \theta \leftarrow P_{\bm \Theta} (\bm \theta - \alpha \bm{\nabla_\theta L})
+\end{equation}
+
+为了得到梯度 \( \bm{\nabla_\theta L} \)，从链式法则出发：
+\begin{equation}
+    \bm{\nabla_\theta L} = \sum_{k=1}^{N} \frac{\partial L}{\partial \bm x_k} \frac{\partial \bm x_k}{\partial \bm \theta} + \sum_{k=0}^{N-1} \frac{\partial L}{\partial \bm u_k} \frac{\partial \bm u_k}{\partial \bm \theta}
+\end{equation}
+
+一旦选择了损失函数 \( L \)，就可以确定梯度 \( \frac{\partial L}{\partial \bm x_k} \) 和 \( \frac{\partial L}{\partial \bm u_k} \)，并通过灵敏度传播获得灵敏度状态 \( \frac{\partial \bm x_k}{\partial \bm \theta} \) 和 \( \frac{\partial \bm u_k}{\partial \bm \theta} \)：
+\begin{equation}
+	\begin{gathered}
+		\frac{\partial \bm x_{k+1}}{\partial \bm \theta} = (\bm{\nabla_{x_k}}  T + \bm{\nabla_{u_k}} T \bm{\nabla_{x_k}} h) \frac{\partial \bm x_k}{\partial \bm \theta} + \bm{\nabla_{u_k}} T \bm{\nabla_{\theta}} h\\
+		\frac{\partial \bm u_k}{\partial \bm \theta} = \bm{\nabla_{x_k}} h \frac{\partial \bm x_k}{\partial \bm \theta} + \bm{\nabla_{\theta}} h
+	\end{gathered}
+\end{equation}
+
+其中 \( \frac{\partial \bm x_0}{\partial \bm \theta} = 0 \)。  
+这里符号 \( \bm{\nabla_{x_k}} T, \bm{\nabla_{u_k}} T, \bm{\nabla_{x_k}} h, \bm{\nabla_{\theta}} h \) 表示在状态 \( \bm x_k \) 和控制 \( \bm u_k \) 处对函数 \( T \) 和 \( h \) 的雅可比矩阵求导。
+
+\subsection{基于梯度下降的控制器超参数自适应调节方法}
+
+由于多无人机绳系吊运系统的动态行为复杂，难以通过解析模型精确描述，我们引入深度神经网络（DNN）生成控制器的动态权重和参考轨迹。DNN 的输入特征包括系统状态、障碍物位置等环境信息。第 \(i\) 个无人机的自适应模型预测控制超参数和载荷的自适应模型预测控制超参数可以表示为：
+
+\begin{equation}
+	\label{4-7}
+	\begin{gathered}
+		\boldsymbol{\theta}_i=f_{\boldsymbol{\pi}_i}\left(\boldsymbol{\chi}_i\right),\mathrm{~}\forall i\in\mathcal{I}_q\\    
+		\boldsymbol{\theta}_l=f_{\boldsymbol{\pi}_l}\left(\boldsymbol{\chi}_l\right)
+	\end{gathered}
+\end{equation}
+其中，\( \bm \pi_i \) 表示第 \(i\) 个无人机的DNN的可学习参数，\( \bm \pi_l \) 表示载荷的DNN的可学习参数，\( \bm \chi_i \) 和\( \bm \chi_l \) 分别包含无人机和载荷的环境观测数据及系统相关信息，例如系统状态和障碍物信息等。通过优化每个无人机和载荷的DNN参数 \( \pi_i^* \)和\(\bm \pi_l\)，最小化由所有无人机的损失函数构成的总体损失函数，进而实现自适应控制。该问题可以用以下优化问题表示：
 
 \begin{equation}
 	\label{4-8}
 	\begin{aligned} 
-	&\operatorname*{minimize}_{\bm{\pi}}& & L_l+\sum_{i=1}^nL_i  \\
-	&\text{subject to}& & \begin{aligned}
-		&\boldsymbol{x}_{t+1}^i=\bar{\boldsymbol{f}}_t^i\left(\boldsymbol{x}_t^i,\boldsymbol{u}_{0|t}^{*,i},\Delta t;\boldsymbol{x}_t^l,\boldsymbol{u}_{0|t}^{*,l}\right),\forall i\in\mathcal{I}_q\\&\boldsymbol{u}_{0|t}^{*,i}\text{ generated by QMPC}\left(\boldsymbol{\theta}^i\left(\boldsymbol{\varpi}^i\right)\right)\\&\boldsymbol{x}_{t+1}^l=\bar{\boldsymbol{f}}_t^l\left(\boldsymbol{x}_t^l,\boldsymbol{u}_{0|t}^{*,l},\Delta t;\boldsymbol{x}_t^1,\cdots,\boldsymbol{x}_t^n\right)\\&\boldsymbol{u}_{0|t}^{*,l}\text{ generated by LMPC}\left(\boldsymbol{\theta}^l\left(\boldsymbol{\varpi}^l\right)\right)
-	\end{aligned} \\
-\end{aligned}
+		&\operatorname*{minimize}_{\bm{\pi}}& & L(\bm \theta_l)+\sum_{i=1}^n L(\bm \theta_i) \\
+		&\text{subject to}& & \begin{aligned}
+			&\boldsymbol{x}_{i,{t+1}}=\bar{{f}}_{i,t}\left(\boldsymbol{x}_{i,t},\boldsymbol{u}_{{*,i},{0|t}},\Delta t;\boldsymbol{x}_{l,t},\boldsymbol{u}_{{*,i},{0|t}}\right),\forall i\in\mathcal{I}_q\\&\boldsymbol{x}_{i,{t+1}}=\bar{{f}}_{l,t}\left(\boldsymbol{x}_{l,t},\boldsymbol{u}_{{*,l},{0|t}},\Delta t;\boldsymbol{x}_{i,t}\right),\forall i\in\mathcal{I}_q\\
+		\end{aligned} \\
+	\end{aligned}
 \end{equation}
+其中，$L(\bm \theta_l)$和 $L(\bm \theta_i)$分别表示载荷和第 \(i\) 个无人机的损失函数，损失基于它们在给定预测时间范围 \( N_c \in \mathbb{R}^+ \) 内的状态变化计算。参数 \( \pi \) 包含了所有无人机的DNN参数 \( \pi_i \)，
+\( \boldsymbol{u}_{*,i,{0|t}} \)
+由第 \(i\) 个无人机的模型预测控制器生成在时刻 \(t\) 的最优控制输入\( \boldsymbol{\theta}_i \) ，\( \boldsymbol{u}_{*,l,{0|t}} \)由载荷的模型预测控制器生成在时刻 \(t\) 的最优控制输入(\ \boldsymbol{\theta}_l \)。
 
 
-其中，\( {L}_l \) 和 \( {L}_i \) 分别表示载荷和第 \(i\) 个无人机的损失函数，损失基于它们在给定预测时间范围 \( N_c \in \mathbb{R}^+ \) 内的状态变化计算。参数 \( \pi \) 包含了所有无人机的DNN参数 \( \pi_i \)。
-
-
-
-\subsection{基于梯度下降的多无人机闭环训练方法}
 上述系统动力学基于名义模型，通过虚拟控制输入 \( u_l \) 进行优化，而实际系统动力学则引入了混合张力大小 \( T = \{T_1, \dots, T_n\} \)。由于 \( T \) 的混合特性，实际系统模型是非可微的，因此无法直接用于优化过程。在实际应用中，由于动态耦合特性和任务复杂性，要求控制器参数优
-化能够全面评估闭环性能。为了实现这一目标，提出了一种基于梯度下降的闭环训
+化能够全面评估闭环性能。
+
+为了实现这一目标，提出了一种基于梯度下降的训
 练框架，结合分布式分布式灵敏度传播算法，高效计
 算灵敏度以优化控制器超参数和深度神经网络（DNN）的参数 π。此方法有效克服了传
 统开环训练的局限性，为多无人机协同系统的性能优化提供了灵活高效的解决方案。
-与传统开环训练不同，闭环策略考虑了实时反馈对系统性能的影响。
+
+与传统开环模型预测控制不同，闭环策略考虑了实时反馈对系统性能的影响。
+
+
+我们通过 DiffTune 来求解上述问题，DiffTune 使用投影梯度下降算法来迭代更新参数：
+\begin{equation}
+    \bm \theta \leftarrow P_{\bm \Theta} (\bm \theta - \alpha \bm{\nabla_\theta L})
+\end{equation}
+
+为了得到梯度 \( \bm{\nabla_\theta L} \)，从链式法则出发：
+\begin{equation}
+    \bm{\nabla_\theta L} = \sum_{k=1}^{N} \frac{\partial L}{\partial \bm x_k} \frac{\partial \bm x_k}{\partial \bm \theta} + \sum_{k=0}^{N-1} \frac{\partial L}{\partial \bm u_k} \frac{\partial \bm u_k}{\partial \bm \theta}
+\end{equation}
+
+一旦选择了损失函数 \( L \)，就可以确定梯度 \( \frac{\partial L}{\partial \bm x_k} \) 和 \( \frac{\partial L}{\partial \bm u_k} \)，并通过灵敏度传播获得灵敏度状态 \( \frac{\partial \bm x_k}{\partial \bm \theta} \) 和 \( \frac{\partial \bm u_k}{\partial \bm \theta} \)：
+\begin{equation}
+	\begin{gathered}
+		\frac{\partial \bm x_{k+1}}{\partial \bm \theta} = (\bm{\nabla_{x_k}}  T + \bm{\nabla_{u_k}} T \bm{\nabla_{x_k}} h) \frac{\partial \bm x_k}{\partial \bm \theta} + \bm{\nabla_{u_k}} T \bm{\nabla_{\theta}} h\\
+		\frac{\partial \bm u_k}{\partial \bm \theta} = \bm{\nabla_{x_k}} h \frac{\partial \bm x_k}{\partial \bm \theta} + \bm{\nabla_{\theta}} h
+	\end{gathered}
+\end{equation}
+
+其中 \( \frac{\partial \bm x_0}{\partial \bm \theta} = 0 \)。  
+这里符号 \( \bm{\nabla_{x_k}} T, \bm{\nabla_{u_k}} T, \bm{\nabla_{x_k}} h, \bm{\nabla_{\theta}} h \) 表示在状态 \( \bm x_k \) 和控制 \( \bm u_k \) 处对函数 \( T \) 和 \( h \) 的雅可比矩阵求导。
 
 本节提出了针对多机协同提升系统的闭环训练框架，其训练问题采用双层结构进行描述。在底层结构中，通过算法 \ref{alg:mpc_multilift} 解决模型预测控制(\ref{4-8})中的分解子问题，实现系统的开环预测。随后，将计算得到的最优控制指令 \( u^*_{i,0|t} \) 和 \( u^*_{l,0|t} \) 应用于名义系统。其中，\( u^*_{i,\cdot|t} \) 表示基于反馈状态 \( x_i^t \) 计算的最优控制轨迹。在上层结构中，通过优化深度神经网络（DNN）参数 \( \pi \)，以最小化总损失函数，从而评估系统的闭环性能。
 
-为了突出闭环训练的优越性，我们将其与现有的开环训练方法进行比较。在保持闭环训练中的模型预测控制设置一致的情况下，继续使用公式 (\ref{4-7}) 中定义的自适应模型预测控制超参数，可以将多机协同提升系统的开环训练问题描述为以下形式：
+为了突出闭环训练的优越性，我们将其与现有的开环训练方法进行比较。在保持闭环训练中的模型预测控制设置一致的情况下，继续使用式 (\ref{4-7}) 中定义的自适应模型预测控制超参数，可以将多机协同提升系统的开环训练问题描述为以下形式：
 
 \begin{equation}
 	\label{4-9}
@@ -1388,8 +1452,7 @@ $\quad \xi^{*,l}_{\theta^l} = \{ X^{*,l}_{\theta^l}, U^{*,l}_{\theta^l} \}$。
 梯度公式的三项分别对应于损失函数相对于闭环状态的显式梯度、闭环状态对模型预测控制超参数的灵敏度、超参数对 DNN 参数的显式梯度。
 
 
-在公式(\ref{4-10})中，第一项和第三项的梯度可以直接计算，因为个体损失函数和模型预测控制超参数均是闭环状态和DNN参数的显函数。主要挑战在于求解第二项，即闭环状态对模型预测控制超参数的梯度。为了提高运算效率，下一小节将使用分布式灵敏度传播方法，将计算任务分解到各无人机和载荷中并行执行。
-
+在式(\ref{4-10})中，第一项和第三项的梯度可以直接计算，因为个体损失函数和模型预测控制超参数均是闭环状态和DNN参数的显函数。主要挑战在于求解第二项，即闭环状态对模型预测控制超参数的梯度。为了提高运算效率，下一小节将使用分布式灵敏度传播方法，将计算任务分解到各无人机和载荷中并行执行。
 
 \subsection{多无人机分布式灵敏度传播方法}
 
@@ -1572,7 +1635,6 @@ L_i = \alpha \sum_{t=T}^{T+N_{cl}} \exp\left(-\eta \| p_i^t - p_{\text{obs}} \|^
 
 在此基础上，我们将完整的训练流程总结为算法 \ref{alg:distributed_pg} 。每个训练周期的平均损失 $L_{\text{mean}}$ 由所有个体损失函数的总和计算而得，系统动态离散化的时间步长为 $\bar{\Delta t}$，训练周期的时长为 $T_{\text{ep}}$。
 
-
 \section{仿真验证}
 我们通过广泛的仿真实验验证了\textbf{Auto-Multilift}的有效性，实验主要针对不同飞行场景下模型预测控制（MPC）超参数的学习。具体而言，Auto-Multilift展现出以下几个优势：
 
@@ -1636,7 +1698,6 @@ L_i = \alpha \sum_{t=T}^{T+N_{cl}} \exp\left(-\eta \| p_i^t - p_{\text{obs}} \|^
 \begin{equation}
     \frac{d L_i^\text{pytorch}}{d \pi_i} = \frac{d L_i}{d \pi_i}.
 \end{equation}
-
 
 \section{本章总结}
 \subsubsection{5. 方法的优点}
@@ -2006,15 +2067,15 @@ MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的
 
 \begin{figure}[hbt!]
 	\centering
-	\includegraphics[width=30pc]{picture/ros.png} 
-	\caption{室内试验系统软件配置} 
+	\includegraphics[width=27pc]{picture/ros.png} 
+	\caption{通信信息流通示意图} 
 	\label{ros}
 \end{figure}
 
 
 图 \ref{framewor} 展示了算法在试验过程中所使用的主要软件包及其间传递的消息内容。在实物试验中，动作捕捉设备以100Hz的频率提供外部绝对定位信息，并通过无线连接传递给飞控系统，与飞控系统中的传感器数据进行融合并作为源数据使用。
 无人机控制程序采用C++语言编写，板载计算设备通过USB转串口线与飞控系统连接，通信波特率设置为921600。主程序首先定义了发送和接收的数据类型，涵盖了输出推力、姿态角、位置信息以及以四元数表示的姿态数据。控制算法由定时器以20毫秒的周期触发运行，计算结果通过 uXRCE-DDS 中间件传输至飞控系统以执行相应操作。
-uXRCE-DDS（Micro XRCE-DDS） 是由 eProsima 开发的一种轻量级通信中间件，旨在为资源受限的嵌入式设备提供与标准 DDS（Data Distribution Service）生态系统的无缝集成。它基于 XRCE（规范，专为微控制器和其他受限硬件环境设计，确保在低功耗和有限计算资源的设备上实现高效的实时数据分发和通信，这为 PX4 和 ROS 2 之间提供了快速可靠的集成，并使 ROS 2 更容易获取无人机自身信息以及发送指令，从而更精确地实现了无人机的控制和数据传输。这种节点式的通信方法如图 \ref{ros} 所示，每个Node发布一个Topic，其他的Node可以选择是否订阅这个消息，可机动单元既可以在单个无人机上通信又可以在可机动单元间进行通信。每个可机动单元读取传感器信息，经过滤波、融合算法得出无人机的位姿信息，再通过ROS的节点进行发布，其他的可机动单元可选择性的订阅其所发布的信息，用这种方式进行分布式控制，既简单又稳定可靠。
+uXRCE-DDS（Micro XRCE-DDS） 是由 eProsima 开发的一种轻量级通信中间件，旨在为资源受限的嵌入式设备提供与标准 DDS（Data Distribution Service）生态系统的无缝集成。它基于 XRCE（规范，专为微控制器和其他受限硬件环境设计，确保在低功耗和有限计算资源的设备上实现高效的实时数据分发和通信，这为 PX4 和 ROS 2 之间提供了快速可靠的集成，并使 ROS 2 更容易获取无人机自身信息以及发送指令，从而更精确地实现了无人机的控制和数据传输。这种节点式的通信方法如图 \ref{ros} 所示，这些节点被封装在易于共享和发布的程序包和功能包中。ROS 2的节点式通信基于TCP和UDP协议，因此用户无需关注底层通信的管理。每个节点发布一个Topic，其他节点可以选择订阅这些消息。这样，无人机的各个模块可以在单个无人机内部进行通信，也可以在不同无人机之间进行信息交换。每个无人机通过读取传感器数据，并通过滤波和融合算法计算出位姿信息，再通过ROS 2节点进行发布。其他无人机可以选择性地订阅相关信息，从而实现分布式控制。该方式简洁、稳定且可靠。
 QGC地面站提供数据监控和指令功能，用于监控数据以及申请自主飞行模式（Offboard模式）。需要特别指出的是，尽管上位机也具备申请自主飞行模式的功能，但为了确保实物试验的安全性，禁止通过上位机进行此类申请，自主飞行模式的切换仅通过遥控器和地面站执行。
 \begin{figure}[hbt!]
 	\centering
@@ -2060,7 +2121,7 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 \section{无人机绳系吊运系统控制试验验证}
 \subsection{单无人机吊运试验验证}
 如图 \ref{framewor} 所示，在真实飞行实验的设置中，四旋翼无人机配备了PX4硬件飞控系统，用于实现精确的姿态估计和低级别控制。无人机的位置和线性速度通过VICON运动捕捉系统进行实时估计，VICON系统具有高精度的空间定位能力，可为飞行器提供准确的位置和速度数据，从而为模型预测控制器提供关键输入。此外，加速度和角速度则通过PX4内置的加速度计和陀螺仪传感器进行测量。这些传感器能够实时采集飞行器的加速度和旋转速率数据，为系统提供必要的状态信息，确保飞行控制的精确性和实时性。在实机算法中，模型预测控制（MPC）优化问题的求解采用CasADi \cite{Andersson2019} 和 acados \cite{Verschueren2022} 进行部署。
-训练数据以50 Hz的频率采集，数据来源于沿圆轨迹飞行的无人机数据来源于沿圆轨迹飞行的无人机，该系统采用模型预测控制器进行控制。训练集仅包含60秒的飞行数据（共3000个数据点），这些数据用于训练模型，外力和力矩通过公式\ref{nmpc}计算后作为标签用于学习。在数据采集过程中，系绳长度和载重分别为0.8 m和160 g，这些参数在NP-MPC中是未知的，因此在训练过程中，系统必须基于实时估计的状态信息来动态调整控制策略。考虑到这些参数的不确定性，NP-MPC通过建模外力和力矩对飞行控制进行实时预测，从而确保系统在没有先验信息的情况下仍能稳定运行。无人机试验场景如图 \ref{dan} 所示。
+训练数据以50 Hz的频率采集，数据来源于沿圆轨迹飞行的无人机数据来源于沿圆轨迹飞行的无人机，该系统采用模型预测控制器进行控制。训练集仅包含60秒的飞行数据（共3000个数据点），这些数据用于训练模型，外力和力矩通过式\ref{nmpc}计算后作为标签用于学习。在数据采集过程中，系绳长度和载重分别为0.8 m和160 g，这些参数在NP-MPC中是未知的，因此在训练过程中，系统必须基于实时估计的状态信息来动态调整控制策略。考虑到这些参数的不确定性，NP-MPC通过建模外力和力矩对飞行控制进行实时预测，从而确保系统在没有先验信息的情况下仍能稳定运行。无人机试验场景如图 \ref{dan} 所示。
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=28pc]{picture/danjireal.png} 
@@ -2129,7 +2190,7 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 为了充分验证所提Neural Predictor的泛化性能，本试验采用了训练数据集之外的速度数据和有效载荷质量进行测试，旨在评估其在不同环境和条件下的表现。具体而言，本试验设计了四种测试场景，其中第一个场景用于收集数据集，并在该数据集上训练神经网络模型。然后，基于此训练好的模型，进一步设计了三种不同的测试情况以检验NP-MPC的泛化能力：第一种情况是改变飞行速度的大小，第二种情况是改变飞行轨迹的半径，最后一种情况则是增加有效载荷的额外重量。这三种不同的测试场景可以模拟实际应用中可能出现的变化条件，从而验证所提方法的适应性和鲁棒性。
 在图 \ref{prediction_res} 中，分别展示了在不同速度、轨迹半径和有效载荷情况下的测试结果。从中可以明显看出，NP-MPC相比于传统的模型预测控制在所有测试场景中均展现出了更优的跟踪性能。在所有测试场景下，跟踪精度的提升最大可达到65.1\%。尤其在增加有效载荷额外重量的情况下，NP-MPC凭借其快速响应和准确预测的能力，能够迅速适应载荷变化，从而将跟踪精度提升至76.39\%。这一结果表明，NP-MPC在面对实际应用中的动态变化时，能够有效提升轨迹跟踪的精度和稳定性。各种案例的结果表明，NP-MPC具有很强的泛化能力，能够有效地适应训练数据集领域之外的未见数据。
 
-\subsection{多无人机吊运试验验证}
+% \subsection{多无人机吊运试验验证}
 
 \section{本章总结}
 
