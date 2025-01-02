@@ -1,0 +1,105 @@
+
+% 上述系统动力学基于名义模型，通过虚拟控制输入 \( u_l \) 进行优化，而实际系统动力学则引入了混合张力大小 \( T = \{T_1, \dots, T_n\} \)。由于 \( T \) 的混合特性，实际系统模型是非可微的，因此无法直接用于优化过程。在实际应用中，由于动态耦合特性和任务复杂性，要求控制器参数优
+% 化能够全面评估闭环性能。
+
+本节提出了针对多机协同提升系统的闭环训练框架，其训练问题采用双层结构进行描述。在底层结构中，通过算法 \ref{alg:mpc_multilift} 解决模型预测控制(\ref{5})中的分解子问题，实现系统的开环预测。随后，将计算得到的最优控制指令 \( u^*_{i,0|t} \) 和 \( u^*_{l,0|t} \) 应用于名义系统。其中，\( u^*_{i,\cdot|t} \) 表示基于反馈状态 \( x_i^t \) 计算的最优控制轨迹。在上层结构中，通过优化深度神经网络（DNN）参数 \( \pi \)，以最小化总损失函数，从而评估系统的闭环性能。
+
+对于多无人机绳系吊运系统，其动态行为复杂，难以通过解析模型精确描述。因此，引入深度神经网络（DNN）生成控制器的动态权重和参考轨迹，DNN 的输入特征包括系统状态、障碍物位置等环境信息。第 \(i\) 个无人机的自适应模型预测控制超参数和载荷的自适应模型预测控制超参数可以表示为：
+
+\begin{equation}
+	\label{4}
+	\begin{gathered}
+		\boldsymbol{\theta}_i=h_{\boldsymbol{\pi}_i}\left(\boldsymbol{\chi}_i\right),\mathrm{~}\forall i\in\mathcal{I}_q\\    
+		\boldsymbol{\theta}_l=h_{\boldsymbol{\pi}_l}\left(\boldsymbol{\chi}_l\right)
+	\end{gathered}
+\end{equation}
+其中，\( \bm \pi_i \) 表示第 \(i\) 个无人机的DNN的可学习参数，\( \bm \pi_l \) 表示载荷的DNN的可学习参数，\( \bm \chi_i \) 和\( \bm \chi_l \) 分别包含无人机和载荷的环境观测数据及系统相关信息，例如系统状态和障碍物信息等。通过优化每个无人机和载荷的DNN参数 \( \pi_i^* \)和\(\bm \pi_l\)，最小化由所有无人机的损失函数构成的总体损失函数，进而实现自适应控制。该问题可以用以下优化问题表示：
+
+\begin{equation}
+	\label{5}
+	\begin{aligned} 
+		&\operatorname*{minimize}_{\bm{\pi}} & & L_l + \sum_{i=1}^n L_i \\
+		&\text{subject to} & & \begin{aligned}
+			&\boldsymbol{x}_{i,{k+1}} = {{f}}_{i,k}\left(\boldsymbol{x}_{i,k}, \boldsymbol{u}^*_{i,{k}},  \boldsymbol{x}_{l,k}, \boldsymbol{u}^*_{l,{k}}\right), \forall i \in \mathcal{I}_q \\
+			&\boldsymbol{x}_{l,{k+1}} = {{f}}_{l,k}\left(\boldsymbol{x}_{l,k}, \boldsymbol{u}^*_{{l},{k}},  \boldsymbol{x}_{i,k}\right), \forall i \in \mathcal{I}_q
+		\end{aligned} \\
+	\end{aligned}
+\end{equation}
+其中，$L_l$和 $L_i$分别表示载荷和第 \(i\) 个无人机的损失函数，损失基于它们在给定预测时间范围 \( N \in \mathbb{R}^+ \) 内的状态变化计算。参数 \(\bm \pi \) 包含了所有无人机的DNN参数 \( \bm \pi_i \)和载荷的DNN参数 \( \bm \pi_l \)，
+第 \(i\) 个无人机的模型预测控制器在超参数\( \boldsymbol{\theta}_i \)下于时刻 \(k\) 生成的最优控制输入记为 \( \boldsymbol{u}^*_{i,{k}} \) ，载荷的模型预测控制器在超参数\( \boldsymbol{\theta}_l \)下于时刻 \(k\) 生成的最优控制输入记为\( \boldsymbol{u}^*_{l,{k}} \)。
+
+
+\sum_{k=T}^{T+N} \| \bm x_{l,k} - \bm x_{l,k}^{\text{ref}} \|_W^2+\sum_{i=1}^{n}\sum_{k=T}^{T+N} \| \bm x_{i,k} - \bm x_{i,k}^{\text{ref}} \|_W^2
+
+
+
+
+
+
+
+与前文类似，无人机的控制输入为$\bm{U}=\left[U_1,U_2,U_3,U_4\right]^\mathrm{T}=\left[f_i,\tau_{x_i},\tau_{y_i},\tau_{z_i}\right]^\mathrm{T}$，其中$f_{i}$，$\tau_{x_i}$，$\tau_{y_i}$，$\tau_{z_i}$表示第 $i$ 个无人机的控制力和控制力矩大小，具体表述参
+考式(\ref{2-5})和(\ref{2-6})。
+
+% 同时，为了模拟系统受到的未知扰动（四旋翼无人机的诱导气流等），考虑有一个直接作用在吊挂载荷上的外界干扰力${\boldsymbol{f}}_{w}=\left[F_{xw},F_{yw},F_{zw}\right]^\mathrm{T}$。
+
+% 在三个四旋翼无人机绳系吊挂载荷系统中，存在三个非零张力系绳产生的完整约束，不考虑载荷的刚体转动情况下，整个系统自由度为18（6×3+3-3）。本文为方便后续多机吊挂研究，选择吊挂载荷的位置，三个无人机的姿态角以及三根系绳与吊挂载荷形成的偏离角度作为系统的广义坐标，记作：
+% $$\boldsymbol{X}_n=
+% \left[
+% 	p_{l_x} , p_{l_y} , p_{l_z},\alpha_1,\beta_1,\phi_1,\theta_1,\psi_1,\alpha_2,\beta_2,\phi_2,\theta_2,\psi_2,\alpha_3,\beta_3,\phi_3,\theta_3,\psi_3
+% \right]^\mathrm T$$
+
+类似式(\ref{2-9})，三个无人机吊挂载荷系统的动能和势能可分别表示如下：
+\begin{equation}
+	\begin{aligned}
+	\mathcal{T}=\frac{1}{2}m_{l}{\boldsymbol{v}}_{l}^\mathrm{T}{\boldsymbol{v}}_{l}+&\frac{1}{2}\left[\sum_{i=1}^{n}\left(m_{q_{i}}\dot{\boldsymbol{v}}_{q_{i}}^{T}\dot{\boldsymbol{v}}_{q_{i}}+\boldsymbol{\omega}_{q_{i}}^{T}\boldsymbol{J}_{q_{i}}\boldsymbol{\omega}_{q_{i}}\right)\right] \\
+	\mathcal{U}=\sum_{i=1}^{n}&m_{q_{i}}g\boldsymbol{e}_3\cdot\boldsymbol{x}_{q_{i}}+m_{l}g\boldsymbol{e}_3\cdot\boldsymbol{x}_{l}
+\end{aligned}
+\label{2-18}
+\end{equation}
+其中，$m_{q_{i}}$,$m_l$ 表示第 $i$ 个无人机和吊挂载荷的质量，
+
+$\boldsymbol{J}_{q_{i}}$ 为无人机的转动惯量。
+可以得到系统的欧拉-朗格朗日方程为:
+\begin{equation}
+\begin{aligned}
+	&\mathcal{L}=\mathcal{T}-\mathcal{U} \\
+	{F}_{\boldsymbol{X}_n}=&\frac{\mathrm{d}}{\mathrm{d}t}\left(\frac{\partial\mathcal{L}}{\partial\dot{\boldsymbol{X}_n}}\right)-\frac{\partial\mathcal{L}}{\partial\boldsymbol{X}_n}
+\end{aligned}
+\label{2-19}
+\end{equation}
+
+
+把式(\ref{2-18})代入式(\ref{2-19})中可得到如下二阶非线性微分方程：
+\begin{equation}	
+	\dot{\bm X}_n= f_n(\bm X_n)+ g_n(\bm X_n)\bm u+ k_{n}\left(\bm f_{w}\right)
+	\label{2-20}
+\end{equation}
+其中$\bm k_{z}\left(\bm F_{p}\right)$为未知的外部干扰。
+进一步选择状态向量为：$$\bm X=\left[x_{p},x_{p},y_{p},y_{p},z_{p},z_{p},\alpha_{i},\dot{\alpha}_{i},\beta_{i},\dot{\beta}_{i},\phi_{i},\dot{\phi}_{i},\theta_{i},\dot{\theta}_{i},\psi_{i},\dot{\psi}_{i}\right]^\mathrm{T}$$
+记$\bm{U}=\left[f_i,\tau_{x_i},\tau_{y_i},\tau_{z_i}\right]^\mathrm{T}$作为控制力、力矩向量，${\boldsymbol{U}}_{w}=\left[F_{w_x},F_{w_y},F_{w_z}\right]^\mathrm{T}$为外部干扰输入，从而把式(\ref{2-20})转换为一阶非线性微分方程：
+\begin{equation}
+	\dot{\boldsymbol{X}}= f\left(\boldsymbol{X},\boldsymbol{U}\right)+ f_w\left(\boldsymbol{U}_w\right)
+	\label{2-21}
+\end{equation}
+
+式(\ref{2-21})可以完整地描述出三个四旋翼无人机运输吊挂载荷的动力学模型，而且当无
+人机数量增加时，只需在状态变量中相应增加系绳偏角α、β即可。但是在实际运输控制中，无人机的控制器很难获取系绳偏角和吊挂载荷的位置信息，依照现有模型无法进
+行控制器设计，因
+此需要一个不包含载荷信息的简化模型，可以将系绳拉力可以被当作对无人机平动运动
+的一个干扰力，绳子牵引力作用下的第$i$架无人机动力学模型为： 
+\begin{equation}
+	\left\{
+	\begin{aligned}
+		&\ddot{x}=\frac{U_{1i}\left(\cos\phi_i\cos\psi_i\sin\theta_i+\sin\phi_i\sin\psi_i\right)-f_{xi}}{m}+d_{xi}\\
+		&\ddot{y}=\frac{U_{1i}\left(\cos\phi_i\sin\psi_i\sin\theta_i-\cos\psi_i\sin\phi_i\right)-f_{yi}}{m}+d_{yi}\\
+		&\ddot{z}=\frac{U_{1i}\cos\phi_i\cos\theta_i-f_{zi}}{m}-g+d_{zi}\\
+		&\ddot{\phi}=\frac{(I_{y}-I_{z})\cdot \dot{\theta}_i\dot{\psi}_i+U_{2i}}{I_{x}}\\
+		&\ddot{\theta}=\frac{(I_{z}-I_{x})\cdot \dot{\phi}_i\dot{\psi}_i+U_{3i}}{I_{y}}\\
+		&\ddot{\psi}=\frac{(I_{x}-I_{y})\cdot \dot{\phi}_i\dot{\theta}_i+U_{4i}}{I_{z}}\end{aligned}
+	\right.
+	\label{2-22}
+\end{equation}
+其中为$\boldsymbol{f}_{i}=
+\left[f_{xi} , f_{yi} , f_{zi}\right]^\mathrm{T}$系绳拉力，$\bm d_i=\left[d_{xi},d_{yi},d_{zi}\right]^\mathrm{T}$为系统受到的未知干扰，其中包括未知风扰等。 
+
+式(\ref{2-22})表示了对各个无人机而言的简化模型，可以看出，式(\ref{2-22})中不包含载荷信息和其他无人机的状态耦合，而是用一个位置干扰力$\boldsymbol{d}_{i}$来表示。
