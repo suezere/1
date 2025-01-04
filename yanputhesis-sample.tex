@@ -1038,7 +1038,7 @@ $。
 
 传统的鲁棒模型预测控制方法虽然能够有效应对系统中的不确定性，但其实际应用往往受到严格假设条件的限制，难以完全满足实际工程需求。此外，模型预测控制的闭环性能在很大程度上依赖于其内部模型的准确性，模型误差可能导致控制效果的下降。
 
-为了解决上述问题，本小节引入了前文所提出的Neural Predictor数据驱动预测方法。该方法凭借其强大的数据拟合能力，能够捕捉系统中难以建模或存在动态缺失的特性，从而显著提升控制器的整体性能和鲁棒性。
+为了解决上述问题，本小节引入了前文所提出的Neural Predictor方法。该方法凭借其强大的数据拟合能力，能够捕捉系统中难以建模或存在动态缺失的特性，从而显著提升控制器的整体性能和鲁棒性。
 
 将 Neural Predictor 集成至 MPC 框架后，形成了针对无人机系绳吊运系统的数据驱动模型预测控制框架——NP-MPC。模型预测控制通过优化方法以递推方式生成一系列最优控制输入。因此，基于学习动力学的 NP-MPC 方法可以被考虑在如下形式的优化问题中：
 
@@ -1101,7 +1101,7 @@ $。
 \end{tabular}
 \end{table*}
 
-图2展示了NeuroMHE、NeuroBEM和Neural Predictor在一段激进飞行轨迹（表 \ref{table_bem} 中的“随机点”，时间段为45秒至55秒）上的外力和力矩估计性能。
+\autoref{table_bem} 展示了NeuroMHE、NeuroBEM和Neural Predictor在一段激进飞行轨迹（表 \ref{table_bem} 中的“随机点”，时间段为45秒至55秒）上的外力和力矩估计性能。
 从整体上看，这三种方法均能较为准确地估计外力和力矩。然而，在无人机执行激进机动的情况下（图2中的局部放大部分），NeuroMHE和NeuroBEM的外力和力矩估计精度明显下降，导致估计性能下降。相比之下，Neural Predictor在该场景下的估计结果更接近真实值，表明其在外力和力矩估计方面仍能保持较高的精度。这一优势源于Neural Predictor将外力和力矩建模为一个线性动态系统，并将无人机状态作为输入。当四旋翼无人机进行激进机动时，状态的变化驱动Neural Predictor响应外力和力矩的变化，从而实现快速自适应。此外，与最先进的NeuroMHE方法相比，Neural Predictor将外力和力矩的估计误差降低了66.15\%和33.33\%，具有显著的性能提升。
 
 \begin{figure}[hbt!]
@@ -1555,8 +1555,6 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
 	\end{gathered}
 	\label{ss}      
 \end{equation}
-
-
 其中
 \(
 \bm{F}_{i,k} = \frac{\partial \bar{f}_{i,k}}{\partial \bm{x}_{i,k}} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{i0}^*} \frac{\partial \bm{u}_{i0}^*}{\partial \bm{x}_{i,k}} + \frac{\partial \bm{u}_{i0}^*}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{i,k}} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{i,k}}
@@ -1856,7 +1854,7 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
 	\caption{开环训练算法和分布式策略梯度训练算法的平均损失对比} 
 	\label{meanloss}
 \end{figure}
-\autoref{meanloss} 比较了Autotune与开环训练方法在多无人机绳系吊运系统的平均损失。为了公平比较，图中显示的所有平均损失均使用相同的损失函数。对于具有较重载荷的多无人机绳系吊运系统，开环训练方法没有考虑系统中的强耦合项，导致训练不稳定，平均损失呈发散趋势。相比之下，Autotune的平均损失均能稳定在更小的值，体现了稳定学习和更佳跟踪性能的优势。
+
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=36pc]{picture/kk/plot3D.png} 
@@ -1864,24 +1862,44 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
 	\label{cjb}
 \end{figure}
 
-\autoref{cjb} 以3D图的方式展示了训练过程。Autotune在训练周期中提高了跟踪性能，同时逐渐将载荷的姿态稳定在期望的水平位置。相较于开环训练的MPC方法，Autotune-MPC的优势主要源于直接在实际系统动力学的闭环系统状态上进行训练，而前者依赖于名义动力学中预测得到的开环状态。如 \autoref{cjb1} 和 \autoref{cjb2} 所示，MPC计算的张力比实际张力平滑得多，在Autotune-MPC中，使用MPC计算的得到的张力代替实际张力，解决了实际张力和MPC计算张力之间的差异。
+\autoref{meanloss} 比较了Autotune与开环训练方法在多无人机绳系吊运系统的平均损失。为了公平比较，图中显示的所有平均损失均使用相同的损失函数。对于具有较重载荷的多无人机绳系吊运系统，开环训练方法没有考虑系统中的强耦合项，导致训练不稳定，平均损失呈发散趋势。相比之下，Autotune的平均损失均能稳定在更小的值，体现了稳定学习和更佳跟踪性能的优势。
+
+\autoref{cjb} 以3D图的方式展示了训练过程。Autotune在训练周期中提高了跟踪性能，同时逐渐将载荷的姿态稳定在期望的水平位置。相较于开环训练的MPC方法，Autotune-MPC的优势主要源于直接在实际系统动力学的闭环系统状态上进行训练，而前者依赖于名义动力学中预测得到的开环状态。如 \autoref{cjb1} 所示，MPC计算的张力比实际张力平滑得多，在Autotune-MPC中，使用MPC计算的得到的张力代替实际张力，解决了实际张力和MPC计算张力之间的差异。
 尽管这两种方法都通过对MPC进行自适应调参以提高鲁棒性，但基于闭环数据进行训练的Autotune-MPC方法提供了一种更加稳健和高效的途径来提升跟踪性能。在16
 秒左右，系绳上的实际张力存在高频波动，Autotune-MPC能够有效计算出适当的梯度来稳定训练，而开环训练方法则导致了不稳定。
+% \begin{figure}[hbt!]
+% 	\centering
+% 	\includegraphics[width=32pc]{picture/kk/cable_actual_tensions_fig_8_6quad_ol.png} 
+% 	\caption{闭环训练过程中系绳上的实际张力大小} 
+% 	\label{cjb1}
+% \end{figure}
+
+
+% \begin{figure}[hbt!]
+% 	\centering
+% 	\includegraphics[width=32pc]{picture/kk/cable_MPC_tensions_fig_8_6quad_ol.png} 
+% 	\caption{闭环训练过程中系绳上的MPC计算张力大小} 
+% 	\label{cjb2}
+% \end{figure}
 \begin{figure}[hbt!]
-	\centering
-	\includegraphics[width=32pc]{picture/kk/cable_actual_tensions_fig_8_6quad_ol.png} 
-	\caption{闭环训练过程中系绳上的实际张力大小} 
+    \centering
+    % 第一行的两张图
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{picture/kk/cable_actual_tensions_fig_8_6quad_ol.png}
+        \caption{实际张力}
+        % \label{quadrotoru0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{picture/kk/cable_MPC_tensions_fig_8_6quad_ol.png}
+        \caption{MPC计算张力}
+        % \label{quadrotoru1}
+    \end{subfigure}
+	\caption{闭环训练过程中系绳上的张力大小} 	
 	\label{cjb1}
 \end{figure}
-
-
-\begin{figure}[hbt!]
-	\centering
-	\includegraphics[width=32pc]{picture/kk/cable_MPC_tensions_fig_8_6quad_ol.png} 
-	\caption{闭环训练过程中系绳上的MPC计算张力大小} 
-	\label{cjb2}
-\end{figure}
-
 % \subsection{梯度计算与实现}
 
 % 针对上述参数化，链式法则~(15) 中的梯度计算公式重写为：
@@ -1901,7 +1919,7 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
 %为验证所提出方法的可行性与有效性，本章对章动目标消旋地面试验系统进行了搭建。试验系统主要由目标章动旋转模拟装置、磁场源、机械臂和计算机组成，通过目标章动模拟装置模拟空间目标的章动旋转运动，通过机械臂抓取磁场源模拟服务星的运动。采用不同消旋轨迹进行了多组试验，记录目标角速度变化情况并对结果进行了比较分析。
 为了验证上述提出方法的可行性与有效性，通过物理引擎仿真和实物试验验证两个方面对设计的算法效果进行评估。数据驱动方法依赖于大量高质量的标注数据来训练模型。然而，在机器人领域，获取真实世界的数据通常面临数据采集成本高、环境限制、数据标注困难等挑战，物理引擎仿真系统，可以在虚拟环境中高效生成大量多样化且精准标注的数据，避免了真实世界收集数据困难的问题。
 
-在物理引擎仿真方面，利用Drake、Gazebo和MuJoCo几种主流仿真平台，搭建四旋翼无人机绳系吊运系统的动力学和环境模型，并模拟其飞行轨迹与响应特性。在实物试验验证方面，基于实际硬件搭建四旋翼无人机绳系吊运系统，通过物理引擎和真实试验收集的大量数据，在室内场景中完成一系列试验，验证仿真模型的准确性与适用性。本章通过仿真与试验的结合，为无人机绳系吊运系统的设计与优化提供科学依据。
+在物理引擎仿真方面，在Drake、Gazebo和MuJoCo这几种主流仿真物理引擎平台中搭建四旋翼无人机绳系吊运系统的动力学和环境模型，并选择最适合的物理引擎来模拟其飞行轨迹与响应特性。在实物试验验证方面，基于实际硬件搭建四旋翼无人机绳系吊运系统，通过物理引擎和真实试验收集的大量数据，在室内场景中完成一系列试验，验证仿真模型的准确性与适用性。本章通过仿真与试验的结合，为无人机绳系吊运系统的设计与优化提供科学依据。
 \section{物理引擎仿真系统介绍}
 在无人机绳系吊运载荷系统的研究中，仿真是通过计算机模拟现实世界现象的过程。不同的仿真器针对不同的现象进行模拟，提供不同程度的真实感，消耗不同的计算资源，并适用于不同的目的。低保真度的仿真器通常需要较少的计算资源，因此常用于快速估计现实世界的行为或模拟系统的某个特定组件。相反，高保真度的仿真器能够在一个或多个方面更准确地估计现实世界的行为。高保真度的常见维度包括动力学模拟的精确性和更高的视觉真实感。
 
@@ -2044,14 +2062,15 @@ MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的
 
 \subsection{单无人机吊运仿真验证}
 
+
+在单无人机吊运仿真仿真中，无人机和有效载荷的质量分别为0.75 kg和0.15 kg，无人机的转动惯量通过MJCF中的“inertiafromgeom”模块自动计算得到。无人机与有效载荷之间的吊绳长度为1m。在仿真中，使用显式Runge-Kutta数值积分法，采样时间为0.01s，用于模拟系统的动态响应。
+通过悬停与轨迹跟踪两个仿真对设计的NP-MPC算法进行了验证。Neural Predictor的训练数据通过在仿真环境中生成的圆轨迹和双纽线轨迹中进行收集，轨迹速度和半径均为随机值。共收集了1000条轨迹，每条轨迹持续20s，包含2000个数据点。
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=25pc]{picture/kk/xuanting.png} 
 	\caption{无人机悬停仿真场景} 
 	\label{xuanting}
 \end{figure}
-在单无人机吊运仿真仿真中，无人机和有效载荷的质量分别为0.75 kg和0.15 kg，无人机的转动惯量通过MJCF中的“inertiafromgeom”模块自动计算得到。无人机与有效载荷之间的吊绳长度为1m。在仿真中，使用显式Runge-Kutta数值积分法，采样时间为0.01s，用于模拟系统的动态响应。
-通过悬停与轨迹跟踪两个仿真对设计的NP-MPC算法进行了验证。Neural Predictor的训练数据通过在仿真环境中生成的圆轨迹和双纽线轨迹中进行收集，轨迹速度和半径均为随机值。共收集了1000条轨迹，每条轨迹持续20s，包含2000个数据点。
 
 \begin{figure}[hbt!]
 	\centering
@@ -2085,7 +2104,7 @@ MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的
 		\caption{双纽线轨迹}
 		\label{bazib}
 	\end{subfigure}
-	\caption{无人机轨迹跟踪仿真场景}
+	\caption{无人机轨迹跟踪仿真可视化展示}
 	\label{mujoco}
 \end{figure}
 
@@ -2324,7 +2343,7 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 	\centering
 	\hspace{-1.1cm}
 	\includegraphics[width=24pc]{picture/5_10.png} 
-	\caption{室内试验系统软件配置} 
+	\caption{室内实物试验设置示意图} 
 	\label{framewor}
 \end{figure}
 
@@ -2362,7 +2381,7 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 
 
 \section{无人机绳系吊运系统控制试验验证}
-如图 \ref{framewor} 所示，在真实飞行试验的设置中，四旋翼无人机配备了PX4硬件飞控系统，用于实现精确的姿态估计和低级别控制。无人机的位置和线性速度通过动作捕捉设备进行实时估计，VICON动作捕捉系统系统具有高精度的空间定位能力，可为无人机提供准确的位置和速度数据，从而为模型预测控制器提供关键输入。此外，加速度和角速度则通过PX4内置的加速度计和陀螺仪传感器进行测量。这些传感器能够实时采集无人机的加速度和旋转速率数据，为系统提供必要的状态信息，确保飞行控制的精确性和实时性。在实机算法中，模型预测控制（MPC）优化问题的求解采用CasADi \cite{Andersson2019} 和 acados \cite{Verschueren2022} 进行部署。
+如图 \ref{framewor} 所示，在真实飞行试验的设置中，四旋翼无人机配备了PX4硬件飞控系统，用于实现精确的姿态估计和低级别控制。无人机的位置和线性速度通过动作捕捉设备进行实时估计，其具有高精度的空间定位能力，可为无人机提供准确的位置和速度数据，从而为模型预测控制器提供关键输入。此外，加速度和角速度则通过PX4内置的加速度计和陀螺仪传感器进行测量。这些传感器能够实时采集无人机的加速度和旋转速率数据，为系统提供必要的状态信息，确保飞行控制的精确性和实时性。在实机算法中，模型预测控制（MPC）优化问题的求解采用CasADi \cite{Andersson2019} 和 acados \cite{Verschueren2022} 进行部署。
 \subsection{单无人机吊运试验验证}
 对于单无人机吊运试验，无人机试验场景如图 \ref{dan} 所示。在训练数据以50 Hz的频率采集，数据来源于沿圆轨迹飞行的无人机数据来源于沿圆轨迹飞行的无人机，该系统采用模型预测控制器进行控制。训练集仅包含60秒的飞行数据（共3000个数据点），这些数据用于训练模型，外力和力矩通过\autoref{nmpc}计算后作为标签用于学习。在数据采集过程中，系绳长度和载重分别为0.8 m和160 g，这些参数在NP-MPC中是未知的，因此在训练过程中，系统必须基于实时估计的状态信息来动态调整控制策略。考虑到这些参数的不确定性，NP-MPC通过建模外力和力矩对飞行控制进行实时预测，从而确保系统在没有先验信息的情况下仍能稳定运行。
 \begin{figure}[hbt!]
@@ -2418,7 +2437,7 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=38pc]{picture/kk/color.png} 
-	\caption{在载荷上添加额外重量时$Z$轴外力的估算结果} 
+	\caption{不同MPC算法在飞行速度 1.5 m/s 下的飞机轨迹跟踪性能对比} 
 	\label{color}
 \end{figure}
 具体而言，提出的NP-MPC在X-Y平面上减少了53.45\%的跟踪误差，在Z轴上减少了67.45\%，相较于MPC取得了显著的改进。在双纽线轨迹跟踪试验中，GP-MPC、KNODE-MPC和NP-MPC的跟踪表现同样优于MPC。然而，当参考轨迹的曲率半径较小时，GP-MPC和KNODE-MPC的跟踪误差较大，而NP-MPC能够在曲率半径较小的情况下，仍然精确地跟踪参考轨迹。需要注意的是，双纽线轨迹在形状上与训练集中的圆形轨迹存在一定差异，在双纽线轨迹跟踪试验中，NP-MPC在X-Y平面减少了58.16\%的跟踪误差，在Z轴减少了76.72\%，相较于模型预测控制表现更为出色。这些结果表明，NP-MPC在不同类型轨迹下，尤其在复杂几何形状和较小曲率的轨迹跟踪任务中，能够有效地降低误差并提升跟踪精度，同时具有一定的泛化能力。
@@ -2434,7 +2453,7 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 在图 \ref{prediction_res} 中，分别展示了在不同速度、轨迹半径和有效载荷情况下的测试结果。从中可以明显看出，NP-MPC相比于传统的模型预测控制在所有测试场景中均展现出了更优的跟踪性能。在所有测试场景下，跟踪精度的提升最大可达到65.1\%。尤其在增加有效载荷额外重量的情况下，NP-MPC凭借其快速响应和准确预测的能力，能够迅速适应载荷变化，从而将跟踪精度提升至76.39\%。这一结果表明，NP-MPC在面对实际应用中的动态变化时，能够有效提升轨迹跟踪的精度和稳定性。上述试验的结果表明，NP-MPC具有很强的泛化能力，能够有效地适应训练数据集领域之外的未见数据。
 
 \subsection{多无人机吊运试验验证}
-对于多无人机吊运试验，在载荷上也安装三个非共面的反光标识点用动作捕捉设备的精准位姿进行实时估计。为了增强实物试验中无人机的可靠性，避免系统失效，进一步缩小自适应 MPC 权重的上限，上下限分别设定为0.01和1。多无人机吊运系统的系绳长度和载重分别为 1.2 m 和 1.5 kg。
+对于多无人机吊运试验，在载荷上也安装三个非共面的反光标识点用动作捕捉设备的位姿进行精准实时估计。为了增强实物试验中无人机的可靠性，避免系统失效，进一步缩小自适应 MPC 权重的上限，上下限分别设定为0.01和1。多无人机吊运系统的系绳长度和载重分别为 1.2 m 和 1.5 kg。
 
 
 \begin{figure}[hbt!]
