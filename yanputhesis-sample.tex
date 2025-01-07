@@ -48,7 +48,13 @@
 \usepackage{subcaption}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{fontspec}
+% \usepackage{titlesec}   % 用于更改标题样式
 
+% 设置英文标题部分的字体
+\newfontface\timesnewroman{Times New Roman}
+
+% 更改标题样式
 % \renewcommand{\algorithmicrequire}{ \textbf{Input:}} %Use Input in the format of Algorithm
 % \renewcommand{\algorithmicensure}{ \textbf{Output:}} %UseOutput in the format of Algorithm
 
@@ -68,7 +74,7 @@
 A data-driven research on tethered hoisting \\ control of unmanned aerial vehicle (UAV)
 }                                                           % 请自行断行
 \author{\blackbox{李晨豪}}{\blackbox{Li Chenhao}}  % 姓名（添加盲评标记）
-\date{2025年3月}{March 2025}                                  % 答辩日期
+\date{2025年1月}{January 2025}                                  % 答辩日期
 \school{航天学院}{School of Astronautics}% 学院
 \major{控制科学与工程}{Control Science and Engineering}                     % 专业 博士请添加 Ph
 \advisor{\blackbox{张帆}}{\blackbox{Zhang Fan}}      % 导师（添加盲评标记）
@@ -89,11 +95,11 @@ A data-driven research on tethered hoisting \\ control of unmanned aerial vehicl
 \makeCommitteePage{                                         % 学位论文评阅人
     \reviewers{\fullBlindReview{1}}                         % 和答辩委员会名单
     
-    \committee{2025 年 3 月 6 日}{
-        \defenseChair{王志刚}{教授}{西北工业大学}
-        \committeeMember{刘正雄}{教授}{西北工业大学}
-        \committeeMember{常海涛}{副研究员}{西北工业大学}
-        \defenseSecretary{沈刚辉}{副教授}{西北工业大学}
+    \committee{ 年  月   日}{
+        % \defenseChair{王志刚}{教授}{西北工业大学}
+        % \committeeMember{刘正雄}{教授}{西北工业大学}
+        % \committeeMember{常海涛}{副研究员}{西北工业大学}
+        % \defenseSecretary{沈刚辉}{副教授}{西北工业大学}
     }
 }
 %%-----------------------------------------------------------------------------%
@@ -102,7 +108,7 @@ A data-driven research on tethered hoisting \\ control of unmanned aerial vehicl
     
 近年来，数据驱动方法因其能够避免复杂系统高昂的建模成本、适应未知环境和动态变化、实现自主优化等特点，逐渐成为控制领域的重要方法。与传统的基于模型的控制方法相比，数据驱动控制不依赖精确的物理模型，能够直接从数据中学习控制策略，具有更强的适应性、灵活性和优化能力，特别适用于复杂、高维、不确定或动态变化的系统。
 
-本文将重点研究单无人机吊装载荷的高精度跟踪与多无人机协同稳定控制问题，探索数据驱动控制在无人机绳系吊运系统中的应用，并通过物理引擎仿真和实物试验验证其有效性。基于此研究框架，本文的具体研究内容如下：
+本文将重点研究单无人机吊装载荷的高精度跟踪与多无人机协同稳定控制问题，探索数据驱动控制在无人机绳系吊运系统中的应用，并通过物理引擎仿真和飞行试验验证其有效性。基于此研究框架，本文的具体研究内容如下：
 
 首先推导了无人机绳系吊运系统的动力学模型。从单个无人机出发，基于牛顿-欧拉法建立了单个四旋翼无人机的动力学方程，并通过拉格朗日法推导出了单个无人机吊装载荷的混合动力学模型。对于多无人机绳系吊运系统，基于拉格朗日法方程求解了系统的动力学模型，并进行了简化。
 
@@ -110,7 +116,7 @@ A data-driven research on tethered hoisting \\ control of unmanned aerial vehicl
 
 针对多无人机协同吊运载荷的自适应稳定控制问题，基于分布式灵敏度传播的神经网络学习方法，提出了一种分布式策略梯度算法Autotune，用于自动调整系统的分布式模型预测控制参数。分布式灵敏度传播方法用于计算无人机和载荷的动力学的梯度并进行传播，分布式策略梯度算法采用深度神经网络在线生成自适应归一化超参数，以闭环形式有效地学习自适应模型预测控制中的权重参数，提高了多无人机绳系吊运系统的协调控制性能。
 
-最后，搭建了无人机绳系吊运系统的物理引擎仿真平台和实物试验平台对本文所提出的算法进行了验证。在仿真过程中，首先使用了多种开源物理引擎对系统进行建模，基于开源物理引擎进行数值仿真，对单/多无人机绳系吊运系统进行了悬停测试、轨迹跟踪等，验证了本文提出算法的有效性；随后在实物试验中，提出了无人机绳系吊运系统的总体设计方案，并进一步细化了器件选型和机构设计，试验结果也验证了算法的有效性。
+最后，搭建了无人机绳系吊运系统的物理引擎仿真平台和飞行试验平台对本文所提出的算法进行了验证。在仿真过程中，首先使用了多种开源物理引擎对系统进行建模，基于开源物理引擎进行数值仿真，对单/多无人机绳系吊运系统进行了悬停测试、轨迹跟踪等，验证了本文提出算法的有效性；随后在飞行试验中，提出了无人机绳系吊运系统的总体设计方案，并进一步细化了器件选型和机构设计，试验结果也验证了算法的有效性。
 
 % 综上所述，本文对无人机绳系吊运载荷进行了全面的研究，建立了单无人机和多无人机系统的动力学模型，对模型进行了进一步简化；针对载荷对无人机的影响，利用了数据驱动方法对单无人机吊装载荷的不确定非线性项干扰进行预测，并补偿到非线性模型预测控制中；针对多无人机协同吊运的自适应控制问题，设计了一种分布式策略梯度算法，基于梯度下降和灵敏度传播的神经网络学习自适应参数，用于调整多无人机协同吊装搬运系统的分布式模型预测控制；进一步地，搭建了多个物理引擎和真实试验并对所提出算法进行了验证。
 
@@ -182,7 +188,7 @@ A data-driven research on tethered hoisting \\ control of unmanned aerial vehicl
 虽然单无人机绳系吊运载荷有以上众多优点，但仍然存在着许多问题：在空中运输过程中，系绳与载荷会形成类似单摆的结构，在载荷晃动的情况下，系绳的拉力会出现不确定性，且难以通过传感器精确观测，这不仅给无人机增添了更多的自由度，甚至可能引发无人机的不稳定性；单无人机在利用吊装方式运输的时候载荷会存在摆动，且当需要运输的载荷重量与无人机的载荷重量相当时，任务可能会受到影响。
 
 为了解决这些问题，采用多个协作式的无人机绳系吊运载荷是一个很有前途的替代方案，即将多架无人机按照期望的队形来分布，并使其在执行任务的过程中保持编队队形平稳飞行，从而圆满完成运输任务。
-多无人机绳系吊运系统通过根据有效载荷重量适当调整四旋翼无人机的数量，使这种悬挂式有效载荷配置能够实现最大的有效载荷输送效率，此外这种配置还可以有效控制载荷的姿态，解决了单无人机运输载荷出现摆动的问题，甚至在单无人机发生故障时仍可以完成任务需求。因此多无人机吊运载荷具有可行性高、效率高以及扩展性强等单架无人机无法比拟的优势。本文主要研究\autoref{dji1}中所示的单无人机绳系吊运系统和\autoref{dji2}中所示的多无人机绳系吊运系统。
+多无人机绳系吊运系统通过根据有效载荷重量适当调整四旋翼无人机的数量，使这种吊挂式有效载荷配置能够实现最大的有效载荷输送效率，此外这种配置还可以有效控制载荷的姿态，解决了单无人机运输载荷出现摆动的问题，甚至在单无人机发生故障时仍可以完成任务需求。因此多无人机吊运载荷具有可行性高、效率高以及扩展性强等单架无人机无法比拟的优势。本文主要研究\autoref{dji1}中所示的单无人机绳系吊运系统和\autoref{dji2}中所示的多无人机绳系吊运系统。
 % 本文主要研究\autoref{dji1}中所示的单无人机绳系吊运系统和\autoref{dji2}中所示的多无人机绳系吊运系统。绳系吊运载荷最初是为紧急响应、救援任务、民用和军事行动中的人力操作直升机而研究的\cite{2020A}。
 
 % 在运输过程中，载荷会对无人机产生了一系列影响，载荷的摆动运动
@@ -207,11 +213,11 @@ A data-driven research on tethered hoisting \\ control of unmanned aerial vehicl
 单无人机的绳系吊运系统动力学模型将载荷表示为质点，将系绳视为无质量刚性杆，该杆在载荷与四旋翼无人机之间保持恒定距离，并且只能通过轴向力进行传递。在这种条件下，在三维场景中，该载荷系统由空间中的两个角度定义，而在平面场景中，一个角度就足够了，类似于摆\cite{sun2021novel}，如图\ref{1_1}所示。
 
 将系绳视为无质量刚性杆的建模方法因其能够更轻松地稳定无人机的位置而被科学界广泛接受。
-Lupashin等人\cite{lupashin2013stabilization}提出了一个系绳四旋翼无人机，并将系绳建模为无质量刚性杆，他们利用该系绳作为与用户交互的媒介，从而稳定小型低成本悬停无人机的方向和位置  。通过拉紧系绳，仅使用简单的惯性测量传感器就足以使四旋翼无人机在受到外部干扰后恢复其位置和姿态。沿用该方法，Sreenath 等人\cite{sreenath2013trajectory}对悬挂载荷的系绳进行了建模，将其分为拉紧和零拉力两种情况。在三维场景下，具有非零系绳拉力的系统动态方程具有8个自由度，其中4个是欠驱动的。相反，当系绳不传递拉力时，他们认为无人机和系绳形成独立系统，载荷处于自由下落状态。在两种情况下，他们均通过模拟和实际试验验证了模型。
+Lupashin等人\cite{lupashin2013stabilization}提出了一个系绳四旋翼无人机，并将系绳建模为无质量刚性杆，他们利用该系绳作为与用户交互的媒介，从而稳定小型低成本悬停无人机的方向和位置  。通过拉紧系绳，仅使用简单的惯性测量传感器就足以使四旋翼无人机在受到外部干扰后恢复其位置和姿态。沿用该方法，Sreenath 等人\cite{sreenath2013trajectory}对吊挂载荷的系绳进行了建模，将其分为拉紧和零拉力两种情况。在三维场景下，具有非零系绳拉力的系统动态方程具有8个自由度，其中4个是欠驱动的。相反，当系绳不传递拉力时，他们认为无人机和系绳形成独立系统，载荷处于自由下落状态。在两种情况下，他们均通过模拟和实际试验验证了模型。
 
 \begin{figure}[hbt!]
 	\centering 
-	\includegraphics[width=28pc]{picture/1_3.png} 
+	\includegraphics[width=20pc]{picture/1_3.png} 
 	\caption{文献\oldcite{kotaru2017dynamics}中带阻尼和线性弹簧的系绳模型} \label{1_3}
 \end{figure}
 在上述研究中，系绳通常被建模为无质量刚性杆，然而，当四旋翼无人机执行某些任务时，无质量刚性杆模型的局限性显现出来\cite{castillo2019disturbance,estevez2021hybrid}。Klausen 等人\cite{klausen2017nonlinear}在针对激进机动的试验中测试了无质量刚性杆系绳模型，并指出在突然加速期间载荷发生显著偏移，即使无人机达到悬停状态，载荷仍保持低幅度摆动。这些局限性促 使研究人员提出其他系绳模型。Kotaru 等人\cite{kotaru2017dynamics}认为系绳具有弹性，并通过专注于机器人应用研究验证了他们的模型。在这种情况下，系绳的弹性无法忽略，因此刚性杆模型不再适用。为此，他们在系绳模型中加入了阻尼和弹簧（见图 \ref{1_3}），并在不同阻尼和刚度值下测试了系统稳定性，尽管研究仅通过模拟进行验证。Goodarzi 等人\cite{goodarzi2015geometric}提出了另一种新的柔性系绳模型，该模型由一系列不同尺寸的链条组成，并通过球形关节连接（见图 \ref{1_4}），关节之间的连接可以进行延伸，旨在为执行激进机动的无人机载荷系统获得更精确的动力学模型。该方法将载荷建模为由$n$个连接链组成的串联链条，旨在证明系绳无人机在三维飞行机动中稳定性的耦合系统。
@@ -240,18 +246,18 @@ Pizetta 等人\cite{pizetta2019avoiding}提出了另一种系绳建模方案，�
 
 \begin{figure}[hbt!]
 	\centering
-	\includegraphics[width=26pc]{picture/1_6.png} 
+	\includegraphics[width=24pc]{picture/1_6.png} 
 	\caption{文献\oldcite{goodarzi2016stabilization}中的多无人机绳系吊运系统} \label{1_6}
 \end{figure}
 % 此外，多机器人运输方案中，很少有研究考虑起飞或着陆过程。尽管 Goodarzi 等人\cite{goodarzi2015dynamics} 以及Kumar等人\cite{michael2011cooperative}的试验表明其系统能够实现起降，但相关文献并未描述系绳在过渡阶段的数学建模。在这些阶段纳入系绳的动态特性会增加计算成本。
-在多无人机系绳吊挂载荷的建模方法中，通常采用简化策略以降低计算复杂度。例如，Bacelar 等人\cite{bacelar2020board}提出了使用两架 AR Drone 2.0 四旋翼无人机运输悬挂载荷的方法，假设系绳始终处于拉紧状态。随后，Pizetta 等人提出了由两架四旋翼无人机通过两根由弹簧和阻尼器连接的点质量组成的系绳来运输点质量载荷的系统。该系绳模型能够吸收与地面的接触冲击，并线性减少系绳的拉力。Geng 等人\cite{geng2020cooperative}和 Goodman 等人\cite{goodman2023geometric} 也采用了相同的系绳动力学模型。尽管弹性系绳有助于缓解作用在杆上的冲击力，但过度的振荡可能引发不必要的强制运动，危及协作任务的安全性。因此，在运输过程中，采用具有更高刚度和阻尼的弹性系绳对于保护载荷至关重要。例如，Goodman 等人\cite{goodman2022geometric}在后续研究中通过仿真验证了他们的结果，而 Gabellieri 等人\cite{gabellieri2023equilibria}则通过实际试验验证了他们的方案。
+在多无人机系绳吊挂载荷的建模方法中，通常采用简化策略以降低计算复杂度。例如，Bacelar 等人\cite{bacelar2020board}提出了使用两架 AR Drone 2.0 四旋翼无人机运输吊挂载荷的方法，假设系绳始终处于拉紧状态。随后，Pizetta 等人提出了由两架四旋翼无人机通过两根由弹簧和阻尼器连接的点质量组成的系绳来运输点质量载荷的系统。该系绳模型能够吸收与地面的接触冲击，并线性减少系绳的拉力。Geng 等人\cite{geng2020cooperative}和 Goodman 等人\cite{goodman2023geometric} 也采用了相同的系绳动力学模型。尽管弹性系绳有助于缓解作用在杆上的冲击力，但过度的振荡可能引发不必要的强制运动，危及协作任务的安全性。因此，在运输过程中，采用具有更高刚度和阻尼的弹性系绳对于保护载荷至关重要。例如，Goodman 等人\cite{goodman2022geometric}在后续研究中通过仿真验证了他们的结果，而 Gabellieri 等人\cite{gabellieri2023equilibria}则通过实际试验验证了他们的方案。
 
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=28pc]{picture/1_8.png} 
 	\caption{文献\oldcite{doakhan2023cooperative, doakhan2023robust}中的多无人机绳系吊运系统} \label{1_8}
 \end{figure}
-近年来，研究趋势倾向于扩展系绳模型，使其在达到特定高度阈值时，从松弛状态切换至拉紧状态\cite{rao2023integrated,arab2022cooperative,doakhan2023robust,mohammadi2021passivity}。这种方法在数学上相对简单，已成为试验中常用的悬挂载荷方案，适用于包含载荷提升的平稳机动任务。然而，这些研究主要局限于平稳的机动操作。
+% 近年来，研究趋势倾向于扩展系绳模型，使其在达到特定高度阈值时，从松弛状态切换至拉紧状态\cite{rao2023integrated,arab2022cooperative,doakhan2023robust,mohammadi2021passivity}。这种方法在数学上相对简单，已成为试验中常用的吊挂载荷方案，适用于包含载荷提升的平稳机动任务。然而，这些研究主要局限于平稳的机动操作。
 
 \subsection{无人机绳系吊运系统控制方法研究现状}
 由于载荷的吊运通常会引入动态扰动，特别是由于绳系和载荷本身的摆动效应，导致无人机的飞行性能受到显著影响。为了实现对无人机绳系吊运系统的高效稳定控制，确保其能够完成各类任务，众多控制算法已经得到了应用，并取得了良好的效果。接下来，将对其中一些常用的控制算法进行介绍。
@@ -277,7 +283,7 @@ Tal等人\cite{2021Accurate}的研究展示了通过增量非线性动态逆 (IN
 
 Ariyibi 等人\cite{ariyibi2020quaternion}提出了一种用于两架四旋翼无人机运输吊挂载荷的分层控制系统。该系统在位置环中采用线性控制器，在姿态环中使用基于四元数的非线性控制器。研究人员通过仿真代码验证了该控制器对刚性和柔性载荷的适用性。Klausen 等人\cite{klausen2018cooperative}开发了一种针对未知质量、能够抵御环境干扰的协同算法。该控制算法是分布式的，每架四旋翼无人机利用其邻居的相对速度和位置来实现期望的编队形状。
 
-Tognon等人\cite{tognon2018aerial}提出了一种基于李雅普诺夫的分布式控制器，用于两架无人机对系绳悬挂载荷的空中操控。该工作的目标是在不依赖主从阻抗控制器进行通信的情况下，调节载荷的位置和姿态。Wehbeh等人\cite{wehbeh2020distributed}展示了一种基于模型预测控制 (MPC) 的分布式协同运输方法。
+Tognon等人\cite{tognon2018aerial}提出了一种基于李雅普诺夫的分布式控制器，用于两架无人机对系绳吊挂载荷的空中操控。该工作的目标是在不依赖主从阻抗控制器进行通信的情况下，调节载荷的位置和姿态。Wehbeh等人\cite{wehbeh2020distributed}展示了一种基于模型预测控制 (MPC) 的分布式协同运输方法。
 
 Gimenez 等人\cite{gimenez2018multi}提出了一种新的运动学编队控制器，利用零空间理论使两架旋翼无人机通过柔性系绳吊挂载荷并跟随期望轨迹。该控制器考虑了风扰动和避障问题。在后续研究中，该团队使用相同控制技术，通过试验验证了两架旋翼无人机运输刚性载荷的着陆阶段\cite{gimenez2020control}。
 
@@ -306,7 +312,7 @@ Shi等人\cite{o2022neural}提出了通过对无人机在风扰中的情形进�
 
 % 近年来，随着深度学习和强化学习技术的迅猛发展，越来越多的学者开始探讨如何利用深度神经网络（DNN）和强化学习（RL）直接对控制器进行学习。Koch等人\ref{koch2019reinforcement} 将强化学习应用于低级姿态控制，研究表明，通过PPO训练的学习型低级控制器在几乎所有指标上均优于完全调优的PID控制器；Lambert等人\ref{lambert2019low} 则采用基于模型的强化学习方法进行未知动态系统的低级控制；Li等人\ref{li2020aggressive} 通过离线训练网络策略模仿模型基控制器生成的控制命令，成功实现了四旋翼的激进在线控制。类似地，文献\oldcite{sanchez2018real} 研究了深度神经网络在自主着陆问题中的实时最优控制。此外，相关研究还表明，强化学习能够有效地找到最优控制器\ref{ferede2024end} 或高度自适应的控制器\ref{sacks2024deep}。
 
-\section{存在问题及改进方案}
+\section{现有研究总结与分析}
 目前在进行无人机绳系吊运系统的动力学分析时，大多数研究采用了简化的模型。这种简化方式虽然可以减少计算复杂度，但无法精确描述绳系的真实动力学特性，特别是绳子的变形、时变长度和柔性特性。随着绳系无人机任务的复杂化和高精度要求的提高，现有的建模方式已无法满足实际需求，特别是在大范围运动、大变形的场景下，模型的精度和可靠性受到严重制约。本文拟采用基于数据驱动的建模方法，对外部非线性项进行预测学习，构建能够准确反映系绳柔性特性和动态变化的模型。
 
 当前大多数无人机绳系吊运系统的控制器是基于具体的物理模型进行设计的。这些控制器通常在设计时对模型的依赖性很强，需要对系统进行大量的参数调整，以确保控制性能的稳定性和精度。然而，真实的环境往往充满不确定性和变化，且无人机和绳系的耦合动力学高度复杂，模型的参数往往难以精准确定，尤其是在多变的操作环境中，控制器的鲁棒性和适应性较差。本文拟采用基于数据驱动的控制方法，通过对控制器中的自适应参数进行调节，提高系统在复杂环境中的适应性和鲁棒性。
@@ -326,7 +332,7 @@ Shi等人\cite{o2022neural}提出了通过对无人机在风扰中的情形进�
 
 第四章为多无人机吊运控制。针对多无人机控制中的手动调参问题，使用自适应学习的控制参数优化方法来对分布式模型预测控制的参数进行调节。首先使用分布式灵敏度传播得到 MPC 中关键参数的实际系统状态灵敏度，在此基础上结合深度神经网络设计了分布式策略梯度学习算法实现控制参数的自适应调整，提高了多无人机系统的协调控制性能。
 
-第五章为物理引擎仿真与实物试验验证。搭建了基于Drake、Gazebo和MuJoCo等物理引擎的仿真平台，对所提出的控制方法进行了验证。此外，设计了试验系统，进行了实际飞行试验，验证了控制策略的有效性和可行性。
+第五章为物理引擎仿真与飞行试验验证。搭建了基于Drake、Gazebo和MuJoCo等物理引擎的仿真平台，对所提出的控制方法进行了验证。此外，设计了试验系统，进行了实际飞行试验，验证了控制策略的有效性和可行性。
 
 最后一章为总结和展望。对全文的研究内容进行了总结，并对未来的研究方向进行了展望。
 
@@ -467,7 +473,7 @@ $$\begin{aligned}\boldsymbol{R}_{b-e}&=\bm{R}_{e-b}^\mathrm{T}\\&=\begin{bmatrix
 
 \begin{figure}[hbt!]
 	\centering
-	\includegraphics[width=20pc]{picture/2_2.png} 
+	\includegraphics[width=16pc]{picture/2_2.png} 
 	\caption{单无人机吊装载荷受力分析} 
 	\label{2_2}
 \end{figure}
@@ -483,14 +489,14 @@ $$\begin{aligned}\boldsymbol{R}_{b-e}&=\bm{R}_{e-b}^\mathrm{T}\\&=\begin{bmatrix
 其中$\bm p_q$、$\bm p_l$分别为无人机和载荷的位置，$l$为系绳的长度，$\bm q$表示从无人机质心指向载荷质心的单位向量。本文采用拉格朗日法来推导运动方程。系统的拉氏量 $\mathcal{L}:T\bar{Q}\to\mathbb{R}$ 定义为$\mathcal{L}=\mathcal{T}-\mathcal{U}$，其中$\mathcal{T}:TQ\to\mathbb{R}$和${\mathcal{U}}:Q\to\mathbb{R}$分别是机械系统的动能和势能，它们的定义如下：
 \begin{equation}
 \begin{aligned}
-	\mathcal{T}=\frac{1}{2}&m_{q}\bm v_{q}\cdot \bm v_{q}+\frac{1}{2}m_{l}\bm v_{l}\cdot \bm v_{l}+\frac{1}{2}\langle\hat{\bm  \omega_q},\widehat{\bm J_{q}\bm  \omega_q}\rangle\\
-	&\mathcal{U}=m_{q}g\bm e_{3}\cdot \bm x_{Q}+m_{l}g\bm e_{3}\cdot \bm x_{l}
+	\mathcal{T}=\frac{1}{2}&m_{q}\bm v_{q} \bm v_{q}+\frac{1}{2}m_{l}\bm v_{l} \bm v_{l}+\frac{1}{2}\langle\hat{\bm  \omega_q},\widehat{\bm J_{q}\bm  \omega_q}\rangle\\
+	&\mathcal{U}=m_{q}g\bm e_{3} \bm x_{Q}+m_{l}g\bm e_{3} \bm x_{l}
 \end{aligned}
 	\label{2-9}
 \end{equation}
 其中$\bm v_q$、$\bm v_l$分别为无人机和载荷的速度，$m_q$、$m_l$分别为无人机和载荷的质量，$\langle\cdot,\cdot\rangle $表示内积，$\hat{.}$被定义为使得 $\hat{\bm x}\bm y=\bm x\times \bm y$对于所有$\bm x,\bm y\in\mathbb{R}^3$恒成立，$\omega_q$为无人机在机体坐标系下的角速度。在本文中，$\lambda_m(\cdot)$和 $\lambda_n(\cdot)$ 分别表示矩阵的最小和最大特征值。系统的动力学满足拉格朗日原理：
 \begin{equation}
-	\bm \delta\int_0^\tau\mathcal{L} \text{dt}+\int_0^\tau\left(\langle \bm W_1,\hat{\bm \tau}\rangle+\bm W_2\cdot f\bm{R}_{b-e}\bm e_3\right) \text{dt}=0
+	\bm \delta\int_0^\tau\mathcal{L} \text{dt}+\int_0^\tau\left(\langle \bm W_1,\hat{\bm \tau}\rangle+\bm W_2 f\bm{R}_{b-e}\bm e_3\right) \text{dt}=0
 	\label{2-10}
 \end{equation}
 其中$\bm W_{1}=\bm R_{b-e}^\mathrm{T}\bm \delta \bm R_{b-e}$是定义在旋转空间上的变分向量场， $ \bm W_{2}=\bm \delta \bm x_{Q}=\bm \delta \bm x_{L}-l\bm \delta q$是定义在平移空间上的变分向量场，两者共同描述刚体系统中的变分动态，并且满足以下条件：
@@ -509,7 +515,7 @@ $$\begin{aligned}\boldsymbol{R}_{b-e}&=\bm{R}_{e-b}^\mathrm{T}\\&=\begin{bmatrix
 \begin{equation}
 	\begin{aligned}
 		&\dot{\bm x}_{l}=\bm v_{l} \\
-		(m_q+m_l)(\dot{\bm v}_L+g\bm e_3)& =(\bm q\cdot f\bm R\bm e_3-m_Ql(\dot{\bm q}\cdot\dot{\bm q}))\bm q \\
+		(m_q+m_l)(\dot{\bm v}_L+g\bm e_3)& =(\bm q f\bm R\bm e_3-m_Ql(\dot{\bm q}\dot{\bm q}))\bm q \\
 		&\dot{\bm q}=\bm \omega_l\times \bm q \\
 		m_{q}l \dot{\bm \omega_l}&=-\bm q\times f\bm R\bm e_{3} \\
 		&\dot{\bm R_{b-e}}=\bm R_{b-e}\hat{\bm  \omega_q} \\
@@ -534,7 +540,7 @@ $$\begin{aligned}\boldsymbol{R}_{b-e}&=\bm{R}_{e-b}^\mathrm{T}\\&=\begin{bmatrix
 上述方程可以写成标准形式$\dot{\bm X}_z=f_z(\bm X_z)+\ g_z(\bm X_z)\bm u$，$\bm X_z = \{\bm x_L,\bm x_q,\bm R_{b-e},\bm v_l,\bm v_q,\bm \omega_b\}$为状态。
 
 \subsection{混合系统的模型}
-系绳悬挂载荷的无人机系统为一个混合系统。其动力学会在两种不同的状态之间切换，具体来说，当系绳中的拉力降为零时，系统进入松弛状态，而当拉力恢复时，松弛的系绳被拉紧，系统进入拉伸状态。这种切换导致系统的动力学发生变化。因此，混合系统的数学模型可表示为：
+系绳吊挂载荷的无人机系统为一个混合系统。其动力学会在两种不同的状态之间切换，具体来说，当系绳中的拉力降为零时，系统进入松弛状态，而当拉力恢复时，松弛的系绳被拉紧，系统进入拉伸状态。这种切换导致系统的动力学发生变化。因此，混合系统的数学模型可表示为：
 \begin{equation}
 	\left.\begin{aligned}&\Sigma_{n}:\left\{\begin{array}{ll}\dot{\bm X_n}= f_n(\bm X_n)+ g_n(\bm X_n)\bm u  &\bm X_n\notin \mathbb{S}_z\\\bm X_z^+=\Delta_{n\to z}(\bm X_n^-)  &\bm X_n\in \mathbb{S}_z\end{array}\right.\\&\Sigma_{z}:\left\{\begin{array}{ll}\dot{\bm X_z}=f_z(\bm X_z) + g_z(\bm X_z)\bm u \ \ &\bm X_z\notin \mathbb{S}_n\\\bm X_n^+=\Delta_{z\to n}(\bm X_z^-) \ &\bm X_z\in \mathbb{S}_n\end{array}\right.\end{aligned}\right.
 	\label{eq:混合模型}
@@ -664,14 +670,7 @@ $\boldsymbol{J}_{q_{i}}$ 为无人机的转动惯量。
 \chapter{单无人机吊运控制}
 \chaptermark{单无人机吊运控制}
 许多研究人员都关注了单个无人机的控制问题，但是对于单个无人机绳系吊运的控制问题，尤其是高精度跟踪控制问题，仍存在较大挑战。在吊运中，有效载荷的先验信息通常未知，由此产生的外力会引发未建模扰动，进而对系统的闭环性能产生负面影响。
-本章旨在设计一种控制器，使无人机能够精确跟踪指定的参考轨迹。为此，提出了一种基于数据驱动的外力和力矩预测方法——Neural Predictor。该方法不依赖载荷的先验信息，直接从数据中预测预测无人机所受的外力和力矩，并将其与无人机的名义动力学模型相结合，构成混合动力学模型。此混合模型被集成到非线性模型预测控制方案中，以提升无人机绳系吊运系统的闭环性能。该算法的流程图如\autoref{illustration_framework}  所示。
-
-\begin{figure}[hbt!]
-	\centering
-	\includegraphics[width=38pc]{picture/3_3.png} 
-	\caption{数据驱动下的非线性模型预测控制框架} 
-	\label{illustration_framework}
-\end{figure}
+本章旨在设计一种控制器，使无人机能够精确跟踪指定的参考轨迹。为此，提出了一种基于数据驱动的外力和力矩预测方法——Neural Predictor。该方法不依赖载荷的先验信息，直接从数据中预测预测无人机所受的外力和力矩，并将其与无人机的名义动力学模型相结合，构成混合动力学模型。此混合模型被集成到非线性模型预测控制方案中，以提升无人机绳系吊运系统的闭环性能。
 
 \section{问题描述}
 在第 2 章中，介绍了单无人机绳系吊运系统的混合模型。然而，该模型需要在两种不同状态之间切换，然而对于控制器来说，载荷的状态信息是难以直接进行获取的。因此，本章将模型表达\autoref{eq:混合模型} 改写成如下形式：
@@ -693,7 +692,7 @@ Koopman算子理论是一种强大的工具，广泛应用于非线性动力系�
 
 \begin{figure}[hbt!]
 	\centering
-	\includegraphics[width=37pc]{picture/3_1.png} 
+	\includegraphics[width=32pc]{picture/3_1.png} 
 	\caption{Koopman算子理论} \label{3_1}
 \end{figure}
 首先，考虑一个离散时间动力系统，其状态向量为$\bm{x} \in \mathcal{X} \subseteq \mathbb{R}^{N_{\bm{x}}}$，系统的演化由非线性函数$T$描述，如图 \ref{3_1} 所示。通过引入可观测函数$g(\bm{x})$，可以将原始状态 $\bm{x}$ 映射至新的空间。在该新空间中，系统动力学可通过线性算子 $\mathcal{K}$（即Koopman算子）来表述。换句话说，尽管 $T$ 和 $\mathcal{K}$ 作用于不同的空间，但它们封装了相同的动态特性。
@@ -759,7 +758,7 @@ MPC中的预测模型是基于状态空间模型构建的。通过测量或估�
 \end{gathered}
 \end{equation}
 其中，$\bm s(k)$ 表示 $k$ 的系统状态，$\bm u(k)$ 表示 $k$ 时刻系统的控制输入，$\bm O(k)$ 为系统的输出。$\bm A(k)$ 是系统的状态转移矩阵，描述了当前时刻系统状态 $\bm s(k)  $对下一个时刻状态 $ \bm s(k+1)$ 的影响，
-$bm B(k)$  是控制输入矩阵，描述了系统的控制输入 $ \bm u(k)$ 对当前状态  $\bm s(k)$  及未来状态  $\bm s(k+1)$ 的影响，
+$\bm B(k)$  是控制输入矩阵，描述了系统的控制输入 $ \bm u(k)$ 对当前状态  $\bm s(k)$  及未来状态  $\bm s(k+1)$ 的影响，
 $\bm C(k)$ 是输出矩阵，描述了系统的状态量 $\bm s(k)$ 如何转换为系统的观测输出 $\bm O(k)$。
 
 通过建立预测模型，可以构造新的状态向量，该向量同时包含系统的状态变量与控制输入：
@@ -775,7 +774,9 @@ $\bm C(k)$ 是输出矩阵，描述了系统的状态量 $\bm s(k)$ 如何转换
 	\label{3-11}
 \end{equation}
 其中，$N_x$ 和 $N_u$ 分别表示状态变量和控制输入的维度，$E$ 为单位矩阵，
-$$\bm{\tilde{A}}_k = \begin{bmatrix} \bm A(k) & \bm B(k)$$，$$\bm 0_{N_u \times N_x} & \bm E_{N_u} \end{bmatrix}$$$$\tilde{\bm B}_k = \left[ \bm B(k) , \bm E_{N_u} \right]^\mathrm{T}$$，$$\tilde{\bm C}_k = \left[ \bm C(k) \quad \bm 0 \right]$$
+$$\bm{\tilde{A}}_k = \begin{bmatrix} \bm A(k) & \bm B(k) \\ \bm 0_{N_u \times N_x} & \bm E_{N_u} \end{bmatrix},$$
+$$\tilde{\bm B}_k = \left[ \bm B(k) , \bm E_{N_u} \right]^\mathrm{T},$$
+$$\tilde{\bm C}_k = \left[ \bm C(k) \quad \bm 0 \right]$$
 
 根据状态预测模型，可以推导出未来时域内的系统状态：
 \begin{equation}
@@ -801,15 +802,15 @@ $$\bm{\tilde{A}}_k = \begin{bmatrix} \bm A(k) & \bm B(k)$$，$$\bm 0_{N_u \times
 \boldsymbol{O} = 
 \left[
 	\boldsymbol{\sigma}(k+1) , \boldsymbol{\sigma}(k+2) , \boldsymbol{\sigma}(k+3) , \cdots , \boldsymbol{\sigma}(k+N_p)
-\right]^\mathrm{T}$$
+\right]^\mathrm{T},$$
 $$\boldsymbol{\Psi} = 
 \left[
 	\boldsymbol{\tilde{C}}_k\boldsymbol{\tilde{A}}_k , \boldsymbol{\tilde{C}}_k\boldsymbol{\tilde{A}}_k^2 , \boldsymbol{\tilde{C}}_k\boldsymbol{\tilde{A}}_k^3 , \cdots , \boldsymbol{\tilde{C}}_k\boldsymbol{\tilde{A}}_k^{N_p}
-\right]^\mathrm{T}$$
+\right]^\mathrm{T},$$
 $$\boldsymbol{\Delta U} = 
 \left[
-	\Delta u(k) , \Delta u(k+1) , \Delta u(k+2) , \cdots , \Delta u(k+N_c-1)
-\right]^\mathrm{T}$$
+	\bm \Delta \bm u(k) , \bm \Delta \bm u(k+1) , \bm \Delta \bm u(k+2) , \cdots , \bm \Delta \bm u(k+N_c-1)
+\right]^\mathrm{T},$$
 $$\bm \Theta=\begin{bmatrix}\tilde{\bm C}_k\tilde{\bm B}_k&0&0&0\\\tilde{\bm C}_k\tilde{\bm A}_k\tilde{\bm B}_k&\tilde{\bm C}_k\tilde{\bm B}_k&0&0\\...&\ddots&...&...\\\tilde{\bm C}_k\tilde{\bm A}_k^{N_c-1}\tilde{\bm B}_k&\tilde{\bm C}_k\tilde{\bm A}_k^{N_c-2}\tilde{\bm B}_k&...&\tilde{\bm C}_k\tilde{\bm B}_k\\...&...&...&...\\...&...&...&...\\\tilde{\bm C}_k\tilde{\bm A}_k^{N_p-1}\tilde{\bm B}_k&\tilde{\bm C}_k\tilde{\bm A}_k^{N_p-2}\tilde{\bm B}_k&...&\tilde{\bm C}_k\tilde{\bm A}_k^{N_p-N_c-1}\tilde{\bm B}_k\end{bmatrix}$$
 
 针对不同的控制问题，可以根据该方法的理论框架设计相应的代价函数和约束条件，并采用合适的优化方法进行求解，从而得到符合约束条件的最优控制量序列。本文将模型预测控制理论应用于无人机控制器的设计，并利用二次规划方法（QP）进行求解。
@@ -885,7 +886,7 @@ Koopman算子可以从数据中将非线性系统全局映射为线性系统 \ci
 \end{equation}
 其中 $\mu_1,\mu_2 \in(0,1)$ 为超参数，用于调整损失项的时间步长权重。损失函数(\ref{L2})的目的是最小化前向和后向多步预测误差，从而有助于在较长的预测时间范围内更精确地预测系统状态。
 
-\subsection{数据驱动建模方法的理论保证}
+\subsection{数据驱动建模方法收敛性证明}
 尽管学习得到的模型能够较好地拟合外力与力矩的动态特性，但其预测结果可能存在发散的风险，从而导致外力和力矩的预测不准确。为了确保学习过程中的预测误差在全局范围内保持可控，需要对预测误差进行约束。以下定理为学习得到的模型的预测误差提供了全局有界性的理论保证。
 
 \textbf{定理3.1:}假设存在正数 $\alpha_{\bm{\chi}}>0$ 和 $\alpha_{\bm{\zeta}}>0$，使得不等式 $\Vert \bm{\chi}(t_0+t_s)-\bm{\chi}(t_0)\Vert \le \alpha_{\bm{\chi}}$ 和 $\Vert \bm{\zeta}(t_0+t_s) - \bm{\zeta}(t_0) \Vert \le \alpha_{\bm{\zeta}}$ 成立，如果近似得到的Koopman算子 $\hat{{\mathcal{K}}}$ 是稳定的，且与其相关的升维函数具有Lipschitz常数 $L_{\bm{\Psi}}$，则学习得到的模型的预测误差是全局有界的。
@@ -975,7 +976,7 @@ $。
 \end{equation}
 其中，$\gamma$ 是升维函数的目标Lipschitz常数。
 
-\textbf{证明:}对DNN的每一层应用谱归一化方法，升维函数的Lipschitz常数满足
+\textbf{证明:}对DNN的每一层应用谱归一化方法，升维函数的Lipschitz常数满足：
 \begin{equation}
 	\Vert {\Psi}(\bm{\chi}) \Vert_{\text{Lip}} \le \prod_{l=1}^{L+1}\sigma(\hat{\bm{W}}^l) = \prod_{l=1}^{L+1}\gamma^{\frac{1}{L+1}}=\gamma
 \end{equation}
@@ -986,11 +987,16 @@ $。
 % 通过对升维函数应用谱归一化方法，可以有效地控制其Lipschitz常数，从而保证模型的稳定性，并确保预测误差的有界性。这一方法不仅提供了对神经网络训练过程中的梯度传播的控制，也为避免过度拟合和梯度爆炸等问题提供了一种有效的解决方案。
 
 \section{基于混合模型的非线性模型预测控制器设计}
-
 传统的鲁棒模型预测控制方法虽然能够有效应对系统中的不确定性，但其实际应用往往受到严格假设条件的限制，难以完全满足实际工程需求。此外，模型预测控制的闭环性能在很大程度上依赖于其内部模型的准确性，模型误差可能导致控制效果的下降。
 
-为了解决上述问题，本小节引入了前文所提出的数据驱动建模方法Neural Predictor。该方法凭借其强大的数据拟合能力，能够捕捉系统中难以建模或存在动态缺失的特性，从而显著提升控制器的整体性能和鲁棒性。
+为了解决上述问题，本小节引入了前文所提出的数据驱动建模方法Neural Predictor。该方法凭借其强大的数据拟合能力，能够捕捉系统中难以建模或存在动态缺失的特性，从而显著提升控制器的整体性能和鲁棒性。该算法的流程图如\autoref{illustration_framework}所示。
 
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=38pc]{picture/3_3.png} 
+	\caption{数据驱动下的非线性模型预测控制框架} 
+	\label{illustration_framework}
+\end{figure}
 将 Neural Predictor 集成至 MPC 框架后，形成了针对无人机系绳吊运系统的数据驱动模型预测控制框架——NP-MPC。MPC 通过递推优化方法生成一系列最优控制输入。因此，NP-MPC可以被考虑在如下形式的优化问题中：
 \begin{equation}
 	\begin{aligned} \label{nmpc}
@@ -1058,9 +1064,9 @@ $。
 	\caption{NeuroBEM、NeuroMHE和NP的外力和力矩估计性能} 
 	\label{3-5}
 \end{figure}
-为了进一步验证Neural Predictor的有效性，在6个训练集之外的激进飞行轨迹上评估了其性能，具体结果如表 \ref{table_bem}所示。结果表明，Neural Predictor在所有情况下均得到了更小的外力和力矩估计误差，且其表现明显优于NeuroMHE和NeuroBEM。在力估计方面，Neural Predictor在“Race track\_1”轨迹上的误差最大减少了72.06\%。在力矩估计方面，Neural Predictor在四个轨迹中明显优于NeuroMHE和NeuroBEM，在另外两个轨迹中表现相当。这些结果表明，Neural Predictor在许多未见过的激进飞行轨迹中展现出较强的泛化能力，并在外力和力矩估计方面超越了当前最先进的基于学习的估计方法。
+为了验证Neural Predictor的泛化性，在6个训练数据集之外的激进飞行轨迹上评估了其性能，具体结果如表 \ref{table_bem}所示。结果表明，Neural Predictor在所有情况下均得到了更小的外力和力矩估计误差，且其表现明显优于NeuroMHE和NeuroBEM。在力估计方面，Neural Predictor在“Race track\_1”轨迹上的误差最大减少了72.06\%。在力矩估计方面，Neural Predictor在四个轨迹中明显优于NeuroMHE和NeuroBEM，在另外两个轨迹中表现相当。这些结果表明，Neural Predictor在许多未见过的激进飞行轨迹中展现出较强的泛化能力，并在外力和力矩估计方面超越了当前最先进的基于学习的估计方法。
 
-为验证Neural Predictor的样本效率，使用1000、2000、3000、4000、5000和6000个样本对其进行了训练，并在测试数据集上评估了估计性能，结果如\autoref{3-6}所示。从图中可以看出，随着训练样本量的增加，Neural Predictor的均方根误差逐渐降低。然而，当训练样本达到4000、5000和6000时，模型在测试集上的表现趋于一致。这表明，4000个训练样本已足够揭示外力/力矩与线速度/角速度之间的关系。此外，与使用4000个样本训练的NeuroMHE相比，Neural Predictor在样本量少于4000个的情况下仍能表现出较高的性能。具体而言，在力估计任务上，Neural Predictor仅需约1800个训练样本即可达到与NeuroMHE相当的性能，显著减少了训练所需的样本量。这些结果表明，Neural Predictor在样本效率方面具有优势，能够在较少的训练数据下实现较好的外力和力矩估计性能。
+为验证Neural Predictor的高效性，使用1000至6000个样本对其进行了训练，并在测试数据集上评估了其估计性能，结果如\autoref{3-6} 所示。从图中可以看出，随着训练样本量的增加，Neural Predictor的均方根误差逐渐降低。然而，当训练样本达到4000、5000和6000时，模型在测试集上的表现趋于一致。这表明，4000个训练样本已足够揭示外力/力矩与线速度/角速度之间的关系。此外，与使用4000个样本训练的NeuroMHE相比，Neural Predictor在样本量少于4000个的情况下仍能表现出较高的性能。具体而言，在力估计任务上，Neural Predictor仅需约1800个训练样本即可达到与NeuroMHE相当的性能，显著减少了训练所需的样本量。这些结果表明，Neural Predictor具有更高的效率，能够在较少的训练数据下实现较好的外力和力矩估计性能。
 
 \begin{figure}[hbt!]
 	\centering
@@ -1071,7 +1077,7 @@ $。
 此外，尽管Neural Predictor在离线阶段进行训练，但结果表明，它在外力和力矩估计中依然具备较强的自适应能力。由于训练过程完全在离线环境中完成，Neural Predictor在在线执行阶段仅需进行前向推理，从而显著降低了机载计算机的计算负担。
 
 \section{本章总结}
-本章提出了一种基于数据驱动的学习方法——Neural Predictor，用于捕捉无人机绳系吊运系统中由载荷引起的外力和力矩。Neural Predictor的核心观点是利用Koopman算子理论，将外力和力矩建模为一个动态系统，并用Lipschitz常数从理论上保证了预测误差的界限。与现有的最优的估计方法相比，Neural Predictor具有响应速度快、泛化能力强、样本效率高以及外力和力矩估计更准确的优势。 值得注意的是，Neural Predictor还可以与其他基于模型的控制器结合，进而提高其闭环性能。
+本章提出了一种基于数据驱动的学习方法——Neural Predictor，用于捕捉无人机绳系吊运系统中由载荷引起的外力和力矩。Neural Predictor的核心观点是利用Koopman算子理论，将外力和力矩建模为一个动态系统，并用Lipschitz常数从理论上保证了预测误差的界限。与现有的最优的估计方法相比，Neural Predictor具有响应速度快、泛化能力强、效率高以及外力和力矩估计更准确的优势。 值得注意的是，Neural Predictor还可以与其他基于模型的控制器结合，进而提高其闭环性能。
 % 在第五章的，将Neural Predictor与模型预测控制框架相结合，形成NP-MPC，可以显著提升闭环跟踪性能。
 
 
@@ -1082,8 +1088,7 @@ $。
 \chaptermark{多无人机吊运控制}
 
 针对载荷已知的多无人机绳系吊运系统，结合第3章数据驱动的模型预测控制，本章提出了一种新颖的自适应调参框架——Autotune，旨在自动调整其的参数，提升系统在复杂环境下的稳定性和适应性。与传统的手动调参方法不同，Autotune采用分布式策略梯度算法，以闭环方式高效训练无人机和载荷系统，实现参数的自适应调整。
-在训练过程中，Autotune框架引入了分布式灵敏度传播算法，充分利用了多无人机系统中的动态耦合特性，并行计算无人机上的梯度，使控制器能够动态适应不同负载和环境变化。图 \ref{4_1} 显示了该算法的整体流程，包含前向分布式 MPC 求解与后向策略梯度训练。
-
+在训练过程中，Autotune框架引入了分布式灵敏度传播算法，充分利用了多无人机系统中的动态耦合特性，并行计算无人机上的梯度，使控制器能够动态适应不同载荷和环境变化。图 \ref{4_1} 显示了该算法的整体流程，包含前向分布式 MPC 求解与后向策略梯度训练。
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=34pc]{picture/4_1.png} 
@@ -1231,7 +1236,6 @@ $g_{j,k} = 2d_{\text{quad}} - \|\bm p_{i,k} - \bm p_{j,k}\|^2$为无人机之间
 	} 
 	\label{4_2}
 \end{figure}
-
 \begin{algorithm}[h]
 	\captionsetup{font={stretch=1.2}}
     \linespread{1.2}\selectfont % 设置行距为1.2倍
@@ -1257,9 +1261,8 @@ $g_{j,k} = 2d_{\text{quad}} - \|\bm p_{i,k} - \bm p_{j,k}\|^2$为无人机之间
 	\EndWhile
 	\end{algorithmic}
 \end{algorithm}
-
 \section{自适应学习的控制参数优化}
-分布式MPC通过对\ref{multimpc}中的集中式MPC算法进行近似来提高计算效率，如算法\ref{alg:mpc_multilift}所示。随着阈值\(\delta\) 的减小和最大迭代\(k_{\text{max}}\)的增加，近似的准确性会得到提升。然而，算法\ref{alg:mpc_multilift}的性能（包括预测轨迹的可行性和跟踪精度）依赖于对多种超参数的精细调整。这些超参数包括权重矩阵的选择以及参考轨迹在\autoref{juav}和\autoref{jpayload}中的设计。
+分布式MPC通过对\autoref{multimpc}中的集中式MPC算法进行近似来提高计算效率，如算法\ref{alg:mpc_multilift}所示。随着阈值\(\delta\) 的减小和最大迭代\(k_{\text{max}}\)的增加，近似的准确性会得到提升。然而，算法\ref{alg:mpc_multilift}的性能（包括预测轨迹的可行性和跟踪精度）依赖于对多种超参数的精细调整。这些超参数包括权重矩阵的选择以及参考轨迹在\autoref{juav}和\autoref{jpayload}中的设计。
 
 令 \(\bm \theta_i \in \mathbb{R}^{m_i}, \forall i \in \mathcal{I}_q\) 表示第 \(i\) 个无人机的超参数，\(\bm \theta_l \in \mathbb{R}^{m_l}\) 表示载荷的超参数。
 % 因此，可以将分解后的 MPC 问题参数化为无人机的MPC和载荷的MPC。
@@ -1293,7 +1296,7 @@ $g_{j,k} = 2d_{\text{quad}} - \|\bm p_{i,k} - \bm p_{j,k}\|^2$为无人机之间
 	\end{aligned}
 \end{equation}
 
-本文将使用简写符号 \( L \) 来表示代价函数。对于上述优化问题，可通过梯度下降算法迭代更新学习参数:
+本节将使用简写符号 \( L \) 来表示代价函数。对于上述优化问题，可通过梯度下降算法迭代更新学习参数:
 \begin{equation}
     \bm \theta\leftarrow\mathcal{P}_{\bm \Theta}(\bm \theta-\alpha\nabla_{\bm \theta}L).
 \end{equation}
@@ -1305,33 +1308,36 @@ $g_{j,k} = 2d_{\text{quad}} - \|\bm p_{i,k} - \bm p_{j,k}\|^2$为无人机之间
 \end{equation}
 
 由于一旦选择了代价函数 
-$L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{\partial \bm u_k}$。为了进一步求得灵敏度状态 $\frac{\partial \bm x_k}{\partial \bm \theta}$ 和 $\frac{\partial \bm u_k}{\partial \bm \theta}$，可以使用灵敏度传播方法进行计算，其形式如下：
+$L$ ，可以确定${\partial L}/{\partial \bm x_k}$ 和 ${\partial L}/{\partial \bm u_k}$。为了进一步计算灵敏度状态 ${\partial \bm x_k}/{\partial \bm \theta}$ 和 ${\partial \bm u_k}/{\partial \bm \theta}$，可以使用灵敏度传播方法进行计算，其形式如下：
 
 \begin{equation}
 	\begin{gathered}
 		\frac{\partial \bm x_{k+1}}{\partial \bm \theta} = ({\nabla}_{\bm x_k}  T + {\nabla}_{\bm u_k} T {\nabla}_{\bm x_k} h) \frac{\partial \bm x_k}{\partial \bm \theta} + {\nabla}_{\bm u_k} T {\nabla_{\bm \theta}} h\\
 		\frac{\partial \bm u_k}{\partial \bm \theta} = {\nabla}_{\bm x_k} h \frac{\partial \bm x_k}{\partial \bm \theta} + {\nabla_{\bm \theta}} h
 	\end{gathered}
-	\label{6}
 \end{equation}
-其中 \( \frac{\partial \bm x_0}{\partial \bm \theta} = 0 \)。梯度
+其中 \( {\partial \bm x_0}/{\partial \bm \theta} = 0 \)。梯度
 \( {\nabla}_{\bm x_k} T, {\nabla}_{\bm u_k} T, {\nabla}_{\bm x_k} h, {\nabla_{\bm \theta}} h \) 分别表示在状态 $\bm x_k$ 和控制量 $\bm u_k$ 下，函数 $T$ 和 $h$ 关于状态 $\bm x$、控制量 $\bm u$ 以及参数 $\bm \theta$ 的雅可比矩阵。
 
-灵敏度传播（公式(5a)）通过将灵敏度状态 $\partial x_k / \partial \theta$ 随时间向前传播来实现。实际上，公式 \autoref{6} 是一个关于灵敏度状态 $\partial x_k / \partial \theta$ 的时变线性系统。系统矩阵 $\nabla_{x_k} f + \nabla_{u_k} f \nabla_{x_k} h$和激励项 $\nabla_{u_k} f \nabla_{\theta} h$，每次都使用从物理系统采样的数据进行计算。具体而言，由于函数 $f$ 和 $h$ 是已知的，其导数 $\nabla_{\bm{x}k} f$、$\nabla{\bm{u}k} f$、$\nabla{\bm{x}k} h$ 和 $\nabla{\bm{\theta}} h$ 的公式也是已知的，这些导数在采样状态$x_k$ 和控制量 $u_k$ 处进行评估。
-一旦 $\{\partial x_k / \partial \theta\}_{k=0:N}$ 和 $\{\partial u_k / \partial \theta\}_{k=0:N-1}$ 全部计算完成，$\nabla_{\theta} L$ 可以通过灵敏度状态的加权和计算得出，其中权重 $\{\partial L / \partial x_k\}_{k=0:N}$ 和 $\{\partial L / \partial u_k\}_{k=0:N-1}$ 的公式也是已知的，并在采样数据处进行评估。图3c 展示了灵敏度传播的工作原理示意图。
+% \autoref{6} 通过将灵敏度状态 $\partial \bm{x}_k / \partial \bm{\theta}$ 随时间向前传播来实现。
+实际上，\autoref{6} 是一个时变线性系统，
+% 其灵敏度状态为 $\partial \bm{x}_k / \partial \bm{\theta}$。
+系统矩阵 ${\nabla}_{\bm{x}_k} T + {\nabla}_{\bm{u}_k} T {\nabla}_{\bm{x}_k} h$和激励项 ${\nabla}_{\bm{u}_k} T {\nabla}_{\bm{\theta}} h$是通过对物理系统的数据进行采样并计算得到的。具体而言，由于函数 $T$ 和 $h$ 已知，其梯度 $\nabla_{\bm{x}_k} T$、$\nabla_{\bm{u}_k} T$、$\nabla_{\bm{x}_k} h$ 和 $\nabla_{\bm{\theta}} h$ 的公式也已知，
+一旦完成 $\{\partial \bm{x}_k / \partial \bm{\theta}\}_{k=0:N}$ 和 $\{\partial \bm{u}_k / \partial \bm{\theta}\}_{k=0:N-1}$的计算，就可以通过灵敏度状态的加权和计算出 $\nabla_{\theta} L$。灵敏度传播的工作原理示意图如\autoref{system} 所示。
 
-此外，灵敏度传播允许在线调整。由于 $\nabla_{\bm{x}k} f$、$\nabla{\bm{u}k} f$、$\nabla{\bm{x}k} h$ 和 $\nabla{\bm{\theta}} h$ 的公式可以离线推导，因此每当系统数据 $\bm{x}_k$ 和 $\bm{u}k$ 被采样时，灵敏度传播可以在线更新 $\frac{\partial \bm{x}{k+1}}{\partial \bm{\theta}}$。由于灵敏度传播是随时间向前的，因此可以根据需要在线调整预测范围 $N$，这进一步提高了使用灵敏度传播在变化范围内计算梯度的灵活性。我们在算法 1 中总结了带有灵敏度传播的 DiffTune 算法。
-
-
-通过这种方法，可以有效地计算系统参数 $\bm \theta$ 对代价函数 $L$ 的灵敏度，进而优化控制策略和系统性能。
-
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=32pc]{picture/图片1.png} 
+	\caption{灵敏度传播计算梯度示意图} 
+	\label{system}
+\end{figure}
+此外，灵敏度传播支持在线调整。由于 $\nabla_{\bm{x}_k} T$、$\nabla_{\bm{u}_k} T$、$\nabla_{\bm{x}_k} h$ 和 $\nabla_{\bm{\theta}} h$ 的公式可以离线进行推导，每当系统数据 $\bm{x}_k$ 和 $\bm{u}_k$ 被采样时，灵敏度传播可以在线更新 ${\partial \bm{x}_{k+1}}/{\partial \bm{\theta}}$。此外，预测范围 $N$ 也可以进行在线调整，进一步提高了梯度计算的灵活性。
+通过这种方法，可以有效地计算系统参数 $\bm{\theta}$ 对代价函数 $L$ 的灵敏度，进而优化控制策略和系统性能。
 
 \subsection{分布式灵敏度传播方法}
-
-
 在多无人机系绳吊运系统中，由于无人机与载荷之间的系绳拉力耦合以及无人机之间的间接耦合关系，系统的灵敏度传播变得复杂且计算成本较高。
 
-闭环状态 \( \bm x_{i,k} \) 和 \( \bm x_{l,k} \) 分别通过系统动力学方程（\ref{multiuav}）和（\ref{multipayload}）进行迭代定义（即传播）。基于此，梯度（灵敏度） \( \frac{\partial x_{it}}{\partial \theta_i} \) 和 \( \frac{\partial x_{lt}}{\partial \theta_l} \) 可以通过对相应的 MPC 超参数 \( \theta_i \) 和 \( \theta_l \) 求偏导数，分别从两个动态方程的两边进行传播。多无人机绳系吊运系统的灵敏度传播可定义如下：
+闭环状态 \( \bm x_{i,k} \) 和 \( \bm x_{l,k} \) 分别通过\autoref{multiuav}和\autoref{multipayload}进行迭代定义（即传播）。基于此，灵敏度\( {\partial \bm x_{it}}/{\partial \bm \theta_i} \) 和 \( {\partial \bm x_{lt}}/{\partial \bm \theta_l} \) 可以通过对相应的 MPC 超参数 \( \bm \theta_i \) 和 \( \bm \theta_l \) 求偏导数，分别从两个动态方程的两边进行传播。多无人机绳系吊运系统的灵敏度传播可定义如下：
 
 \begin{equation}
 	\begin{gathered}
@@ -1346,29 +1352,21 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
 	\label{ss}      
 \end{equation}
 其中
-\(
-\bm{F}_{i,k} = \frac{\partial \bar{f}_{i,k}}{\partial \bm{x}_{i,k}} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{i0}^*} \frac{\partial \bm{u}_{i0}^*}{\partial \bm{x}_{i,k}} + \frac{\partial \bm{u}_{i0}^*}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{i,k}} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{i,k}}
-,
-\bm{F}_{il,k} = \frac{\partial \bar{f}_{i,k}}{\partial \bm{x}_{l,k}} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{i0}^*} \frac{\partial \bm{u}_{i0}^*}{\partial \bm{x}_{l,k}} + \frac{\partial \bm{u}_{i0}^*}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{l,k}} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{l,k}}
-,
-\bm{F}_{l,k} = \frac{\partial \bar{f}_{l,k}}{\partial \bm{x}_{l,k}} + \frac{\partial \bar{f}_{l,k}}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{l,k}}
-,
-\bm{F}_{li,k} = \frac{\partial \bar{f}_{l,k}}{\partial \bm{x}_{i,k}} + \frac{\partial \bar{f}_{l,k}}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{i,k}}
-,
-\bm{G}_{i,k} = \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{i0}^*}
-,
-\bm{G}_{il,k} = \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{i0}^*} \frac{\partial \bm{u}_{i0}^*}{\partial \bm{u}_{l0}^*} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{l0}^*}
-,
-\bm{G}_{l,k} = \frac{\partial \bar{f}_{l,k}}{\partial \bm{u}_{l0}^*}
-,
-\bm{U}_{i,k} = \frac{\partial \bm{u}_{i0}^*}{\partial \bm{\theta}_i}, \quad \bm{U}_{l,k} = \frac{\partial \bm{u}_{l0}^*}{\partial \bm{\theta}_l}
-\)。与单个代理的灵敏度传播相比，式（\ref{ss}）额外考虑了每架四旋翼与负载之间的动态耦合，这些耦合通过梯度 \( \frac{\partial u_{i0}^*}{\partial u_{l0}^*} \)，\( \frac{\partial u_{i0}^*}{\partial x_{lt}} \)，\( \frac{\partial u_{l0}^*}{\partial x_{it}} \)，\( X_{i,t}^l \) 和 \( X_{l,t}^i \) 表示。对于以上系数矩阵，
+$$
+\bm{F}_{i,k} = \frac{\partial \bar{f}_{i,k}}{\partial \bm{x}_{i,k}} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{i0}^*} \frac{\partial \bm{u}_{i0}^*}{\partial \bm{x}_{i,k}} + \frac{\partial \bm{u}_{i0}^*}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{i,k}} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{i,k}},$$
+$$\bm{F}_{il,k} = \frac{\partial \bar{f}_{i,k}}{\partial \bm{x}_{l,k}} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{i0}^*} \frac{\partial \bm{u}_{i0}^*}{\partial \bm{x}_{l,k}} + \frac{\partial \bm{u}_{i0}^*}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{l,k}} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{l,k}},$$
+$$\bm{F}_{l,k} = \frac{\partial \bar{f}_{l,k}}{\partial \bm{x}_{l,k}} + \frac{\partial \bar{f}_{l,k}}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{l,k}}
+, \quad \bm{F}_{li,k} = \frac{\partial \bar{f}_{l,k}}{\partial \bm{x}_{i,k}} + \frac{\partial \bar{f}_{l,k}}{\partial \bm{u}_{l0}^*} \frac{\partial \bm{u}_{l0}^*}{\partial \bm{x}_{i,k}},$$
+$$\bm{G}_{i,k} = \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{i0}^*}
+, \quad \bm{G}_{il,k} = \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{i0}^*} \frac{\partial \bm{u}_{i0}^*}{\partial \bm{u}_{l0}^*} + \frac{\partial \bar{f}_{i,k}}{\partial \bm{u}_{l0}^*}
+, \quad \bm{G}_{l,k} = \frac{\partial \bar{f}_{l,k}}{\partial \bm{u}_{l0}^*},$$
+$$\bm{U}_{i,k} = \frac{\partial \bm{u}_{i0}^*}{\partial \bm{\theta}_i}, \quad \bm{U}_{l,k} = \frac{\partial \bm{u}_{l0}^*}{\partial \bm{\theta}_l}$$
 
+\textbf{注4.2：}与单个代理的灵敏度传播相比，式（\ref{ss}）额外考虑了每架无人机与载荷之间的动态耦合，这些耦合通过梯度 \( {\partial \bm{u}_{i0}^*}/{\partial \bm{u}_{l0}^*}, {\partial \bm{u}_{i0}^*}/{\partial \bm{x}_{l,k}}, {\partial \bm{u}_{l0}^*}/{\partial \bm{x}_{i,k}}, {\partial \bm{x}_{i,k}}/{\partial \bm{\theta}_l}, {\partial \bm{x}_{l,k}}/{\partial \bm{\theta}_i} \)表示。
 
-由于MPC是隐式可微的，其梯度 \( \frac{\partial \bm u_{0}^*}{\partial \bm x_{}}, \frac{\partial \bm u_{0}^*}{\partial \bm \theta_{}} \) 无法像简单的反馈控制律 \( \bm u = \bm K \bm x \) 那样直接计算。因此，本节通过构造隐式微分来计算梯度。
+对于式（\ref{ss}）中的系数矩阵，由于MPC是隐式可微的，其梯度 \( {\partial \bm u_{0}^*}/{\partial \bm x_{}}, {\partial \bm u_{0}^*}/{\partial \bm \theta_{}} \) 无法像简单的反馈控制律 \( \bm u = \bm K \bm x \) 那样直接计算。因此，本节通过构造隐式微分来计算梯度。
 
 对于式 (\ref{multiuav}) 和式 (\ref{multipayload}) 中的非线性MPC问题，可以将其表示为以下一般形式：
-
 \begin{equation}
 \begin{aligned} 
 &\operatorname*{minimize}_{\bm{X}_l, \bm{U}_l} & &  \sum_{k=1}^N{\bm C}_{\bm \theta,k}(\bm x_k,\bm u_k) \\
@@ -1380,11 +1378,8 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
 \end{aligned}
 \label{NMPC}
 \end{equation}
-
 其中，非线性成本函数 \( \bm C_{\bm \theta,k} \) 由参数 \( \bm \theta \) 表示，\( f \) 为非线性动态函数，\( g \) 为非线性不等式约束函数。
-
-解决该非线性优化问题的一种常见方法是将其视为非线性规划问题，并应用序列二次规划（SQP）。该方法通过迭代生成并优化以下近似问题：
-
+解决该非线性优化问题的一种常见方法是将其视为非线性规划问题，并应用序列二次规划（SQP），该方法通过迭代生成并优化以下近似问题：
 \begin{equation}
 \begin{aligned} 
 &\operatorname*{minimize}_{\bm{X}_l, \bm{U}_l} & & \frac{1}{2}\bm{\tau}_{t}^{\top}\nabla^{2}\bm C_{\bm \theta,t}^{p}\bm{\tau}_{t}+(\nabla \bm C_{\bm \theta,t}^{p}-\nabla^{2}\bm C_{\bm \theta,t}^{p}\bm{\tau}_{t}^{p})^{\top}\bm{\tau}_{t} \\
@@ -1396,24 +1391,12 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
 \end{aligned}	
 \label{L-NMPC}
 \end{equation}
-
 其中，非线性成本函数和约束在第 \(p\) 次迭代的最优解 \( \{\bm  \tau_t^p \}_{t=1}^{T} \) 处分别进行了泰勒展开，展开至二阶和一阶。所有表示为 \( \nabla \) 的微分是相对于 \( \bm \tau_t \) 进行的，幂次为2表示Hessian矩阵。幂次 \( p \) 表示该函数在第 \( p \) 次迭代得到的最优解处求值。式 (\ref{L-NMPC}) 的解 \( \{\bm \tau_t^{p+1} \}_{t=1}^{T} \) 用于在泰勒展开中构造第 \( p+1 \) 次迭代的SQP。
 
-式 (\ref{L-NMPC}) 的形式与线性MPC的形式完全相同。当SQP在第 \( N \) 次迭代结束时，将 \( \{\bm \tau_t^N \}_{t=1}^{T} \) 作为 (\ref{NMPC}) 的最优解，并使用线性MPC方法计算梯度\cite{tao2024difftune}。通过链式法则，可以得到目标梯度 \( \frac{\partial \bm u_0^\star}{\partial \bm \theta} \) 和 \( \frac{\partial \bm u_0^\star}{\partial \bm x_{\text{init}}} \)，用于迭代更新学习参数。
+式 (\ref{L-NMPC}) 的形式与线性MPC的形式完全相同。当SQP在第 \( N \) 次迭代结束时，将 \( \{\bm \tau_t^N \}_{t=1}^{T} \) 作为 (\ref{NMPC}) 的最优解，根据文献\oldcite{tao2024difftune}中的定理1，使用线性MPC方法计算梯度。通过链式法则，可以得到目标梯度 \( {\partial \bm u_0^\star}/{\partial \bm \theta} \) 和 \( {\partial \bm u_0^\star}/{\partial \bm x_{\text{init}}} \)，用于迭代更新学习参数。
 
-\begin{figure}[hbt!]
-	\centering
-	\includegraphics[width=32pc]{picture/图片1.png} 
-	\caption{灵敏度传播计算梯度示意图} 
-	\label{system}
-\end{figure}
+由\textbf{注4.2}可知，系绳引起的强动力学耦合作用使得每个智能体的闭环状态不仅受到自身控制器的影响，还会受到其他智能体控制器的影响。因此，灵敏度状态还需要考虑无人机闭环状态相对于载荷MPC超参数的梯度和载荷闭环状态相对于无人机MPC超参数的梯度${\partial \bm{x}_{i,k}}/{\partial \bm{\theta}_l}$和${\partial \bm{x}_{l,k}}/{\partial \bm{\theta}_i}$。
 
-
-
-系绳引起的强动力学耦合作用使得每个智能体的闭环状态不仅受到自身控制器的影响，还会受到其他智能体控制器的影响。因此，灵敏度状态还需要考虑无人机闭环状态相对于载荷MPC超参数的梯度和载荷闭环状态相对于无人机MPC超参数的梯度。
-
-在求解上述两个梯度时，借助第3章中提出的 Neural Predictor 方法。由式(\ref{nmpc})中的动力学模型可知，在无人机系统中，无人机的动力学和载荷的动力学可以分为两类，分别是无人机动力学和学习得到的载荷动力学。Neural Predictor可以用于预测系绳连接的载荷动力学。
-对于每架无人机，可以将学习得到的载荷动力学模型与无人机自身的动力学模型相结合，载荷闭环状态相对于无人机MPC超参数的梯度可以通过学习得到的动力学模型进行显式计算。而对于无人机闭环状态相对于载荷MPC超参数的梯度，情况有所不同。由于载荷上的虚拟控制输入 \( \bm{u}_l = \left[ \bar{T}_1, \cdots, \bar{T}_n \right] \) 实际上可以在Neural Predictor中用无人机的状态 \( \bm{x}_i \) 进行预测，因此无人机闭环状态相对于载荷MPC超参数的梯度可以直接通过载荷闭环状态相对于载荷MPC超参数的梯度进行体现。最终，通过这一系统化的求解过程，可以实现对复杂动力学系统的有效建模与控制。
 \begin{algorithm}[h]
 	\captionsetup{font={stretch=1.2}}
     \linespread{1.2}\selectfont % 设置行距为1.2倍
@@ -1425,114 +1408,22 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
     \begin{algorithmic}[1]
     \For{$i = 1$ \textbf{to} $n$}
         \For{$k = T$ \textbf{to} $T+N_{\text{}}$}
-            \State 从中央智能体接收载荷灵敏度 $\frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_l}$
-            \State 基于接收到的 $\frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_l}$ 使用 (\ref{ss}) 计算灵敏度 $\frac{\partial \bm{x}_{i,k}}{\partial \bm{\theta}_i}, \frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_i}, \frac{\partial \bm{x}_{i,k}}{\partial \bm{\theta}_l}$
-            \State 将 $\frac{\partial \bm{x}_{i,k}}{\partial \bm{\theta}_l}$ 发送至中央智能体
+            \State 从“中央无人机”接收载荷灵敏度 $\frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_l}$
+            \State 基于接收到的 $\frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_l}$ 使用\autoref{ss}计算灵敏度 $\frac{\partial \bm{x}_{i,k}}{\partial \bm{\theta}_i}, \frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_i}, \frac{\partial \bm{x}_{i,k}}{\partial \bm{\theta}_l}$
+            \State 将 $\frac{\partial \bm{x}_{i,k}}{\partial \bm{\theta}_l}$ 发送至“中央无人机”
         \EndFor
     \EndFor
     
     \For{$k = T$ \textbf{to} $T+N_{\text{}}$}
-        \State \textbf{在中央智能体中运行:}
+		\Statex $\triangleright$ 在“中央无人机”中
         \State 接收来自所有无人机的灵敏度 $\frac{\partial \bm{x}_{i,k}}{\partial \bm{\theta}_l}, \forall i \in \mathcal{I}_q$
-        \State 使用 (\ref{ss}) 基于接收到的 $\frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_l}, \forall i \in \mathcal{I}_q$ 计算载荷的灵敏度轨迹 $\frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_l}$
+        \State 使用\autoref{ss}基于接收到的 $\frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_l}, \forall i \in \mathcal{I}_q$ 计算载荷的灵敏度轨迹 $\frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_l}$
     \EndFor
     \end{algorithmic}
 \end{algorithm}
+在求解上述两个梯度时，借助第3章中提出的 Neural Predictor 方法。由式(\ref{nmpc})中的动力学模型可知，在无人机系统中，无人机的动力学和载荷的动力学可以分为两类，分别是无人机动力学和学习得到的载荷动力学。Neural Predictor可以用于预测系绳连接的载荷动力学。
+对于每架无人机，可以将学习得到的载荷动力学模型与无人机自身的动力学模型相结合，载荷闭环状态相对于无人机MPC超参数的梯度可以通过学习得到的动力学模型进行显式计算。而对于无人机闭环状态相对于载荷MPC超参数的梯度，情况有所不同。由于载荷上的虚拟控制输入 \( \bm{u}_l = \left[ \bar{T}_1, \cdots, \bar{T}_n \right] \) 实际上可以在Neural Predictor中用无人机的状态 \( \bm{x}_i \) 进行预测，因此无人机闭环状态相对于载荷MPC超参数的梯度可以直接通过载荷闭环状态相对于载荷MPC超参数的梯度进行体现。最终，通过这一系统化的求解过程，可以实现灵敏度的分布式并行传播。具体的算法流程总结如算法 \ref{alg:sensitivity_propagation} 所示。
 
-通过该方法，可以实现灵敏度的分布式并行传播。具体的算法流程总结如算法 \ref{alg:sensitivity_propagation} 所示。
-
-
-
-% \begin{algorithm}[h]
-%     \caption{分布式灵敏度传播算法}
-%     \label{alg:sensitivity_propagation}
-%     \textbf{输入:} 阈值 $\delta$，最大迭代次数 $k_{\text{max}}$，系统矩阵 (17), (18), (19)，新的控制输入 $\{\bar{U}_t\}_{t=T}^{T+N_{cl}}$，初始条件 $\bar{X}_T^0 = 0$ 和 $\{X_{l,t}^{l,0} = 0\}_{t=T}^{T+N_{cl}}$。\\
-%     \textbf{输出:} 灵敏度轨迹 $\bar{\mathbf{Y}}_t \, (\forall t = T, \cdots, T+N_{cl})$。
-
-%     \begin{algorithmic}[1]
-%     \State $k \gets 1$
-%     \While{$e \geq \delta$ $\textbf{and}$ $k \leq k_{\text{max}}$}
-%         \For{$i \gets 1$ $\bm{\textbf{to}}$ $n$ \textbf{(并行)}}
-%             \For{$t \gets T$ $\bm{\textbf{to}}$  $T+N$}
-%                 \State 计算灵敏度轨迹：$X_{i,t}^i$, $X_{i,t}^l$, $X_{l,t}^i$
-%                 \Statex \quad \quad \quad \quad \ \  基于载荷的灵敏度 $X_{l,t}^{l,k-1}$
-%                 \Statex \quad \quad \quad \quad \ \ $\triangleright$ 在每个无人机中运行，并发送至中央无人机
-%             \EndFor
-%         \EndFor
-%         \State 更新四旋翼灵敏度：$X_{i,t}^{i,k} \gets X_{i,t}^i$, $X_{l,t}^{l,k} \gets X_{i,t}^l, \forall i \in \mathcal{I}_q$
-%         \For{$t \gets T$ 到 $T+N_{cl}$}
-%             \State 计算载荷灵敏度 $X_{l,t}^l$，基于四旋翼灵敏度 $X_{i,t}^{i,k}, \forall i \in \mathcal{I}_q$
-%         \EndFor
-%         \State 更新载荷灵敏度轨迹：$X_{l,t}^{l,k} \gets X_{l,t}^l$
-%         \Statex \quad \ \ $\triangleright$ 在中央无人机中运行
-%         \State 计算误差: $e \gets \max \{ e_i^i, e_i^l, e_l^i, e_l^l \}, \forall i \in \mathcal{I}_q$
-%         \Statex \quad \ \ 其中:
-%         \Statex \quad \ \ $e_i^i = \frac{1}{N_{cl}} \sum_{t=T}^{T+N_{cl}} \| X_{i,t}^{i,k} - X_{i,t}^{i,k-1} \|_2^2$;
-%         \Statex \quad \ \ $e_l^i = \frac{1}{N_{cl}} \sum_{t=T}^{T+N_{cl}} \| X_{i,t}^{l,k} - X_{i,t}^{l,k-1} \|_2^2$;
-%         \Statex \quad \ \ $e_i^l = \frac{1}{N_{cl}} \sum_{t=T}^{T+N_{cl}} \| X_{l,t}^{i,k} - X_{l,t}^{i,k-1} \|_2^2$;
-%         \Statex \quad \ \ $e_l^l = \frac{1}{N_{cl}} \sum_{t=T}^{T+N_{cl}} \| X_{l,t}^{l,k} - X_{l,t}^{l,k-1} \|_2^2$。
-%         \State 更新迭代次数：$k \gets k + 1$
-%     \EndWhile
-%     \end{algorithmic}
-% \end{algorithm}
-% 具体而言，所有无人机的动力学通过系绳拉力与载荷直接耦合，而无人机之间的动力学则通过载荷间接耦合。因此，载荷控制器对每个无人机的动力学行为的影响通常要比其它无人机控制器的影响更为显著。
-
-
-
-% \subsection{分布式策略梯度学习算法}
-
-% 通过分布式灵敏度传播算法，可以高效地获得系统的灵敏度矩阵。这些灵敏度进一步用于分布式策略梯度学习优化方法，以实现对控制器参数的高效调优。
-
-% 对于多无人机绳系吊运系统，其动态行为复杂，难以通过解析模型精确描述。因此，引入深度神经网络（DNN）生成控制器的动态权重和参考轨迹，DNN 的输入特征包括系统状态、障碍物位置等环境信息。第 \(i\) 个无人机的自适应模型预测控制超参数和载荷的自适应模型预测控制超参数可以表示为：
-
-% \begin{equation}
-% 	\begin{gathered}
-% 		\boldsymbol{\theta}_i=h_{\boldsymbol{\pi}_i}\left(\boldsymbol{\chi}_i\right),\mathrm{~}\forall i\in\mathcal{I}_q\\    
-% 		\boldsymbol{\theta}_l=h_{\boldsymbol{\pi}_l}\left(\boldsymbol{\chi}_l\right)
-% 	\end{gathered}
-% \end{equation}
-% 其中，\( \bm \pi_i \) 表示第 \(i\) 个无人机的DNN的可学习参数，\( \bm \pi_l \) 表示载荷的DNN的可学习参数，\( \bm \chi_i \) 和\( \bm \chi_l \) 分别包含无人机和载荷的环境观测数据及系统相关信息，例如系统状态和障碍物信息等。通过优化每个无人机和载荷的DNN参数 \( \pi_i^* \)和\(\bm \pi_l\)，最小化由所有无人机的代价函数构成的总体代价函数，进而实现自适应控制。该问题可以用以下优化问题表示：
-
-% \begin{equation}
-% 	\begin{aligned} 
-% 		&\operatorname*{minimize}_{\bm{\pi}} & & L_l + \sum_{i=1}^n L_i \\
-% 		&\text{subject to} & & \begin{aligned}
-% 			&\boldsymbol{x}_{i,{k+1}} = {{f}}_{i,k}\left(\boldsymbol{x}_{i,k}, \boldsymbol{u}^*_{i,{k}},  \boldsymbol{x}_{l,k}, \boldsymbol{u}^*_{l,{k}}\right), \forall i \in \mathcal{I}_q \\
-% 			&\boldsymbol{x}_{l,{k+1}} = {{f}}_{l,k}\left(\boldsymbol{x}_{l,k}, \boldsymbol{u}^*_{{l},{k}},  \boldsymbol{x}_{i,k}\right), \forall i \in \mathcal{I}_q
-% 		\end{aligned} \\
-% 	\end{aligned}
-% \end{equation}
-% 其中，$L_l$和 $L_i$分别表示载荷和第 \(i\) 个无人机的代价函数，损失基于它们在给定预测时间范围 \( N \in \mathbb{R}^+ \) 内的状态变化计算。参数 \(\bm \pi \) 包含了所有无人机的DNN参数 \( \bm \pi_i \)和载荷的DNN参数 \( \bm \pi_l \)，
-% 第 \(i\) 个无人机的模型预测控制器在超参数\( \boldsymbol{\theta}_i \)下于时刻 \(k\) 生成的最优控制输入记为 \( \boldsymbol{u}^*_{i,{k}} \) ，载荷的模型预测控制器在超参数\( \boldsymbol{\theta}_l \)下于时刻 \(k\) 生成的最优控制输入记为\( \boldsymbol{u}^*_{l,{k}} \)。
-% \paragraph{优化更新公式}  
-% 根据灵敏度矩阵 $\frac{\partial x_t}{\partial \theta}$，计算梯度：
-% \begin{equation}
-% \nabla_\theta L = \sum_{k=0}^N \frac{\partial L}{\partial x_k} \frac{\partial x_k}{\partial \theta} + \sum_{k=0}^{N-1} \frac{\partial L}{\partial u_k} \frac{\partial u_k}{\partial \theta}.
-% \end{equation}
-% 通过优化更新控制器参数：
-% \begin{equation}
-% \theta \leftarrow P_\Theta(\theta + \epsilon^*),
-% \end{equation}
-% 其中 $\epsilon^*$ 是通过最小化二次损失预测函数 $L(\theta + \epsilon)$ 得到的最优更新量。
-
-% 本节提出了一种分布式策略梯度学习算法，用于实现多无人机绳系吊运系统的闭环轨迹跟踪控制与障碍物自主避让功能。该算法通过分布式闭环方式高效训练深度神经网络（DNN）参数 $\pi$，并应用于多吊点系统的轨迹跟踪任务。
-
-% 轨迹跟踪是多吊点系统在载荷传输任务中的常见应用。针对系统配置，可以采用现有的轨迹规划算法（例如最小曲率方法）生成平滑的参考轨迹。为了评估系统的轨迹跟踪性能，我们定义每个无人机（吊点）的闭环跟踪误差代价函数 $L_i$，其形式如下：
-% \begin{equation}
-% L_i = \sum_{t=T}^{T+N_{cl}} \| x_i^t - x_{i,\text{ref}}^t \|_W^2, \quad \forall i \in \mathcal{I}_A,  \label{28}
-% \end{equation}
-% 其中，$x_i^t$ 为第 $i$ 个无人机在实际动力学下的闭环状态，$x_{i,\text{ref}}^t$ 为对应的参考状态，$W$ 是一个正定加权矩阵，$N_{cl}$ 表示预测时间域。
-
-% 在复杂环境下，障碍物避让是飞行任务的核心需求。虽然可以直接将障碍物约束引入模型预测控制（MPC）问题中，但复杂约束通常会导致求解过程的数值计算难度增加。因此，更为可行的方法是通过学习自适应参考轨迹，使系统能够主动响应障碍物并简化MPC求解过程。
-
-% 针对障碍物避让问题，我们设计了新的代价函数 $L_i$，用于惩罚无人机与障碍物之间的相对距离，具体形式如下：
-% \begin{equation}
-% L_i = \alpha \sum_{t=T}^{T+N_{cl}} \exp\left(-\eta \| p_i^t - p_{\text{obs}} \|^2 \right), \quad \forall i \in \mathcal{I}_A,  
-% \label{29}
-% \end{equation}
-% 其中，$\alpha$ 和 $\eta$ 为正数权重系数，$p_i^t$ 和 $p_{\text{obs}}$ 分别表示无人机和障碍物在世界坐标系中的位置。
-
-% 为了提高训练的灵活性和系统的可行性，我们将轨迹跟踪误差损失（式 \ref{28}）与障碍物避让损失（式 \ref{29}）进行组合。结合这两种代价函数，通过梯度下降法学习最优策略参数 $\pi$。
 
 \subsection{分布式策略梯度算法}
 对于多无人机绳系吊运系统，其动态行为复杂，难以通过解析模型精确描述。因此，引入深度神经网络（DNN）生成控制器的动态权重和参考轨迹，DNN 的输入特征包括系统状态、障碍物位置等环境信息。第 \(i\) 个无人机的自适应模型预测控制超参数和载荷的自适应模型预测控制超参数可以表示为：
@@ -1569,20 +1460,8 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
 本小节中，提出了一种分布式策略梯度学习算法，结合分布式灵敏度传播，用于通过梯度下降法学习 DNN 参数 $\bm \pi$：
 \begin{equation}
     \bm \pi\leftarrow \bm \pi-\alpha\nabla_{\bm \pi}L
+	\label{6}
 \end{equation}
-
-多无人机绳系吊运系统中存在的耦合效应，在闭环训练中，无人机 DNN 参数的梯度\( \bm{\nabla}_ {\bm \pi_i}  L \) 和载荷 DNN 参数的梯度 \( \bm{\nabla}_ {\bm \pi_l}  L \)可分别使用链式法则表达为：
-\begin{equation}
-	\begin{gathered}
-		\bm{\nabla}_ {\bm \pi_i}  L = \left(\sum_{k=1}^{N} \frac{\partial L_i}{\partial \bm x_{i,k}} \frac{\partial \bm x_{i,k}}{\partial \bm \theta_i} + \sum_{k=1}^{N} \frac{\partial L_l}{\partial \bm x_{l,k}} \frac{\partial \bm x_{l,k}}{\partial \bm \theta_i} +\sum_{k=0}^{N-1} \frac{\partial L}{\partial \bm u_{i,k}} \frac{\partial \bm u_{i,k}}{\partial \bm \theta_i}\right)\frac{\partial\boldsymbol{\theta}_{i}}{\partial\boldsymbol{\Theta}_{i}}\frac{\partial\boldsymbol{\Theta}_{i}}{\partial\boldsymbol{\pi}_{i}},\forall i\in\mathcal{I}_q\\
-		\bm{\nabla}_ {\bm \pi_l} L = \left(\sum_{k=1}^{N} \frac{\partial L_l}{\partial \bm x_{l,k}} \frac{\partial \bm x_{l,k}}{\partial \bm \theta_l} +\sum_{i=1}^{N} \sum_{k=1}^{N} \frac{\partial L_i}{\partial \bm x_{i,k}} \frac{\partial \bm x_{i,k}}{\partial \bm \theta_l} + \sum_{k=0}^{N-1} \frac{\partial L}{\partial \bm u_{l,k}} \frac{\partial \bm u_{l,k}}{\partial \bm \theta}\right)\frac{\partial\boldsymbol{\theta}_{l}}{\partial\boldsymbol{\Theta}_{l}}\frac{\partial\boldsymbol{\Theta}_{l}}{\partial\boldsymbol{\pi}_{l}}
-	\end{gathered}
-    % \bm{\nabla_\pi L} = \sum_{k=1}^{N} \frac{\partial L}{\partial \bm x_{i,k}} \frac{\partial \bm x_k}{\partial \bm \theta} + \sum_{k=0}^{N} \frac{\partial L}{\partial \bm u_k} \frac{\partial \bm u_k}{\partial \bm \theta}
-	\label{7}
-\end{equation}
-
-在式(\ref{7})中，$\frac{\partial L}{\partial \bm x_{i,k}} , \frac{\partial L}{\partial \bm x_{l,k}} , \frac{\partial L}{\partial \bm u_k} , \frac{\boldsymbol{\theta}_i}{\partial\boldsymbol{\pi}_i} , \frac{\boldsymbol{\theta}_l}{\partial\boldsymbol{\pi}_l}$这些参数都可以通过显函数微分直接确定，无人机闭环状态相对于载荷MPC超参数的梯度\(\frac{\partial \bm x_{i,k}}{\partial \bm \theta_l}\)和载荷闭环状态相对于无人机MPC超参数的梯度\(\frac{\partial \bm x_{l,k}}{\partial \bm \theta_i}\)则可以通过算法 \ref{alg:sensitivity_propagation} 进行灵敏度传播计算灵敏度状态。
-
 \begin{algorithm}[h]
 	\captionsetup{font={stretch=1.2}}
     \linespread{1.2}\selectfont % 设置行距为1.2倍
@@ -1592,31 +1471,31 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
     \textbf{初始化:} $\pi_0$
     
     \begin{algorithmic}[1]
-        \While{$L_{\text{mean}}$ 未收敛}
-            \For{$k = 0$ \textbf{to} $T$ \textbf{by} $\Delta \bar t$ }
+        \While{$L_{\text{mean}}$ not converged}
+            \For{$k = 0$ \textbf{to} $T_{\text{ep}}$ \textbf{by} $\Delta \bar t$ }
                 \State \textbf{前向传播:}
-                \State 使用 (\ref{4}) 求得自适应超参数 $\bm{\theta}_{i,k}, \, \forall i \in \mathcal{I}_A$；
-                \State 使用算法 \ref{alg:mpc_multilift} 求得 $\bm{u}_{i,k}^{\ast}, \, \forall i \in \mathcal{I}_A$；
-                \State 计算个体损失 $L_{i,k}, \, \forall i \in \mathcal{I}_A$；
+                \State 使用\autoref{4}计算自适应超参数 $\bm{\theta}_{i,k}, \, \forall i \in \mathcal{I}_A$；
+                \State 使用\autoref{alg:mpc_multilift}计算 $\bm{u}_{i,k}^{\ast}, \, \forall i \in \mathcal{I}_A$；
+                \State 计算每个无人机和载荷的损失函数 $L_{i,k}, \, \forall i \in \mathcal{I}_A$；
                 
                 \For{$i = 1$ \textbf{to} $n$}
-                    \State 使用 Neural Predictor 求得 $T_{i,k}$；
-                    \State 将 $\bm{u}_{i,k}^{\ast}$ 和 $-T_{i,k}$ 应用于四旋翼实际模型 (\ref{eq:混合模型})，以更新无人机闭环状态 $x_{i,k}$；
+                    \State 使用 Neural Predictor 计算 $T_{i,k}$；
+                    \State 将 $\bm{u}_{i,k}^{\ast}$ 和 $-T_{i,k}$ 应用于无人机数学模型 (\ref{eq:混合模型})，以更新无人机闭环状态 $x_{i,k}$；
                 \EndFor
                 
-                \State 将 $\left\{ T_{i,k} \right\}_{i=1}^n$ 应用于载荷实际模型 (\ref{2-15})，以更新无人机闭环状态 $x_{l,k}$；
+                \State 将 $\left\{ T_{i,k} \right\}_{i=1}^n$ 应用于载荷数学模型 (\ref{2-15})，以更新无人机闭环状态 $x_{l,k}$；
                 
                 \State \textbf{反向传播:}
                 \For{$i = 1$ \textbf{to} $n$}
-                    \State 使用算法 \ref{alg:sensitivity_propagation} 求得无人机的 MPC 相关梯度 $\frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_i}$；
-                    \State 使用算法 \ref{alg:sensitivity_propagation} 求得载荷的 MPC 相关梯度 $\frac{\partial \bm{x}_{i,k}}{\partial \bm{\theta}_l}$；
+                    \State 使用算法 \ref{alg:sensitivity_propagation} 计算无人机的 MPC 相关梯度 $\frac{\partial \bm{x}_{l,k}}{\partial \bm{\theta}_i}$；
+                    \State 使用算法 \ref{alg:sensitivity_propagation} 计算载荷的 MPC 相关梯度 $\frac{\partial \bm{x}_{i,k}}{\partial \bm{\theta}_l}$；
                 \EndFor
                 
                 \If{$k \geq N$}
                     \State 通过 $T_{\text{}} \gets k - N$ 确定起始步；
-                    \State 求得系统矩阵；
-                    \State 使用式 (\ref{7}) 求得 $\bm{\nabla}_{\bm{\pi}_i} L, \, \forall i \in \mathcal{I}_A$；
-                    \State 使用基于梯度的优化方法更新 $\bm{\pi}_k$；
+                    \State 计算系统矩阵；
+                    \State 使用式 (\ref{7}) 计算 $\bm{\nabla}_{\bm{\pi}_i} L, \, \forall i \in \mathcal{I}_A$；
+                    \State 使用基于梯度的优化方法\autoref{6}更新 $\bm{\pi}_k$；
                 \Else
                     \State 保持 $\bm{\pi}_k$ 不变；
                 \EndIf
@@ -1625,6 +1504,18 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
         \EndWhile
     \end{algorithmic}
 \end{algorithm}
+多无人机绳系吊运系统中存在的耦合效应，在闭环训练中，无人机 DNN 参数的梯度\( \bm{\nabla}_ {\bm \pi_i}  L \) 和载荷 DNN 参数的梯度 \( \bm{\nabla}_ {\bm \pi_l}  L \)可分别使用链式法则表达为：
+\begin{equation}
+	\begin{gathered}
+		\bm{\nabla}_ {\bm \pi_i}  L = \left(\sum_{k=1}^{N} \frac{\partial L_i}{\partial \bm x_{i,k}} \frac{\partial \bm x_{i,k}}{\partial \bm \theta_i} + \sum_{k=1}^{N} \frac{\partial L_l}{\partial \bm x_{l,k}} \frac{\partial \bm x_{l,k}}{\partial \bm \theta_i} +\sum_{k=0}^{N-1} \frac{\partial L}{\partial \bm u_{i,k}} \frac{\partial \bm u_{i,k}}{\partial \bm \theta_i}\right)\frac{\partial\boldsymbol{\theta}_{i}}{\partial\boldsymbol{\Theta}_{i}}\frac{\partial\boldsymbol{\Theta}_{i}}{\partial\boldsymbol{\pi}_{i}},\forall i\in\mathcal{I}_q\\
+		\bm{\nabla}_ {\bm \pi_l} L = \left(\sum_{k=1}^{N} \frac{\partial L_l}{\partial \bm x_{l,k}} \frac{\partial \bm x_{l,k}}{\partial \bm \theta_l} +\sum_{i=1}^{N} \sum_{k=1}^{N} \frac{\partial L_i}{\partial \bm x_{i,k}} \frac{\partial \bm x_{i,k}}{\partial \bm \theta_l} + \sum_{k=0}^{N-1} \frac{\partial L}{\partial \bm u_{l,k}} \frac{\partial \bm u_{l,k}}{\partial \bm \theta}\right)\frac{\partial\boldsymbol{\theta}_{l}}{\partial\boldsymbol{\Theta}_{l}}\frac{\partial\boldsymbol{\Theta}_{l}}{\partial\boldsymbol{\pi}_{l}}
+	\end{gathered}
+    % \bm{\nabla_\pi L} = \sum_{k=1}^{N} \frac{\partial L}{\partial \bm x_{i,k}} \frac{\partial \bm x_k}{\partial \bm \theta} + \sum_{k=0}^{N} \frac{\partial L}{\partial \bm u_k} \frac{\partial \bm u_k}{\partial \bm \theta}
+	\label{7}
+\end{equation}
+其中，${\partial L}/{\partial \bm x_{i,k}} , {\partial L}/{\partial \bm x_{l,k}} , {\partial L}/{\partial \bm u_k} , {\boldsymbol{\theta}_i}/{\partial\boldsymbol{\pi}_i} , {\boldsymbol{\theta}_l}/{\partial\boldsymbol{\pi}_l}$这些参数都可以通过显函数微分直接确定，无人机闭环状态相对于载荷MPC超参数的梯度\({\partial \bm x_{i,k}}/ {\partial \bm \theta_l}\)和载荷闭环状态相对于无人机MPC超参数的梯度\({\partial \bm x_{l,k}}/{\partial \bm \theta_i}\)则可以通过算法 \ref{alg:sensitivity_propagation} 进行灵敏度传播计算灵敏度状态。
+
+
 
 训练过程总结如算法 \ref{alg:distributed_pg} 所示，其中 $L_{\text{mean}}$ 为一个训练周期（持续时间为 $T_{\text{ep}}$）内各个体损失之和的平均值，$\Delta \bar{t}$ 为离散化实际系统动力学所用的时间步长。
 通过这种方法，分布式策略梯度算法能够有效地训练多无人机绳系吊运系统中的 DNN 参数，实现如轨迹跟踪和避障等功能的优化。
@@ -1708,21 +1599,18 @@ $L$ ，可以确定$\frac{\partial L}{\partial \bm x_k}$ 和 $\frac{\partial L}{
 
 \cleardoublepage
 
-\chapter{物理引擎仿真与实物试验验证}
+\chapter{物理引擎仿真与飞行试验验证}
 \chaptermark{物理引擎仿真与试验验证}
 %为验证所提出方法的可行性与有效性，本章对章动目标消旋地面试验系统进行了搭建。试验系统主要由目标章动旋转模拟装置、磁场源、机械臂和计算机组成，通过目标章动模拟装置模拟空间目标的章动旋转运动，通过机械臂抓取磁场源模拟服务星的运动。采用不同消旋轨迹进行了多组试验，记录目标角速度变化情况并对结果进行了比较分析。
-为了验证上述提出方法的可行性与有效性，通过物理引擎仿真和实物试验验证两个方面对设计的算法效果进行评估。数据驱动方法依赖于大量高质量的标注数据来训练模型。然而，在机器人领域，获取真实世界的数据通常面临数据采集成本高、环境限制、数据标注困难等挑战，物理引擎仿真系统，可以在虚拟环境中高效生成大量多样化且精准标注的数据，避免了真实世界收集数据困难的问题。
+为了验证上述提出方法的可行性与有效性，通过物理引擎仿真和飞行试验验证两个方面对设计的算法效果进行评估。数据驱动方法依赖于大量高质量的标注数据来训练模型。然而，在机器人领域，获取真实世界的数据通常面临数据采集成本高、环境限制、数据标注困难等挑战，物理引擎仿真系统，可以在虚拟环境中高效生成大量多样化且精准标注的数据，避免了真实世界收集数据困难的问题。
 
-在物理引擎仿真方面，在Drake、Gazebo和MuJoCo这几种主流仿真物理引擎平台中搭建无人机绳系吊运系统的动力学和环境模型，并选择最适合的物理引擎来模拟其飞行轨迹与响应特性。在实物试验验证方面，基于实际硬件搭建无人机绳系吊运系统，通过物理引擎和真实试验收集的大量数据，在室内场景中完成一系列试验，验证仿真模型的准确性与适用性。本章通过仿真与试验的结合，为无人机绳系吊运系统的设计与优化提供科学依据。
+在物理引擎仿真方面，在Drake、Gazebo和MuJoCo这几种主流仿真物理引擎平台中搭建无人机绳系吊运系统的动力学和环境模型，并选择最适合的物理引擎来模拟其飞行轨迹与响应特性。在飞行试验验证方面，基于实际硬件搭建无人机绳系吊运系统，通过物理引擎和真实试验收集的大量数据，在室内场景中完成一系列试验，验证仿真模型的准确性与适用性。本章通过仿真与试验的结合，为无人机绳系吊运系统的设计与优化提供科学依据。
 \section{物理引擎仿真系统介绍}
-在无人机绳系吊运载荷系统的研究中，仿真是通过计算机模拟现实世界现象的过程。不同的仿真器针对不同的现象进行模拟，提供不同程度的真实感，消耗不同的计算资源，并适用于不同的目的。低保真度的仿真器通常需要较少的计算资源，因此常用于快速估计现实世界的行为或模拟系统的某个特定组件。相反，高保真度的仿真器能够在一个或多个方面更准确地估计现实世界的行为。高保真度的常见维度包括动力学模拟的精确性和更高的视觉真实感。
+在无人机绳系吊运载荷系统的研究中，物理引擎仿真是通过计算机模拟现实世界现象的过程。不同的物理引擎模拟不同的现象，提供不同程度的逼真度，消耗不同数量的计算资源，并为不同的目的量身定制。低保真度的物理引擎通常所需的计算资源通常要少得多，因此通常用于快速估算真实世界的行为，或模拟系统的某个特定组件。相反，保真度较高的物理引擎可在一个或多个方面对真实世界的行为做出更准确的估计。
 
 本章选用了几种主流物理仿真平台对无人机绳系吊运系统的深入分析和验证，包括Drake、Gazebo和MuJoCo。这些平台具有高效的物理建模和仿真功能，可以满足复杂动力学系统建模及仿真精度的需求。本节将对仿真系统的构建流程、各平台的特点及其在仿真中的具体应用进行详细介绍。
 
-
-
 \subsection{Drake仿真引擎}
-
 Drake 是由麻省理工学院计算机科学与人工智能试验室与丰田研究院联合开发的一款功能强大的开源物理仿真与控制工具，专注于动力学建模、优化及精确控制仿真。它广泛应用于机器人动力学的分析以及控制系统的开发，特别适合研究高自由度系统。Drake 使用高精度数值积分方法，确保动力学计算的准确性，可模拟包括摩擦、接触、空气动力学在内的复杂机器人动力学，并将这些信息传递给高级规划、控制与分析算法。此外，Drake 提供符号计算与解析梯度支持，对于优化控制和建模复杂任务至关重要。
 
 与 Simulink 类似，Drake 强调模块化设计，具备灵活的接口和先进的数学工具，是学术研究和工业应用的理想选择。其高效的优化工具可用于验证控制算法并优化其性能。
@@ -1738,10 +1626,10 @@ Drake 工具箱提供了以下三大核心组件，用于实现高效、灵活�
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=38pc]{picture/drake.png} 
-	\caption{Drake仿真引擎中三架无人机系统框图} 
+	\caption{Drake仿真引擎中三架无人机系统流程框图} 
 	\label{drake}
 \end{figure}
-在最初的设计中，无人机绳系吊运系统采用多路复用器和解复用器来拼接系统的输入与输出。然而，这种方法容易导致状态变量之间的混淆问题。为解决此问题，系统设计进行了改进：移除多路复用器和解复用器，直接将三架无人机的 12 个输入传递给系统，并输出三架无人机的所有状态变量。系统的结构如图 \ref{drake} 所示。此外，为每架无人机添加了滚转-俯仰-偏航关节。相较于单架无人机的设计，系统中对角权重矩阵 $Q$和控制权重矩阵 $R$的长度增加了三倍，但其组成方式保持不变。
+在最初的设计中，无人机绳系吊运系统采用多路复用器和解复用器来拼接系统的输入与输出。然而，这种方法容易导致状态变量之间的混淆问题。为解决此问题，系统设计进行了改进：移除多路复用器和解复用器，直接将三架无人机的 12 个输入传递给系统，并输出三架无人机的所有状态变量，系统的结构如图 \ref{drake} 所示。此外，为每架无人机添加了滚转-俯仰-偏航关节。相较于单架无人机的设计，系统中对角权重矩阵 $Q$和控制权重矩阵 $R$的长度增加了 3 倍，但其组成方式保持不变。
 
 \begin{figure}[hbt!]
 	\centering
@@ -1749,34 +1637,28 @@ Drake 工具箱提供了以下三大核心组件，用于实现高效、灵活�
 	\caption{Drake仿真引擎中的多无人机绳系吊运系统} 
 	\label{5_1}
 \end{figure}
+在系统建模过程中，通常使用机器人描述格式文件（URDF），结构化地描述模型的各个部分，并清晰定义系统的动力学属性。在 Drake 中，URDF 文件通过定义传感器、执行器和多体结构等实现精确的仿真建模。该系统的动力系统组件还通过增加螺旋桨和控制器模块进一步增强了建模能力。
 
-在系统建模过程中，通常使用统一机器人描述格式（URDF）文件，结构化地描述模型的各个部分，并清晰定义系统的动力学属性。在 Drake 中，URDF 文件是主要的建模工具之一，通过定义传感器、执行器和多体结构等实现精确的仿真建模。该系统的动力系统组件还通过增加螺旋桨和控制器模块进一步增强了建模能力。
 
-目前，Drake 主要支持刚体物体的模拟，因此，对于柔性物体如系绳的建模需要采取一定的简化方法。为了解决这一问题，系绳被建模为弹簧，其中弹簧的拉伸会根据系统状态施加力。具体来说，系绳的行为被简化为弹簧模型，在拉紧时，弹簧会施加力，而在松弛时，则不施加任何力。这个方法虽然简化了系绳的物理特性，但依然能够在一定程度上反映系绳在系统中的作用。这样的建模方式引入了系统的混合组件。在系统中，弹簧模型和刚体物体的相互作用形成了一个混合系统。具体来说，当系绳处于拉伸状态时，它会施加弹性力，这与传统的刚体物体动力学行为不同，因此需要将其作为一个特殊的约束条件来处理。尽管 Drake 并不原生支持柔性物体的建模，但通过这种方式，依然能够在仿真中实现系绳的作用，并与其他刚体物体的动力学交互。
+Drake 目前主要支持刚体物体的模拟，对于柔性物体（如系绳）的建模需采用简化方法。为解决该问题，系绳被建模为弹簧，其拉伸状态根据系统状态施加力。具体而言，系绳行为简化为弹簧模型，在拉紧时施加力，而松弛时不施加任何力。此方法虽然简化了系绳的物理特性，但在一定程度上仍能反映其在系统中的作用。这种建模方式引入了系统的混合组件，其中弹簧模型与刚体物体的相互作用构成混合系统。当系绳处于拉伸状态时，施加的弹性力不同于传统刚体动力学行为，因此需作为特殊约束条件处理。尽管 Drake 不直接支持柔性物体建模，但通过此方法，仿真中依然可以实现系绳的作用，并与其他刚体物体的动力学交互。
 
 此外，Drake 集成了轻量级的 Web 3D 可视化工具 Meshcat，为开发者提供交互式的可视化功能，便于调试、展示与分析仿真结果，如图 \ref{5_1} 所示。通过 Meshcat，开发者可以实时观察复杂系统的运行状态，从而大幅提高开发效率。
 
 \subsection{Gazebo仿真引擎}
+如果仿真任务涉及到复杂的物理约束和要求极高的精度，Drake 通常是首选工具。然而，Drake 的缺点在于它的计算复杂度较高，尤其是当仿真规模增大时，计算资源的消耗也随之增加，因此它可能不适合需要快速仿真或大规模环境模拟的场景。
 
-因此，如果仿真任务涉及到复杂的物理约束和要求极高的精度，Drake 通常是首选工具。然而，Drake 的缺点在于它的计算复杂度较高，尤其是当仿真规模增大时，计算资源的消耗也随之增加，因此它可能不适合需要快速仿真或大规模环境模拟的场景。
+Gazebo 是一个通用的开源仿真框架，它将刚体物理引擎（与图形用户界面（GUI）相结合，并提供了丰富的插件，支持复杂的三维环境建模和模拟各种机器人组件（如电动机、受空气动力学力影响的螺旋桨、传感器噪声及摄像头等）。类似于 Drake，Gazebo 也能处理通过 SDF 文件定义的多无人机绳系吊运系统，并进行动态交互。对于无人机仿真，Gazebo能够通过插件实现气动力、重力以及绳系约束的精确建模。
+然而，Gazebo 与Drake一样，仅能模拟刚体物体。这意味着系绳需要通过多串联链来进行建模。影响系绳模型精度的五个关键参数如下：
 
-Gazebo 是一个通用的开源仿真框架，它将刚体物理引擎（例如本文使用的开放动力学引擎 ODE）与图形用户界面（GUI）相结合，并提供了丰富的插件，支持复杂的三维环境建模和模拟各种机器人组件（例如电动机、受空气动力学力影响的螺旋桨、传感器噪声以及摄像头等）。类似于 Drake，Gazebo 能够处理通过 SDF 文件定义的多无人机绳系吊运系统，并进行动态交互。
-通过与Robot Operating System (ROS) 的集成，可以方便地实现机器人算法的验证和硬件交互仿真。对于无人机仿真，Gazebo能够通过插件实现气动力、重力以及绳系约束的精确建模。
-
-然而，Gazebo 与Drake一样，仅能模拟刚体物体。这意味着灵活系绳的动态需要通过多链刚体来进行建模。为此，有五个关键参数可以影响系绳模型的精确度：
-
-(1){链节数量}：每根系绳包含多少个刚性圆柱体。增加链节数有助于使模型更加接近真实系绳，但也需要更多的计算资源。通过经验观察发现，使用 10 个链节足以在配备 i5-1135G7 CPU 和 16 GB 内存的 Intel NUC 计算机上获得足够的精度而不会造成过大计算压力。
+(1){链节数量}：每根系绳由多少个刚性圆柱体组成。增加链节数量可提升模型的逼真度，但也会增加计算资源消耗。经验表明，使用 10 个链节足以在搭载 i5-1135G7 CPU 和 16 GB 内存的 Intel NUC 计算机上实现较高精度且不会带来过大计算压力。
     
-(2){关节类型}：选择哪种关节类型（例如球形关节、滑动关节或万向节）。由于连续系绳没有刚性关节，最佳选择是约束最少的关节：球形关节。经过多次参数迭代发现，球形关节的阻尼系数不会显著影响关节行为。因此，选择具有功能性阻尼系数的下一个约束最少的关节：万向节。
+(2){关节类型}：选择合适的关节类型（如球形关节、滑动关节或万向节）。由于柔性系绳不具备刚性关节，约束最少的球形关节是最佳选择。
     
-(3) {关节阻尼系数}：描述关节运动过程中能量损失的速率。较大的阻尼系数会导致系绳中的能量传输减少，而过小的阻尼系数则可能导致不稳定的连续振荡。试验表明，$0.01  \text {N}\cdot \text{s} \cdot \text{m}^{-1}$ 
-的阻尼系数是最优的。若低于此值，系绳会振荡至不稳定状态；若高于此值，系绳的运动传递则不如预期。
+(3) {关节阻尼系数}：描述关节运动过程中的能量损失速率。较大阻尼系数会减少能量传输，而较小阻尼系数可能引发不稳定振荡。试验表明，$0.01 \text {N}\cdot \text{s} \cdot \text{m}^{-1}$ 是最优阻尼系数。低于该值会导致系绳振荡至不稳定状态，高于该值则影响运动传递效果。
     
-(4){关节摩擦系数}：描述运动关节需要克服的力。由于系绳本身没有刚性关节，加入任何摩擦系数会使系绳模型变得过于刚性。因此，摩擦系数被设为 0。
+(4){关节摩擦系数}：描述关节运动时需克服的摩擦力。由于柔性系绳不含刚性关节，任何摩擦系数的加入都会使模型过于刚性。因此，摩擦系数设为 0。
     
-(5) {碰撞几何体}：每个元素的碰撞检测应位于何处。考虑到无人机的配置以及准静态的操作方式，系绳与其他世界元素之间几乎没有碰撞发生。唯一的例外是在飞行前与地面平面的碰撞。由于碰撞建模计算开销较大，而系绳在任何显著情况下都不会发生碰撞，因此系绳的碰撞几何体被禁用。
-
-
+(5) {碰撞几何体}：确定碰撞检测的位置。由于无人机的配置和准静态操作方式，系绳与外部环境的碰撞极少发生，主要例外情况是起飞前与地面的接触。考虑到碰撞建模计算量较大，且大多数情况下系绳不会发生显著碰撞，因此碰撞几何体被禁用。
 
 \begin{figure}[hbt!]
 	\centering
@@ -1784,8 +1666,7 @@ Gazebo 是一个通用的开源仿真框架，它将刚体物理引擎（例如�
 	\caption{Gazebo仿真引擎中的多无人机绳系吊运系统} 
 	\label{5_2}
 \end{figure}
-
-图 \ref{5_2} 显示了用于三架无人机和载荷系统的完整 SDF 模型。该模型有三根系绳，每根系绳都是使用离散的链接刚体，两端用球形接头连接。每根系绳都由 XACRO 文件生成，因此可以轻松更改长度、质量和链接数。载荷被模拟为一个球体，系绳连接点沿中心平面对称分布，以模拟载荷的刚体方面。系绳连接到无人机的质量中心。
+图 \ref{5_2} 显示了用于三架无人机和载荷系统的完整SDF（Simulation Description Format） 模型。该模型包含三根系绳，每根系绳由离散的链接刚体构成，两端通过球形接头连接。每根系绳都由 XACRO 文件生成，因此可以方便地调整其长度、质量和链接数。载荷被模拟为一个球体，系绳连接点沿中心平面对称分布，以模拟载荷的刚体特性。系绳连接到无人机的质量中心。
 
 \begin{figure}[hbt!]
 	\centering
@@ -1804,32 +1685,25 @@ Gazebo 是一个通用的开源仿真框架，它将刚体物理引擎（例如�
 	\caption{由无人机、系绳和载荷构成的树图}
 	\label{tree_combined}
 \end{figure}
-
-将载荷和系绳加入仿真中是一个非常具有挑战性的任务，目前尚未完全解决。在SDF（Simulation Description Format）文件中，父节点（parent）通常指的是在运动学树中处于上层的节点（link），它是其他节点的基准或连接点。在SDF文件中，物体的层级结构通过父子节点关系来定义，其中父节点是连接子节点的上级元素。
-具体来说，SDF文件中的父子关系可以通过定义<parent>和<child>标签来表示。每个节点都可以定义一个父节点，而该父节点则为其提供参考系或坐标系。在运动学树中，父节点是控制整个系统运动的核心元素，而子节点则通过关节（joint）与父节点相连，从而形成多体动力学系统。系绳原本由多个链接组成，但被简化为一个单一的链接，端部使用球形铰链连接。系绳连接到无人机的质量中心。
+在 SDF 文件中，父节点指运动学树中上层的节点（link），作为其他节点的基准或连接点。父子关系通过 <parent> 和 <child> 标签表示，父节点控制系统运动，子节点通过关节（joint）与其相连，形成多体动力学系统。系绳由多个链接组成，但在模型中简化为单一链接，并通过球形铰链连接至无人机质量中心。
 
 对于多无人机绳系吊运系统来说，首先设置父节点为无人机，子节点为系绳和载荷（见图 \ref{tree1}）。这是采用类似倒车摆的方式来解决问题，且该方法在网上有较为完善的文档。但是在多无人机绳系吊运系统中，由于多个无人机的存在，只能实现单无人机的绳系吊运系统，当添加载荷和另外两架无人机时，遇到了错误（用虚线表示）。
 因此，设置载荷为父节点，随后是系绳和无人机作为子节点（见图 \ref{tree2}），从而构建得到完整的无人机绳系吊运系统SDF文件。
 
-尽管这种离散的系绳模型对于本仿真器来说足够真实，但它仍然不能完全准确地表示真实的柔性系绳。这也突显了寻找一种既精确又计算开销低的系绳动态建模方法的必要性。
+在 Gazebo 仿真环境中集成了开源无人机飞控系统 PX4，可以通过 SITL（Software In The Loop）仿真模式进行测试。SITL 仿真指将编译好的嵌入式代码在开发计算机上运行，而非最终硬件上执行，使开发者无需实际硬件即可测试和调试飞控系统。开发计算机运行 PX4 代码，并与仿真环境交互，模拟传感器输入与执行器输出。
 
-在 Gazebo 仿真环境中集成了开源无人机飞控系统 PX4，可以通过 SITL（Software In The Loop）仿真模式进行测试。SITL 仿真指将编译好的嵌入式代码在开发计算机上运行，而不是在最终部署的硬件上运行。这样，开发者可以在没有实际硬件的情况下，测试和调试飞控系统。开发计算机不仅运行编译好的 PX4 代码，还与更广泛的仿真环境进行交互，模拟传感器输入和执行器输出。
+此外，Gazebo 可通过 ROS2（Robot Operating System 2）集成，为仿真环境提供强大的通信与控制功能。ROS2 使无人机控制算法能够与仿真机器人系统无缝对接，简化开发流程，提高验证效率与准确性。开发者可借助 ROS2 实现与多种硬件接口的交互，同时控制仿真机器人，如导航与姿态控制。
 
-此外，Gazebo 仿真平台可以通过 ROS2（Robot Operating System 2）进行集成，为仿真环境提供强大的通信与控制功能。ROS2 使得无人机的控制算法可以与仿真环境中的机器人系统进行无缝对接，从而简化了开发过程，并提升了验证算法的效率和准确性。开发者可以使用 ROS2 来实现与多种硬件接口的交互，同时也可以通过 ROS2 控制仿真中的机器人行为，如导航、姿态控制等。
+Gazebo 仿真环境能精确模拟多无人机吊装系统中的传感器（如 IMU、GPS、视觉传感器）、执行器（如电机、舵机）及多体动力学行为。高保真仿真可再现实际系统动态表现，包括风力、地形和外部干扰，帮助开发者真实验证算法性能与鲁棒性。开发者可在虚拟环境中进行飞行路径规划、控制算法优化和系统评估，无需昂贵的硬件测试。
 
-Gazebo 仿真环境精确地模拟了多无人机吊装系统中的各类传感器（如 IMU、GPS、视觉传感器等）、执行器（如电机、舵机等）以及多体动力学行为。这种高保真的仿真能够再现实际系统中的动态表现，包括风力、地形和不同的外部干扰因素，帮助开发者更真实地验证算法的性能和鲁棒性。通过这种仿真，开发者可以在虚拟环境中进行飞行路径规划、控制算法优化和系统性能评估，而不必依赖昂贵的硬件测试。
-
-这种仿真方法的优势在于它允许开发者在多种复杂场景下进行快速的迭代与测试，无需实际部署硬件。开发者可以在仿真中尝试不同的控制策略，调整参数，并实时观察系统的响应，以优化控制算法和飞行策略。同时，这种集成还可以帮助开发者在软件部署到实际硬件之前，发现潜在的问题和漏洞，从而降低开发风险和成本。
+该仿真方法的优势在于开发者能够在复杂场景下快速迭代与测试，无需实际硬件部署。仿真中可尝试不同控制策略、调整参数并实时观察系统响应，优化算法与飞行策略。此外，该集成方式有助于在软件部署至实际硬件前发现潜在问题，降低开发风险与成本。
 
 \subsection{MuJoCo仿真引擎}
-
 在以上两种仿真引擎中，Drake通过弹簧对系绳进行建模，Gazebo则是通过多链刚体对系绳建模，这两种建模方法在一定程度上都不能够模拟真实的柔性系绳，这也突显了寻找一种既精确又计算开销低的系绳动态建模方法的必要性。
 
-MuJoCo是一个高保真开源物理引擎，考虑了复杂的动力学效应和灵活的约束专门用于复杂多体动力学的仿真，广泛应用于机器人学、控制理论、仿真优化和虚拟现实等领域。MuJoCo 以其高精度的数值计算和对柔性体、接触力学的精细建模而著称，尤其在模拟柔性系统和复杂接触情形（如系绳、布料和可变形的3D物体等）时表现突出。
+MuJoCo 是一款高保真开源物理引擎，专注于复杂多体动力学仿真，广泛应用于机器人学、控制理论、仿真优化和虚拟现实等领域。其以高精度数值计算和精细的柔性体、接触力学建模著称，在系绳、布料和可变形物体等柔性系统的仿真中表现出色。
 
-MuJoCo的核心优势之一是其柔性建模能力，能够准确模拟软体与硬体之间的交互，以及柔性结构在动态环境中的变形和响应。这使得它在需要模拟系绳、悬挂系统等软性组件的应用中，能够提供精确的结果，尤其适用于复杂的系绳吊运和柔性机器人系统的仿真。
-
-与其他仿真工具相比，MuJoCo 提供了更灵活的建模方式。通过定义精确的刚性体与柔性体属性、摩擦系数、接触参数等，MuJoCo 允许用户定制复杂的动力学系统，特别是在涉及柔性部件与刚性系统耦合的场景下。此外，MuJoCo 的优化模块能够通过高效的数值算法求解复杂的优化问题，例如最优路径规划、控制算法调优等。
+MuJoCo 的核心优势之一是其对柔性体的建模能力，能够准确模拟软体与硬体的交互以及动态环境下的柔性结构响应，适用于复杂的系绳吊运和柔性机器人系统仿真。
 
 \begin{figure}[hbt!]
 	\centering
@@ -1840,23 +1714,26 @@ MuJoCo的核心优势之一是其柔性建模能力，能够准确模拟软体�
 
 为了增强仿真结果的可视化与交互，MuJoCo 提供了与外部可视化工具（如 OpenGL）集成的能力，允许开发者实时观察仿真过程中的系统状态如图 \ref{5_3} 所示。这种高度交互性和可视化能力大大提升了开发者在测试和调试过程中的效率。
 
+MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的标准化文件格式。与 SDF 文件不同，MJCF 文件在描述机器人结构时不是用父节点和子节点的方式，而是通过直接的嵌套表示其父子关系。MJCF不仅能表示机器人本体信息，还能表示环境信息，其主体并不是系统本身，而是整个世界，里面可以可嵌套多个系统。
+
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=36pc]{picture/MJCF.png} 
 	\caption{无人机绳系吊运系统的 MJCF文件} 
 	\label{MJCF}
 \end{figure}
-MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的标准化文件格式。与 SDF 文件不同，MJCF 文件在描述机器人结构时不是用父节点和子节点的方式，而是通过直接的嵌套表示其父子关系。MJCF不仅能表示机器人本体信息，还能表示环境信息，其主体并不是系统本身，而是整个世界，里面可以可嵌套多个系统。
+如图 \ref{MJCF} 所示，MJCF 文件使用 XML 语法，详细描述无人机绳系吊运系统的组成部分，包括物体的几何形状、动力学属性、约束条件和接触模型等，是 MuJoCo 中进行建模与仿真的核心工具之一。它为仿真引擎提供了一种灵活且易于扩展的方式来描述复杂的动力学系统。
+MuJoCo 中的 sensor 组件可用于创建传感器并将其附加到模型的特定部分，为仿真中的无人机配置虚拟传感器，将传感器数据反馈到控制系统中进行处理，从而为无人机的自主飞行算法提供实时反馈。
+MuJoCo 的 tendon 组件为模拟柔性组件（如系绳）提供了强大且灵活的功能。通过设置拉伸刚度、阻尼和连接的关节，tendon 组件能够有效地将柔性动力学融入到刚体动力学仿真中，极大地便利了复杂系统的建模。
 
-如图 \ref{MJCF} 所示，MJCF文件采用 XML 语法，通过详细描述多体系统的各个组成部分，定义物理世界中物体的几何形状、动力学属性、约束条件、接触模型等，是 MuJoCo 中建模与仿真任务的核心工具之一，为仿真引擎提供了一种灵活且易于扩展的方式来描述复杂的动力学系统。MuJoCo 中的 sensor 组件可以用来来创建传感器并将其附加到模型中的特定部分，为仿真中的无人机配置虚拟传感器，并将传感器的数据反馈到控制系统中进行处理，为无人机的自主飞行算法提供所需的实时反馈。MuJoCo 中的 tendon 组件提供了一种强大而灵活的方式来模拟柔性组件，尤其适用于模拟系绳等系统。通过设置拉伸刚度、阻尼以及连接的关节，tendon 组件能够有效地将柔性动力学融入到刚体动力学仿真中，为复杂系统建模提供了极大的便利。
 
+\subsection{仿真引擎对比}
+在无人机绳系吊运系统的仿真中，Drake、Gazebo和MuJoCo这三种仿真引擎各具特点，适用于不同的应用场景。Drake以高精度的动力学模拟著称，特别适合需要精细控制与优化的系统，在多体动力学和高自由度系统方面表现突出。然而，Drake在柔性物体建模上存在局限，通常采用简化的弹簧模型进行系绳仿真，可能无法完全捕捉柔性组件的复杂动态行为。Gazebo在快速仿真和大规模环境建模方面具有优势，尤其适合与ROS集成的应用。它支持多种复杂的三维环境建模和各种机器人组件的模拟，但对于柔性物体的仿真，Gazebo依赖于刚体物体的链式建模，精度相对较低。MuJoCo在无人机绳系吊运系统的仿真中展现出独特优势，特别是在柔性物体的精确建模方面。它允许用户定义精确的刚性体与柔性体属性、摩擦系数、接触参数等，能够准确模拟系绳等柔性组件的动态行为，提供高保真的仿真结果。此外，MuJoCo提供了灵活的建模方式，允许用户定制复杂的动力学系统，特别是在涉及柔性部件与刚性系统耦合的场景下，为无人机绳系吊运系统的研究提供了强大的支持。
 
-\section{无人机绳系吊运系统控制仿真验证}
-如上一小节所述，MuJoCo 由于其在精确模拟柔性系绳动态行为方面的优势，结合高效的计算方法，能够在保证较低计算开销的同时提供高实时性的仿真效果，因此在无人机绳系吊运系统的应用中明显优于 Gazebo 和 Drake。在本小节中，将采用 MuJoCo 作为仿真平台，进行无人机绳系吊运系统的控制仿真与验证，以评估其在复杂动态环境中的表现与性能，验证其在实际应用中的可行性与优势。
+\section{Mujoco下的无人机绳系吊运系统控制仿真验证}
+如上一小节所述，MuJoCo 由于其在精确模拟柔性系绳动态行为方面的优势，在无人机绳系吊运系统的应用中明显优于 Gazebo 和 Drake。在本小节中，将采用 MuJoCo 作为仿真平台，进行无人机绳系吊运系统的控制仿真与验证，以评估其在复杂动态环境中的表现与性能，验证其在实际应用中的可行性与优势。
 
 \subsection{单无人机吊运仿真验证}
-
-
 在单无人机吊运仿真仿真中，无人机和有效载荷的质量分别为0.75 kg和0.15 kg，无人机的转动惯量通过MJCF中的“inertiafromgeom”模块自动计算得到。无人机与有效载荷之间的吊绳长度为1m。在仿真中，使用显式Runge-Kutta数值积分法，采样时间为0.01s，用于模拟系统的动态响应。
 通过悬停与轨迹跟踪两个仿真对设计的NP-MPC算法进行了验证。Neural Predictor的训练数据通过在仿真环境中生成的圆轨迹和双纽线轨迹中进行收集，轨迹速度和半径均为随机值。共收集了1000条轨迹，每条轨迹持续20s，包含2000个数据点。
 \begin{figure}[hbt!]
@@ -1955,7 +1832,7 @@ MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的
 在多无人机吊运仿真仿真中，三架无人机和有效载荷的质量分别为0.75kg和1.5kg，无人机与有效载荷之间的吊绳长度为2m，其它设置与单无人机吊运仿真相同。
 
 
-通过轨迹跟踪仿真对设计的分布式自适应超参数学习模型预测控制算法进行了验证。首先，通过多项式轨迹生成器生成了载荷的期望轨迹和三架无人机的期望轨迹，并使用 传统 MPC 和分布式自适应超参数 MPC 在仿真引擎中分别进行跟踪。仿真结果如下图所示:
+通过轨迹跟踪仿真对设计的 Autotune-MPC 算法进行了验证。首先，通过多项式轨迹生成器生成了载荷的期望轨迹和三架无人机的期望轨迹，并使用 传统 MPC 和 Autotune-MPC 在仿真引擎中分别进行跟踪。仿真结果如下图所示:
 
 \begin{figure}[hbt!]
     \centering
@@ -2036,10 +1913,10 @@ MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的
 \end{figure}
 
 
-\autoref{tt} 显示了多无人机和载荷对于期望位置和期望姿态的跟踪效果，分布式自适应超参数 MPC 算法在传统的MPC算法的基础上对无人机和载荷中的超参数进行了实时的更新调整，参数更加准确，控制效率和精度更高，算法的跟踪效果有了明显的提升。多无人机和载荷在各个方向上的跟踪误差如\autoref{ex}到\autoref{ez}所示，在分布式自适应超参数 MPC 算法中，提升最明显的是载荷的跟踪精度，这是由于载荷接收到了来自各个无人机和自身的灵敏度，并通过梯度下降的分布式策略对超参数进行了调整，从而确保了载荷能够沿预定轨迹精确运动，显著提升了控制精度。\autoref{combined3D}显示了三维空间下的跟踪效果图。
+\autoref{tt} 显示了多无人机和载荷对于期望位置和期望姿态的跟踪效果， Autotune-MPC  算法在传统的MPC算法的基础上对无人机和载荷中的超参数进行了实时的更新调整，参数更加准确，控制效率和精度更高，算法的跟踪效果有了明显的提升。多无人机和载荷在各个方向上的跟踪误差如\autoref{ex}到\autoref{ez}所示，在 Autotune-MPC 算法中，提升最明显的是载荷的跟踪精度，这是由于载荷接收到了来自各个无人机和自身的灵敏度，并通过梯度下降的分布式策略对超参数进行了调整，从而确保了载荷能够沿预定轨迹精确运动，显著提升了控制精度。\autoref{combined3D}显示了三维空间下的跟踪效果图。
 
 
-\section{试验系统介绍}
+\section{试验系统介绍}   
 
 试验系统包括硬件平台和软件平台两部分。硬件平台由动作捕捉设备、地面控制站和无人机构成，稳定的硬件平台能够保证所研究算法的可靠性；软件平台由控制模块和通信模块组成，是控制算法的载体。
 通过硬件平台和软件平台的有机结合，试验系统能够在复杂环境中实现自主飞行、数据采集和算法验证等功能，满足多样化的应用需求。
@@ -2048,14 +1925,13 @@ MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=36pc]{picture/5_4.png} 
-	\caption{室内试验系统硬件配置} 
+	\caption{室内试验系统信息流传递图} 
 	\label{framework}
 \end{figure}
-由于无人机吊运控制算法在实机测试中需要精确获取自身位置，而室外环境受地形复杂、信号干扰及气候条件等因素的限制，难以实现高精度的绝对位置测量。为此，试验选择在室内环境开展测试，采用动作捕捉设备进行无人机位置的测定。动作捕捉设备通过高精度相机阵列实时跟踪目标，能够
-提供亚毫米级的精确位置数据，具有抗干扰能力强、稳定性高的特点，为算法的验证和性能评估提供了可靠的参考基准。整个系统的硬件框架如图 \ref{framework} 所示。
+由于无人机吊运控制算法在实地测试中需要精确获取自身位置，但在室外环境中，受地形复杂、信号干扰和气候条件等因素的限制，难以实现高精度的绝对位置测量。因此，试验选择在室内环境进行测试，采用动作捕捉设备测定无人机的位姿。地面控制站接收位姿信息并传递给地面站，地面站通过路由器远程连接各无人机，运行算法进行验证。整个系统的信息流的传递图如图 \ref{framework} 所示。
 
 
-动作捕捉设备选用NOKOV（度量）光学三维动作捕捉系统，该系统采用20个高性能红外摄像头捕捉反光标识点，采集并生成精准、实时的动作信息，可广泛应用于无人机室内定位追踪、多智能体协同控制等领域。每个无人机上都会安装四个非共面的反光标识点，并通过四个反射球创建一个刚体，动作捕捉设备能够高精度地解算出刚体的位姿，并提供亚毫米级精度的高频实时位姿估计。
+动作捕捉设备选用NOKOV（度量）光学三维动作捕捉系统，该系统采用20个高性能红外摄像头捕捉反光标识点，采集并生成精准、实时的动作信息，可广泛应用于无人机室内定位追踪、多智能体协同控制等领域。每个无人机上都会安装四个非共面的反光标识点，并通过四个反射球创建一个刚体，动作捕捉设备能够高精度地解算出刚体的位姿，并提供亚毫米级精度的高频实时位姿估计，具有抗干扰能力强、稳定性高的特点，为算法的验证和性能评估提供了可靠的参考基准。
 
 地面控制站即 Mocap计算机，可实现多个无人机之间的通信、遥控器通道的设置、 动作捕捉设备位姿数据的读取和转换、无人机的控制和指令生成以及整体任务的规划等。机载计算设备与Mocap计算机通过局域网建立连接，Mocap计算机将解算得到的位姿信息通过路由器进行广播，无人机上的板载计算设备在接入路由器的局域网后使用VRPN协议可以获取得到广播的实时位姿信息。同时，地面站通过路由器的局域网ssh连接至无人机的机载计算机，可以对无人机发布控制命令并监控其自身状态。
 
@@ -2076,27 +1952,8 @@ MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的
             \caption{NxtPX4v2飞控\label{fig.proximity-tra}}
         \end{subfigure}
     \end{minipage}
-    \caption{无人机硬件控制系统}
-\end{figure*}
-
-% \begin{figure}[hbt!]
-%     \centering
-%     \begin{subfigure}[t]{0.45\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{picture/5_7.png}
-%         \caption{无人机为父节点}
-%         \label{fig.fmtpath}
-%     \end{subfigure}\hfill
-%     \begin{subfigure}[t]{0.45\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{picture/5_8.png}
-%         \caption{载荷为父节点}
-%         \label{fig.proximity-tra}
-%     \end{subfigure}
-%     \caption{由无人机、系绳和载荷构成的树图}
-%     \label{fig.proximity.kk}
-% \end{figure}
-     
+    \caption{无人机硬件控制系统图}
+\end{figure*} 
 在无人机平台的机械部分设计中，机架的选择至关重要，其决定了可以安装的最大桨叶尺寸、电池大小等。本文选择了自制的3.5寸机架，采用双层碳板结构的机臂和中心板，并通过铝柱连接，既轻便又具备较高的强度。为了充分利用空间使无人机的结构更加紧凑，机载计算设备置于机架顶部，下位机飞控和电子调速器置于机架底部，并用底层板保护，这样布局可以更好地对无人机的控制能力进行验证。在动力系统方面，电机选用了四个T-Motor F2004无刷电机，电子调速器采用蓝鸟48K 30A四合一电调，桨叶选用了两对QProp DT90自锁3叶正反尼龙桨，为无人机提供平稳、精准的动力输出。电池方面，选择了格氏金砖系列6s1p 1050mAh 95C锂电池组，相比于5s电池，6s电池提供更强的动力，可直接对Orange Pi 5供电，满载测试续航时间为6分钟，能够满足试验需求。定制的无人机重1.0 kg，电机轴距为360 mm。最后， 对其他的安装件位置进行设计，包括电池固定件、接收机、数传和降压模块等。最终得到无人机的设计图和实物图如图 \ref{Fig.proximity} 所示。
 \begin{figure*}[htb!]
 	\centering
@@ -2124,60 +1981,25 @@ MJCF（MuJoCo XML Format）是 MuJoCo 仿真引擎中用于定义系统模型的
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=27pc]{picture/ros.png} 
-	\caption{通信信息流通示意图} 
+	\caption{通信信息流示意图} 
 	\label{ros}
 \end{figure}
-
-
-图 \ref{framewor} 展示了算法在试验过程中所使用的主要软件包及其间传递的消息内容。在实物试验中，动作捕捉设备以100Hz的频率提供外部绝对定位信息，并通过无线连接传递给飞控系统，与飞控系统中的传感器数据进行融合并作为源数据使用。
+图 \ref{framewor} 展示了算法在试验过程中所使用的主要软件包及其间传递的消息内容。在飞行试验中，动作捕捉设备以100Hz的频率提供外部绝对定位信息，并通过无线连接传递给飞控系统，与飞控系统中的传感器数据进行融合并作为源数据使用。
 无人机控制程序采用C++语言编写，板载计算设备通过USB转串口线与飞控系统连接，通信波特率设置为921600。主程序首先定义了发送和接收的数据类型，涵盖了输出推力、姿态角、位置信息以及以四元数表示的姿态数据。控制算法由定时器以20毫秒的周期触发运行，计算结果通过 uXRCE-DDS 中间件传输至飞控系统以执行相应操作。
 uXRCE-DDS（Micro XRCE-DDS） 是由 eProsima 开发的一种轻量级通信中间件，旨在为资源受限的嵌入式设备提供与标准 DDS（Data Distribution Service）生态系统的无缝集成。它基于 XRCE（规范，专为微控制器和其他受限硬件环境设计，确保在低功耗和有限计算资源的设备上实现高效的实时数据分发和通信，这为 PX4 和 ROS 2 之间提供了快速可靠的集成，并使 ROS 2 更容易获取无人机自身信息以及发送指令，从而更精确地实现了无人机的控制和数据传输。这种节点式的通信方法如图 \ref{ros} 所示，这些节点被封装在易于共享和发布的程序包和功能包中。ROS 2的节点式通信基于TCP和UDP协议，因此用户无需关注底层通信的管理。每个节点发布一个Topic，其他节点可以选择订阅这些消息。这样，无人机的各个模块可以在单个无人机内部进行通信，也可以在不同无人机之间进行信息交换。每个无人机通过读取传感器数据，并通过滤波和融合算法计算出位姿信息，再通过ROS 2节点进行发布。其他无人机可以选择性地订阅相关信息，从而实现分布式控制。该方式简洁、稳定且可靠。
-QGC地面站提供数据监控和指令功能，用于监控数据以及申请自主飞行模式（Offboard模式）。需要特别指出的是，尽管上位机也具备申请自主飞行模式的功能，但为了确保实物试验的安全性，禁止通过上位机进行此类申请，自主飞行模式的切换仅通过遥控器和地面站执行。
+QGC地面站提供数据监控和指令功能，用于监控数据以及申请自主飞行模式（Offboard模式）。需要特别指出的是，尽管上位机也具备申请自主飞行模式的功能，但为了确保飞行试验的安全性，禁止通过上位机进行此类申请，自主飞行模式的切换仅通过遥控器和地面站执行。
 \begin{figure}[hbt!]
 	\centering
-	\hspace{-1.1cm}
-	\includegraphics[width=24pc]{picture/5_10.png} 
-	\caption{室内实物试验设置示意图} 
+	\hspace{1.0cm}
+	\includegraphics[width=28pc]{picture/5_10.png} 
+	\caption{室内飞行试验设置示意图} 
 	\label{framewor}
 \end{figure}
 
-
-
-
-% 系绳收放机构的软件部分使用C语言编程，设计包括主程序和子程序部分。主程序内初始化各个子模块，包括延时函数初始化、串口初始化、指示灯初始化以及定时器初
-% 始化。子程序部分包括了定时器周期中断、拉力传感器数据读取、伺服电机驱动和状态
-% 反馈。当主程序完成各个子模块初始化后，便会循环进入定时器中断响应，一旦中断发
-% 生，则立即响应中断请求执行相应任务。 
-% 需要说明的是波特率是指每秒传送的字节数，读取拉力传感器数据时串口的波特率
-% 设置为9600，默认情况下驱动直流伺服电机时的波特率为57600。当主程序经过中断使
-% 能后，定时器1ms中断一次，并以10ms的周期完成拉力值读取、控制器运算和电机力
-% 矩输出。为了检测程序实时运行情况，正常状态下板载LED灯每1s亮灭交替一次，如
-% 发生程序堵塞，则LED灯出现状态异常。程序流程图如图5-12所示。 
-% 60 
-% 第5章  绳系无人机试验系统设计与试验验证 
-% 中断开始
-% 清除中断标志
-% 10ms
-% N
-% Y
-% 读取拉力值
-% N
-% 控制器计算
-% 控制伺服电机
-% 转矩
-% 1s
-% Y
-% LED灯亮灭交替
-% 中断返回
-% 图5-12 系绳收放机构软件逻辑 
-
-
-
-
 \section{无人机绳系吊运系统控制试验验证}
-如图 \ref{framewor} 所示，在真实飞行试验的设置中，无人机配备了PX4硬件飞控系统，用于实现精确的姿态估计和低级别控制。无人机的位置和线性速度通过动作捕捉设备进行实时估计，其具有高精度的空间定位能力，可为无人机提供准确的位置和速度数据，从而为模型预测控制器提供关键输入。此外，加速度和角速度则通过PX4内置的加速度计和陀螺仪传感器进行测量。这些传感器能够实时采集无人机的加速度和旋转速率数据，为系统提供必要的状态信息，确保飞行控制的精确性和实时性。在实机算法中，模型预测控制（MPC）优化问题的求解采用CasADi \cite{Andersson2019} 和 acados \cite{Verschueren2022} 进行部署。
+如图 \ref{framewor} 所示，在真实飞行试验的设置中，无人机配备了PX4硬件飞控系统，用于实现精确的姿态估计和低级别控制。无人机的位置和线性速度通过动作捕捉设备进行实时估计，其具有高精度的空间定位能力，可为无人机提供准确的位置和速度数据，从而为MPC提供关键输入。此外，加速度和角速度则通过PX4内置的加速度计和陀螺仪传感器进行测量。这些传感器能够实时采集无人机的加速度和旋转速率数据，为系统提供必要的状态信息，确保飞行控制的精确性和实时性。在实机算法中，MPC优化问题的求解采用CasADi \cite{Andersson2019} 和 acados \cite{Verschueren2022} 进行部署。
 \subsection{单无人机吊运试验验证}
-对于单无人机吊运试验，无人机试验场景如图 \ref{dan} 所示。在训练数据以50 Hz的频率采集，数据来源于沿圆轨迹飞行的无人机数据来源于沿圆轨迹飞行的无人机，该系统采用模型预测控制器进行控制。训练集仅包含60秒的飞行数据（共3000个数据点），这些数据用于训练模型，外力和力矩通过\autoref{nmpc}计算后作为标签用于学习。在数据采集过程中，系绳长度和载重分别为0.8 m和160 g，这些参数在NP-MPC中是未知的，因此在训练过程中，系统必须基于实时估计的状态信息来动态调整控制策略。考虑到这些参数的不确定性，NP-MPC通过建模外力和力矩对飞行控制进行实时预测，从而确保系统在没有先验信息的情况下仍能稳定运行。
+对于单无人机吊运试验，无人机试验场景如图 \ref{dan} 所示。在训练数据以50 Hz的频率采集，数据来源于沿圆轨迹飞行的无人机数据来源于沿圆轨迹飞行的无人机，该系统采用MPC进行控制。训练数据集仅包含60秒的飞行数据（共3000个数据点），这些数据用于训练模型，外力和力矩通过\autoref{nmpc}计算后作为标签用于学习。在数据采集过程中，系绳长度和载重分别为0.8 m和160 g，这些参数在NP-MPC中是未知的，因此在训练过程中，系统必须基于实时估计的状态信息来动态调整控制策略。考虑到这些参数的不确定性，NP-MPC通过建模外力和力矩对飞行控制进行实时预测，从而确保系统在没有先验信息的情况下仍能稳定运行。
 \begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=28pc]{picture/danjireal.png} 
@@ -2198,7 +2020,7 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 	\label{force}
 \end{figure}
 
-其次，开展了实际飞行轨迹跟踪试验，以验证NP-MPC在轨迹跟踪方面的优越性，并将其与模型预测控制（MPC）、GP-MPC \cite{torrente2021data} 和 KNODE-MPC \cite{Chee2022} 这三种算法进行对比分析，其中GP-MPC和KNODE-MPC均为基于数据驱动的模型预测控制方法。为了确保对比的公平性，三种基于数据驱动算法的训练集均来自于上述数据采集试验中的60秒圆形飞行轨迹。
+其次，开展了实际飞行轨迹跟踪试验，以验证NP-MPC在轨迹跟踪方面的优越性，并将其与MPC、GP-MPC \cite{torrente2021data} 和 KNODE-MPC \cite{Chee2022} 这三种算法进行对比分析，其中GP-MPC和KNODE-MPC均为基于数据驱动的模型预测控制方法。为了确保对比的公平性，三种基于数据驱动算法的训练数据集均来自于上述数据采集试验中的60秒圆形飞行轨迹。
 在算法实现方面，KNODE网络模型的架构与升维函数$\Psi$相同，保证了其在处理复杂动态时的适应性。GP模型则采用径向基函数（RBF）作为核函数，并使用100个数据点进行训练，这些数据点按规则间隔采样，确保模型能够捕捉到轨迹中的关键特征。对于NP、GP和KNODE模型的输入，它们均为四旋翼的线性速度和角速度，这些输入在实际飞行试验中被实时采集并用于轨迹跟踪控制。
 参考信号的生成采用多项式轨迹生成器，确保参考轨迹具有平滑的变化和较小的误差。试验中的参考高度设定为1.6 m，载荷重量为160 g。通过对比NP-MPC与其他算法的表现，能够评估其在实际飞行环境中的鲁棒性、实时性以及对不同载荷和轨迹的适应能力。
 
@@ -2226,7 +2048,7 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
     \end{tabular}    
 \end{table}
 
-四种框架在跟踪持续50秒的两条轨迹时的性能结果如表 \ref{table_xyz} 和图 \ref{color} 所示。值得注意的是，由于载荷的重力对无人机造成的影响，模型预测控制在X-Y平面和Z轴的轨迹跟踪误差表现显著。而三种基于数据驱动的算法（GP-MPC、KNODE-MPC和NP-MPC）通过捕捉数据中的外力和力矩，成功减少了跟踪误差，优于模型预测控制。在圆形轨迹跟踪试验中，GP-MPC、KNODE-MPC和NP-MPC均表现优于NMPC，因为它们能够从数据中学习到动力学模型的残差项，并对模型预测控制框架进行了有效的补偿。
+四种框架在跟踪持续50秒的两条轨迹时的性能结果如表 \ref{table_xyz} 和图 \ref{color} 所示。值得注意的是，由于载荷的重力对无人机造成的影响，MPC在X-Y平面和Z轴的轨迹跟踪误差表现显著。而三种基于数据驱动的算法（GP-MPC、KNODE-MPC和NP-MPC）通过捕捉数据中的外力和力矩，成功减少了跟踪误差，优于MPC。在圆形轨迹跟踪试验中，GP-MPC、KNODE-MPC和NP-MPC均表现优于NMPC，因为它们能够从数据中学习到动力学模型的残差项，并对模型中的未知动力学进行了补偿。
 
 \begin{figure}[hbt!]
 	\centering
@@ -2234,7 +2056,7 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 	\caption{不同MPC算法在飞行速度 1.5 m/s 下的飞机轨迹跟踪性能对比} 
 	\label{color}
 \end{figure}
-具体而言，提出的NP-MPC在X-Y平面上减少了53.45\%的跟踪误差，在Z轴上减少了67.45\%，相较于MPC取得了显著的改进。在双纽线轨迹跟踪试验中，GP-MPC、KNODE-MPC和NP-MPC的跟踪表现同样优于MPC。然而，当参考轨迹的曲率半径较小时，GP-MPC和KNODE-MPC的跟踪误差较大，而NP-MPC能够在曲率半径较小的情况下，仍然精确地跟踪参考轨迹。需要注意的是，双纽线轨迹在形状上与训练集中的圆形轨迹存在一定差异，在双纽线轨迹跟踪试验中，NP-MPC在X-Y平面减少了58.16\%的跟踪误差，在Z轴减少了76.72\%，相较于模型预测控制表现更为出色。这些结果表明，NP-MPC在不同类型轨迹下，尤其在复杂几何形状和较小曲率的轨迹跟踪任务中，能够有效地降低误差并提升跟踪精度，同时具有一定的泛化能力。
+具体而言，提出的NP-MPC在X-Y平面上减少了53.45\%的跟踪误差，在Z轴上减少了67.45\%，相较于MPC取得了显著的改进。在双纽线轨迹跟踪试验中，GP-MPC、KNODE-MPC和NP-MPC的跟踪表现同样优于MPC。然而，当参考轨迹的曲率半径较小时，GP-MPC和KNODE-MPC的跟踪误差较大，而NP-MPC能够在曲率半径较小的情况下，仍然精确地跟踪参考轨迹。需要注意的是，双纽线轨迹在形状上与训练数据集中的圆形轨迹存在一定差异，在双纽线轨迹跟踪试验中，NP-MPC在X-Y平面减少了58.16\%的跟踪误差，在Z轴减少了76.72\%，相较于MPC表现更为出色。这些结果表明，NP-MPC在不同类型轨迹下，尤其在复杂几何形状和较小曲率的轨迹跟踪任务中，能够有效地降低误差并提升跟踪精度，同时具有一定的泛化能力。
 
 \begin{figure}[hbt!]
 	\centering
@@ -2244,10 +2066,10 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 \end{figure}
 
 最后，为了充分验证所提NP-MPC的泛化性能，本试验采用了训练数据集之外的速度数据和有效载荷质量进行测试，旨在评估其在不同环境和条件下的表现。具体而言，本试验设计了四种测试场景，其中第一个场景用于收集数据集，并在该数据集上训练神经网络模型。然后，基于此训练好的模型，进一步设计了三种不同的测试情况以检验NP-MPC的泛化能力：第一种情况是改变飞行速度的大小，第二种情况是改变飞行轨迹的半径，最后一种情况则是增加有效载荷的额外重量。这三种不同的测试场景可以模拟实际应用中可能出现的变化条件，从而验证所提方法的适应性和鲁棒性。
-在图 \ref{prediction_res} 中，分别展示了在不同速度、轨迹半径和有效载荷情况下的测试结果。从中可以明显看出，NP-MPC相比于传统的模型预测控制在所有测试场景中均展现出了更优的跟踪性能。在所有测试场景下，跟踪精度的提升最大可达到65.1\%。尤其在增加有效载荷额外重量的情况下，NP-MPC凭借其快速响应和准确预测的能力，能够迅速适应载荷变化，从而将跟踪精度提升至76.39\%。这一结果表明，NP-MPC在面对实际应用中的动态变化时，能够有效提升轨迹跟踪的精度和稳定性。上述试验的结果表明，NP-MPC具有很强的泛化能力，能够有效地适应训练数据集领域之外的未见数据。
+在图 \ref{prediction_res} 中，分别展示了在不同速度、轨迹半径和有效载荷情况下的测试结果。从中可以明显看出，NP-MPC相比于传统的MPC在所有测试场景中均展现出了更优的跟踪性能。在所有测试场景下，跟踪精度的提升最大可达到65.1\%。尤其在增加有效载荷额外重量的情况下，NP-MPC凭借其快速响应和准确预测的能力，能够迅速适应载荷变化，从而将跟踪精度提升至76.39\%。这一结果表明，NP-MPC在面对实际应用中的动态变化时，能够有效提升轨迹跟踪的精度和稳定性。上述试验的结果表明，NP-MPC具有很强的泛化能力，能够有效地适应训练数据集领域之外的未见数据。
 
 \subsection{多无人机吊运试验验证}
-对于多无人机吊运试验，在载荷上也安装三个非共面的反光标识点用动作捕捉设备的位姿进行精准实时估计。为了增强实物试验中无人机的可靠性，避免系统失效，进一步缩小自适应 MPC 权重的上限，上下限分别设定为0.01和1。多无人机吊运系统的系绳长度和载重分别为 1.2 m 和 1.5 kg。
+对于多无人机吊运试验，在载荷上也安装三个非共面的反光标识点用动作捕捉设备的位姿进行精准实时估计。为了增强飞行试验中无人机的可靠性，避免系统失效，进一步缩小自适应 MPC 权重的上限，上下限分别设定为0.01和1。多无人机吊运系统的系绳长度和载重分别为 1.2 m 和 1.5 kg。
 
 
 \begin{figure}[hbt!]
@@ -2325,23 +2147,23 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 	\label{x}
 \end{figure}
 
-本次试验旨在验证 Autotune-MPC 在多无人机绳系吊运系统中在实物试验中的应用效果，尤其是其在复杂轨迹跟踪任务中的优越性与实用性。试验通过多项式轨迹生成器生成了三架无人机和载荷的实际飞行轨迹，采用传统的模型预测控制（MPC）和 Autotune-MPC 两种不同的控制策略进行比较，评估其在动态跟踪和自适应调整中的性能。
+本次试验旨在验证 Autotune-MPC 在多无人机绳系吊运系统中在飞行试验中的应用效果，尤其是其在复杂轨迹跟踪任务中的优越性与实用性。试验通过多项式轨迹生成器生成了三架无人机和载荷的实际飞行轨迹，采用传统的MPC和 Autotune-MPC 两种不同的控制策略进行比较，评估其在动态跟踪和自适应调整中的性能。
 
 在试验开始阶段，首先采用手动调参的传统 MPC 控制器对多无人机绳系吊运系统进行控制。MPC 控制器在该阶段通过精确的建模和手动设置的参数，实现了系统的初步稳定，并将三架无人机带到轨迹的起始点，开始对设定的轨迹进行跟踪。无人机和载荷的初始轨迹跟踪表现良好，但由于系统的强耦合性和复杂性，传统 MPC 控制器的固定参数在复杂环境中无法充分适应系统的动态变化，因此存在一定的轨迹误差和控制不稳定的风险。
 
-在轨迹跟踪试验进行到第 9 秒时，系统开始启用 Autotune 功能。Autotune-MPC 通过实时的自适应调参机制，对 MPC 控制参数进行动态调整，以适应环境变化和系统的非线性特性。在这一过程中，Autotune 功能根据当前飞行状态和环境信息，自动调整控制器的增益、约束和权重，以提高控制系统的响应速度、精度和稳定性。如\autoref{t} 所示，在实际轨迹跟踪过程中，位置跟踪效果得到了明显改善。在启用传统 MPC 控制时，系统的轨迹跟踪存在一定的误差，尤其是在多无人机协同飞行和载荷运动的过程中，由于强耦合性和不稳定因素，误差较大。通过启用 Autotune-MPC 后，轨迹跟踪误差显著减少，系统轨迹逐步趋近于设定轨迹，飞行的平滑度和稳定性得到了显著提升。具体而言，传统 MPC 控制下的系统在轨迹跟踪的初期和中期，由于无法实时适应负载变化和环境波动，误差较大；然而在 Autotune-MPC 启用后，随着控制参数的自动调整，系统的跟踪误差逐渐收敛，并且控制系统能够在不同的飞行阶段保持较高的精度，轨迹偏差逐步趋于理想值。
+在轨迹跟踪试验进行到第 9 秒时，系统开始启用 Autotune 功能。Autotune-MPC 通过实时的自适应调参机制，对 MPC 控制参数进行动态调整，以适应环境变化和系统的非线性特性。在这一过程中，Autotune 功能根据当前飞行状态和环境信息，自动调整控制器的增益、约束和权重，以提高控制系统的响应速度、精度和稳定性。如\autoref{t} 所示，在实际轨迹跟踪过程中，位置跟踪效果得到了明显改善。在启用传统 MPC 控制时，系统的轨迹跟踪存在一定的误差，尤其是在多无人机协同飞行和载荷运动的过程中，由于强耦合性和不稳定因素，误差较大。通过启用 Autotune-MPC 后，轨迹跟踪误差显著减少，系统轨迹逐步趋近于设定轨迹，飞行的平滑度和稳定性得到了显著提升。具体而言，传统 MPC 控制下的系统在轨迹跟踪的初期和中期，由于无法实时适应载荷变化和环境波动，误差较大；然而在 Autotune-MPC 启用后，随着控制参数的自动调整，系统的跟踪误差逐渐收敛，并且控制系统能够在不同的飞行阶段保持较高的精度，轨迹偏差逐步趋于理想值。
 
 在\autoref{u} 中，给出了三架无人机的虚拟控制输入。启用 Autotune 功能后，无人机的控制输入表现出了明显的变化趋势。起初，由于传统 MPC 的控制参数较为固定，无人机的控制输入较为剧烈，可能导致不必要的震荡。随着 Autotune-MPC 的启用，控制输入逐渐趋于平稳，系统能够根据实时飞行状态和环境变化进行参数调整，使得控制输入更加精准和高效。与传统控制方法相比，Autotune-MPC 的动态调整显著降低了控制输入的波动，提升了控制稳定性与飞行安全性。
 
 在\autoref{x} 中，给出了载荷的姿态曲线，进一步验证了 Autotune-MPC 在姿态控制方面的优越性。在使用传统 MPC 时，载荷的姿态偏差较大，尤其是在飞行初期，载荷的姿态偏差幅度最大达到了 30 度。这种较大的偏差可能会导致载荷的不稳定运动，并影响到整个系统的控制效果。而在启用 Autotune-MPC 后，系统自动调整控制参数，使得载荷的姿态偏差逐渐减小。经过自适应调整后，载荷的姿态偏差明显减少，并趋近于 0 度，飞行过程中的载荷姿态得到了有效的平稳控制。这一结果表明，Autotune-MPC 能够实时感知载荷运动的变化，并通过动态优化控制参数来减少姿态误差，提升系统的整体稳定性和飞行控制效果。
 
-试验验结果表明，Autotune-MPC 在复杂的多无人机协同飞行和载荷控制任务中，能够有效提升系统的响应速度、精度和稳定性，显著减少轨迹跟踪误差和姿态偏差。此外，Autotune-MPC 的自适应调参功能，使得系统能够保持较高的跟踪精度，降低了对手动调参的依赖，能够有效适应不同负载和环境变化，在动态飞行任务中展现出更高的灵活性和鲁棒性。
+试验验结果表明，Autotune-MPC 在复杂的多无人机协同飞行和载荷控制任务中，能够有效提升系统的响应速度、精度和稳定性，显著减少轨迹跟踪误差和姿态偏差。此外，Autotune-MPC 的自适应调参功能，使得系统能够保持较高的跟踪精度，降低了对手动调参的依赖，能够有效适应不同载荷和环境变化，在动态飞行任务中展现出更高的灵活性和鲁棒性。
 
 
 \section{本章总结}
-本章搭建了无人机绳系吊运系统的物理引擎仿真平台和实物试验平台，物理引擎仿真平台比较了几种主流的开源仿真平台并选取最优的平台进行仿真试验，实物试验平台从硬件配置和软件配置两个方面来进行介绍并进行实物试验。试验结果表明，无论是定点悬停还是轨迹跟踪，第3章提出的NP-MPC和第4章提出的Autotune-MPC均具有更好的控制效果。
+本章搭建了无人机绳系吊运系统的物理引擎仿真平台和飞行试验平台，物理引擎仿真平台比较了几种主流的开源仿真平台并选取最优的平台进行仿真试验，飞行试验平台从硬件配置和软件配置两个方面来进行介绍并进行飞行试验。试验结果表明，无论是定点悬停还是轨迹跟踪，第3章提出的NP-MPC和第4章提出的Autotune-MPC均具有更好的控制效果。
 
-% \cleardoublepage
+\cleardoublepage
 
 \chapter{总结与展望}
 \chaptermark{总结与展望}
@@ -2353,14 +2175,14 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 (1)动力学模型的建立与简化：
 本文首先推导了单无人机绳系吊运系统的动力学模型，采用牛顿-欧拉法建立四旋翼无人机动力学方程，并通过拉格朗日方法对吊挂载荷进行建模。在多无人机系统中，通过拉格朗日方程求解系统动力学模型，并针对载荷状态未知的复杂情况，对模型进行了简化，使得动力学描述更加贴近实际应用场景。
 
-(2)基于数据驱动的单无人机吊运控制方法：
+(2)基于数据驱动建模的单无人机吊运控制：
 针对无人机绳系吊运系统中的不确定性和非线性干扰问题，本文提出了一种基于数据驱动的控制框架。引入Koopman算子理论，通过深度神经网络学习系统动力学，将无人机和载荷运动升维映射到显式线性空间中。在此基础上，结合非线性模型预测控制方法，对无人机吊运系统的动力学进行精确建模与控制，显著提高了轨迹跟踪的精度与稳定性。
 
-(3)多无人机协同控制与拉力分配优化：
-在多无人机协同吊运场景下，本文结合分布式模型预测控制和灵敏度传播方法，提出了一种基于策略梯度的自适应超参数调整算法。该方法利用多层感知网络实现超参数自适应归一化，从而提高系统的协同稳定性与容错能力。
+(3)基于数据驱动调参的多无人机协同控制：
+在多无人机协同吊运场景下，本文结合分布式模型预测控制和灵敏度传播方法，提出了一种基于策略梯度的分布式自适应超参数调整算法。该方法利用多层感知网络实现超参数自适应归一化，从而提高系统的协同稳定性与容错能力。
 
 (4)仿真与试验验证：
-为验证所提算法的有效性，本文搭建了无人机绳系吊运系统的物理引擎仿真平台，选用Drake、Gazebo和MuJoCo等开源物理引擎对无人机吊运系统进行建模与仿真。结果表明，所提数据驱动控制方法能够有效跟踪期望轨迹，并在复杂环境中保持系统稳定性。此外，本文进一步搭建了无人机吊运系统的实物试验平台，通过实地试验验证了算法在实际应用中的可行性与鲁棒性。
+为验证所提算法的有效性，本文搭建了无人机绳系吊运系统的物理引擎仿真平台，选用Drake、Gazebo和MuJoCo等开源物理引擎对无人机吊运系统进行建模与仿真。结果表明，所提数据驱动控制方法能够有效跟踪期望轨迹，并在复杂环境中保持系统稳定性。此外，本文进一步搭建了无人机吊运系统的飞行试验平台，通过实地试验验证了算法在实际应用中的可行性与鲁棒性。
 
 \section{未来工作展望}
 在协同空中操控领域，无人机绳系吊运系统展现了极大的应用潜力。本文在基于数据驱动无人机绳系吊运系统控制算法方面取得了一定成果然而，现阶段的研究多在理想化环境下进行，通过假设、简化和近似，逐步迈向实际应用。基于上述内容，未来研究可重点关注以下方向：
