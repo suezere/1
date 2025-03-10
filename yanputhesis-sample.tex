@@ -77,7 +77,7 @@
 A data-driven research on tethered hoisting \\ control of unmanned aerial vehicle (UAV)
 }                                                           % 请自行断行
 \author{\blackbox{李晨豪}}{\blackbox{Li Chenhao}}  % 姓名（添加盲评标记）
-\date{2025年1月}{January 2025}                                  % 答辩日期
+\date{2025年3月}{March 2025}                                  % 答辩日期
 \school{航天学院}{School of Astronautics}% 学院
 \major{控制科学与工程}{Control Science and Engineering}                     % 专业 博士请添加 Ph
 \advisor{\blackbox{张帆}}{\blackbox{Zhang Fan}}      % 导师（添加盲评标记）
@@ -96,13 +96,13 @@ A data-driven research on tethered hoisting \\ control of unmanned aerial vehicl
 \maketitle                                                  % 封皮页及标题页
 %-----------------------------------------------------------------------------%
 \makeCommitteePage{                                         % 学位论文评阅人
-    \reviewers{\fullBlindReview{1}}                         % 和答辩委员会名单
-    
-    \committee{ 年 \quad 月  \quad 日}{
-        % \defenseChair{王志刚}{教授}{西北工业大学}
-        % \committeeMember{刘正雄}{教授}{西北工业大学}
-        % \committeeMember{常海涛}{副研究员}{西北工业大学}
-        % \defenseSecretary{沈刚辉}{副教授}{西北工业大学}
+    \reviewers{\fullBlindReview{2}}                         % 和答辩委员会名单
+   
+    \committee{2025 年 3 月 6 日}{
+        \defenseChair{刘正雄}{教授}{西北工业大学}
+        \committeeMember{马志强}{副教授}{西北工业大学}
+        \committeeMember{常海涛}{副研究员}{西北工业大学}
+        \defenseSecretary{沈刚辉}{副教授}{西北工业大学}
     }
 }
 %%-----------------------------------------------------------------------------%
@@ -281,21 +281,14 @@ Tal等人\cite{2021Accurate}的研究展示了通过增量非线性动态逆 (IN
 尽管 MPC 方法具有优越性能，但计算成本较高\cite{norouzi2022deep}。因此，部分研究人员考虑采用线性模型预测控制 (LMPC) 作为替代方案。然而，现有许多 LMPC 研究仅关注位置控制\cite{bangura2014real}或基于小角度假设的运动控制\cite{alexis2014trajectory}。由于 LMPC 无法充分捕捉旋转动力学中的非线性，其性能通常不如 MPC 方法\cite{nguyen2021model}。
 
 \subsubsection{多无人机绳系吊运系统控制方法}
-为解决使用四旋翼无人机和系绳进行协同吊装运输载荷的难题，Maza 等人\cite{maza2010multi}设计了一种PID控制器。然而，该控制器方法无法有效减小欠阻尼系统中的振荡。Bacelar 等人\cite{bacelar2020board}开发了一种基于两架无人机的协同载荷运输控制方法，结合了线性二次调节控制器与卡尔曼滤波器。该方法通过两架配备超声波高度计、惯性测量单元和前置摄像头的商用四旋翼无人机进行了试验验证。
+为解决使用四旋翼无人机和系绳进行协同吊装运输载荷的难题，Maza 等人\cite{maza2010multi}设计了一个PID控制器。然而，该控制器方法无法有效减小欠阻尼系统中的振荡。Bacelar 等人\cite{bacelar2020board}开发了一种基于两架无人机的协同载荷运输控制方法，结合了线性二次调节控制器与卡尔曼滤波器。该方法通过两架配备超声波高度计、惯性测量单元和前置摄像头的商用四旋翼无人机进行了试验验证。
 
 Ariyibi 等人\cite{ariyibi2020quaternion}提出了一种用于两架四旋翼无人机运输吊挂载荷的分层控制系统。该系统在位置环中采用线性控制器，在姿态环中使用基于四元数的非线性控制器。研究人员通过仿真代码验证了该控制器对刚性和柔性载荷的适用性。Klausen 等人\cite{klausen2018cooperative}开发了一种针对未知质量、能够抵御环境干扰的协同算法。该控制算法是分布式的，每架四旋翼无人机利用其邻居的相对速度和位置来实现期望的编队形状。
-
-Tognon等人\cite{tognon2018aerial}提出了一种基于李雅普诺夫的分布式控制器，用于两架无人机对系绳吊挂载荷的空中操控。该工作的目标是在不依赖主从阻抗控制器进行通信的情况下，调节载荷的位置和姿态。Wehbeh等人\cite{wehbeh2020distributed}展示了一种基于模型预测控制的分布式协同运输方法。
+Tognon等人\cite{tognon2018aerial}提出了一种基于李雅普诺夫的分布式控制器，用于两架无人机对系绳吊挂载荷的空中操控。该工作的目标是在不依赖主从阻抗控制器进行通信的情况下，调节载荷的位置和姿态。
 
 Gimenez 等人\cite{gimenez2018multi}提出了一种新的运动学编队控制器，利用零空间理论使两架旋翼无人机通过柔性系绳吊挂载荷并跟随期望轨迹。该控制器考虑了风扰动和避障问题。在后续研究中，该团队使用相同控制技术，通过试验验证了两架旋翼无人机运输刚性载荷的着陆阶段\cite{gimenez2020control}。
 
 最后，Lee 等人\cite{lee2013geometric}将几何控制器扩展至多架四旋翼无人机团队载荷运输。然而，这些方法均假设载荷为质点，而实际载荷通常具有不可忽略的几何尺寸，有时甚至与无人机尺寸相当。为克服这一限制，该团队在此基础上设计了一种几何非线性控制器，用于刚体载荷的群体运输\cite{lee2017geometric}。然而，该方法需要已知系绳的方向和角速度，而这些参数在实际场景中难以计算。因此，Sharma 等人\cite{sharma2023geometric}提出了一种动态系统模型，该模型考虑了载荷与旋翼无人机之间的耦合关系，从而创建了一种以四旋翼为中心的方法，避免了上述难以获取的参数。
-
-% 然而，以上提到的研究大多忽略了载荷与无人机之间的耦合效应。
-% 超过两个四旋翼的多升系统引入了系绳拉力的冗余性[15]，导致拉力在四旋翼之间的分布不唯一。在[16]–[18]中，作者提出了系绳拉力分布的最小范数解法。相比之下，Geng等人[19][20]利用这种冗余性，在四旋翼的多升系统中实现了最佳拉力分布，同时保证了安全的旋翼间隔，并考虑了四旋翼的推力限制。此外，最近的研究工作[21][22]将这种冗余性纳入了集中式MPC框架，不仅确保了安全约束，还通过充分考虑系统的非线性动力学，改善了系统的机动性。
-
-% 如上述工作[13][19]–[23]所示，优化方法对于多升系统是有效的，因为它们能够管理约束条件和非线性动力学。然而，这些方法的性能在很大程度上取决于超参数的调节，包括代价函数中的加权和参考值。这些超参数的调节通常需要大量的人工努力，并且受到系绳之间复杂的动态相互连接的影响。为了简化这一过程，通常需要做出保守的假设，如将载荷视为点质量，假设为准静态飞行，并且拉力分布均匀，这可能导致次优结果。随着四旋翼数量的增加以及当其最佳值是动态变化且相互关联时（例如，载荷的质量分布不均且系统必须动态调整配置以避开障碍物），手动选择这些参数的挑战会更大。
-
 
 
 \subsection{数据驱动方法研究现状}
@@ -520,7 +513,7 @@ $$\begin{aligned}\boldsymbol{R}_{b-e}&=\bm{R}_{e-b}^\mathrm{T}\\&=\begin{bmatrix
 \begin{equation}
 	\begin{aligned}
 		&\dot{\bm x}_{l}=\bm v_{l} \\
-		(m_q+m_l)(\dot{\bm v}_L+g\bm e_3)& =(\bm q f\bm R\bm e_3-m_Ql(\dot{\bm q}\dot{\bm q}))\bm q \\
+		(m_q+m_l)(\dot{\bm v}_L+g\bm e_3)& =(\bm q \cdot f\bm R\bm e_3-m_Ql(\dot{\bm q}\cdot\dot{\bm q}))\bm q \\
 		&\dot{\bm q}=\bm \omega_l\times \bm q \\
 		m_{q}l \dot{\bm \omega_l}&=-\bm q\times f\bm R\bm e_{3} \\
 		&\dot{\bm R_{b-e}}=\bm R_{b-e}\hat{\bm  \omega_q} \\
@@ -890,12 +883,12 @@ Koopman算子可以从数据中将非线性系统全局映射为线性系统 \ci
 \end{equation}
 其中 $\beta_1$、$\beta_2$ 和 $\beta_3$ 是正的超参数，分别衡量三种损失函数的权重。三个损失函数 $L_{\text{recons}}$、$L_{\text{forward}}$ 和 $L_{\text{backward}}$ 的定义如下：
 
-(1)状态重建损失函数 $L_{\text{recons}}$:非线性系统的状态应当从不变的Hilbert空间 $\mathcal{H}$ 中重建。重建损失函数 $L_{\text{recons}}$ 定义如下以使得重建误差尽可能地小：
+(1)状态重建损失函数 $L_{\text{recons}}$：非线性系统的状态应当从不变的Hilbert空间 $\mathcal{H}$ 中重建。重建损失函数 $L_{\text{recons}}$ 定义如下以使得重建误差尽可能地小：
 \begin{equation}
 	L_{\text{recons}}=\Vert \bm{f}_e(t) - \bm{C} \bm{z}(t) \Vert
 \end{equation}
 
-(2)多步预测损失函数 $L_{\text{forward}}$ 和 $L_{\text{backward}}$: 从带有基准控制器的无人机系绳吊运系统中采样数据，构建包含 $s$ 条轨迹的数据集 $\{\bm{X}_i \in \mathbb{R}^{n\times m}, \bm{U}_i \in \mathbb{R}^{p \times m}, i=1,\cdots,s\}$。数据集中的每条轨迹都含有 $m$ 个时间步长的数据。每个采样时刻的训练标签，即外力 $\bm{f}_e$ 和力矩 $\bm{\tau}_e$，由四旋翼动力学方程 (\ref{3-1}) 计算得到。
+(2)多步预测损失函数 $L_{\text{forward}}$ 和 $L_{\text{backward}}$：从带有基准控制器的无人机系绳吊运系统中采样数据，构建包含 $s$ 条轨迹的数据集 $\{\bm{X}_i \in \mathbb{R}^{n\times m}, \bm{U}_i \in \mathbb{R}^{p \times m}, i=1,\cdots,s\}$。数据集中的每条轨迹都含有 $m$ 个时间步长的数据。每个采样时刻的训练标签，即外力 $\bm{f}_e$ 和力矩 $\bm{\tau}_e$，由四旋翼动力学方程 (\ref{3-1}) 计算得到。
 
 每个采样时刻的状态可以表示为 $\bm{Z}_i = [\bm{z}_0^i,\cdots,\bm{z}_{m-1}^i]=[{\Psi}(\bm{\chi_{0}}^i),\cdots,{\Psi}(\bm{\chi}_{m-1}^i)]\in \mathbb{R}^{K\times m}$。
 通过迭代升维线性系统(\ref{lift_linear})，基于初始状态 $\bm{z}_0^i$ 来预测前向和后向状态，分别表示为$\hat{\bm{Z}}_i^{\text{forward}} = [\hat{\bm{z}}_0^i, \cdots, \hat{\bm{z}}_{m-1}^i]$ 和 $\hat{\bm{Z}}_i^{\text{backward}} = [\hat{\bm{z}}_0^i, \cdots, \hat{\bm{z}}_{m-1}^i]$。
@@ -964,7 +957,7 @@ $。
 \end{equation}
 其中，$n_h$ 是升维函数中最后一个隐藏层的层数，$\mathbb{B}$ 是包含每个采样时刻 $\bm{\chi}$ 的集合。由于局部预测误差 $\bm{e}(t)$ 有界，且近似Koopman算子 $\hat{\bm{\mathcal{K}}}$ 稳定，可以得到：
 \begin{equation}
-	\Vert \bm{E_n} \Vert \le \sum_{i=0}^{n-1}\Vert \tilde{\mathcal{K}}_d^i\Vert \cdot \Vert \bm{e}(t_0+(n-i)t_s) \Vert\le \Vert c \Vert \sum_{i=0}^{n-1}\Vert {\mathcal{K}}_d^i \Vert
+	\Vert {E_n} \Vert \le \sum_{i=0}^{n-1}\Vert \tilde{\mathcal{K}}_d^i\Vert \cdot \Vert \bm{e}(t_0+(n-i)t_s) \Vert\le \Vert c \Vert \sum_{i=0}^{n-1}\Vert {\mathcal{K}}_d^i \Vert
 \end{equation}
 即预测误差是有界的，从而证明了学习模型的全局误差在理论上是有界的，进一步确保了模型的稳定性和预测的准确性。
 
@@ -1078,7 +1071,7 @@ $。
 \end{tabular}
 \end{table*}
 \autoref{table_bem}展示了NeuroMHE、NeuroBEM和Neural Predictor在一段激进飞行轨迹（\autoref{table_bem}中的“Random points”，时间段为45秒至55秒）上的外力和力矩估计性能。
-从整体上看，这三种方法均能较为准确地估计外力和力矩。然而，由\autoref{3-5}可知，在无人机执行激进机动时，NeuroMHE和NeuroBEM的外力和力矩估计精度明显下降，导致估计性能减弱。相比之下，Neural Predictor在该场景下的估计结果更接近真实值，表明其在外力和力矩估计方面仍能保持较高精度。这一优势源于Neural Predictor将外力和力矩建模为一个线性动态系统，并将无人机状态作为输入。当无人机进行激进机动时，状态的变化驱动Neural Predictor响应外力和力矩的变化，实现快速自适应。此外，与最先进的NeuroMHE方法相比，Neural Predictor将外力和力矩的估计误差降低了66.15\%和33.33\%，表现出显著的性能提升。
+从整体上看，这三种方法均能较为准确地估计外力和力矩。然而，由\autoref{3-5} 可知，在无人机执行激进机动时，NeuroMHE和NeuroBEM的外力和力矩估计精度明显下降，导致估计性能减弱。相比之下，Neural Predictor在该场景下的估计结果更接近真实值，表明其在外力和力矩估计方面仍能保持较高精度。这一优势源于Neural Predictor将外力和力矩建模为一个线性动态系统，并将无人机状态作为输入。当无人机进行激进机动时，状态的变化驱动Neural Predictor响应外力和力矩的变化，实现快速自适应。此外，与最先进的NeuroMHE方法相比，Neural Predictor将外力和力矩的估计误差降低了66.15\%和33.33\%，表现出显著的性能提升。
 
 \begin{figure}[hbt!]
 	\hspace{-0.6cm}  % 左移整体
@@ -1126,7 +1119,7 @@ NP-MPC 的优势不仅体现在更强的实时适应性和控制精度上，同�
 
 (2)通过分布式灵敏度传播算法高效并行计算闭环状态对MPC超参数的灵敏度。该算法的创新在于通过分布式计算模式，使得每个无人机能够独立高效地评估其对MPC超参数的状态灵敏度，进而加速了系统的实时响应。
 
-(3)提出了一种自适应学习的超参数优化算法——Autotune，自动调节多无人机绳系吊语系统中的各种MPC超参数，其中所有超参数均通过深度神经网络（DNN）表示。引入了分布式灵敏度传播算法，充分利用了多无人机系统中的动态耦合特性，并行计算无人机上的梯度。在此基础上，使用分布式策略梯度学习算法生成归一化超参数，并整合到分布式模型预测控制框架中，从而实现了控制器的实时动态适应能力。
+(3)提出了一种自适应学习的超参数优化算法——Autotune，自动调节多无人机绳系吊运系统中的各种MPC超参数，其中所有超参数均通过深度神经网络（DNN）表示。引入了分布式灵敏度传播算法，充分利用了多无人机系统中的动态耦合特性，并行计算无人机上的梯度。在此基础上，使用分布式策略梯度学习算法生成归一化超参数，并整合到分布式模型预测控制框架中，从而实现了控制器的实时动态适应能力。
 
 \section{问题描述}
 本文考虑 $n$ 架无人机协同运输一个载荷，吊挂载荷通过 $n$ 根等长系绳与$n$ 架无人机相连。
@@ -1300,7 +1293,7 @@ $g_{j,k} = 2d_{\text{quad}} - \|\bm p_{i,k} - \bm p_{j,k}\|^2$为无人机之间
 要实现动态耦合的MPC权重的调节，仅通过独立调节各个无人机和载荷的 MPC 超参数是不太可能的，单一固定的超参数无法在各种场景下普遍适用于所有无人机。本节提出了Autotune框架，用于自动调节多无人机绳系吊运系统中的超参数。该框架通过深度神经网络生成自适应MPC超参数，在分布式灵敏度传播方法的基础上，用分布式策略梯度算法优化控制参数，实现自适应学习。
 
 \subsection{超参数自适应调节方法}
-考虑一个离散时间的动力学系统:
+考虑一个离散时间的动力学系统：
 \begin{equation}
     \bm x_{k+1} = f(\bm x_k, \bm u_k)
 	\label{1}
@@ -1327,7 +1320,7 @@ $g_{j,k} = 2d_{\text{quad}} - \|\bm p_{i,k} - \bm p_{j,k}\|^2$为无人机之间
 	\end{aligned}
 \end{equation}
 
-本节将使用简写符号 \( L \) 来表示代价函数。对于上述优化问题，可通过梯度下降算法迭代更新学习参数:
+本节将使用简写符号 \( L \) 来表示代价函数。对于上述优化问题，可通过梯度下降算法迭代更新学习参数：
 \begin{equation}
     \bm \theta\leftarrow\mathcal{P}_{\bm \Theta}(\bm \theta-\alpha\nabla_{\bm \theta}L).
 \end{equation}
@@ -1469,7 +1462,8 @@ $$\bm{U}_{i,k} = \frac{\partial \bm{u}_{i0}^*}{\partial \bm{\theta}_i}, \quad \b
 \begin{equation}
     \bm \theta_i = \bm \theta_{i,\text{min}} + \left( \bm \theta_{i,\text{max}} - \bm \theta_{i,\text{min}} \right) \bm \Theta_i, \quad \forall i \in \mathcal{I}_A,
 \end{equation}
-其中，\( \bm \theta_{i,\text{min}} \) 和 \( \bm \theta_{i,\text{max}} \) 分别表示超参数的下限和上限，\( \bm \Theta_i \) 为归一化超参数，范围在 \([\text{0}, \text{1}]\) 之间。
+其中，\( \bm \Theta_i \) 为归一化超参数，范围在 \([\text{0}, \text{1}]\) 之间，\(\bm{\theta}_{i,\text{min}}\)和\(\bm{\theta}_{i,\text{max}}\)分别表示超参数的物理下限与上限，其确定方法根据超参数类型不同而有所区别：
+当\(\bm{\theta}_i\)为MPC代价函数权重时，下界\(\bm{\theta}_{i,\text{min}}\)能够保证对角权重矩阵的正定性，上界\(\bm{\theta}_{i,\text{max}}\)通过限制权重值的无界增长，有效避免数值发散问题；当\(\bm{\theta}_i\)为自适应MPC的参考轨迹（如张力参考）时，下界\(\bm{\theta}_{i,\text{min}}\)和上界\(\bm{\theta}_{i,\text{max}}\)则直接由电机最大扭矩、机械结构安全阈值等物理约束确定，从而保证参考轨迹的动态可行性。
 
 通过优化每个无人机和载荷的DNN参数 \( \pi_i^* \)和\(\bm \pi_l\)，最小化由所有无人机的代价函数构成的总体代价函数，进而实现自适应控制。该问题可以用以下优化问题表示：
 
@@ -1482,8 +1476,24 @@ $$\bm{U}_{i,k} = \frac{\partial \bm{u}_{i0}^*}{\partial \bm{\theta}_i}, \quad \b
 		\end{aligned} \\
 	\end{aligned}
 \end{equation}
-其中，$L_l $和 $L_i$分别表示载荷和第 \(i\) 个无人机的代价函数，损失基于它们在给定预测时间范围 \( N \in \mathbb{R}^+ \) 内的状态变化计算。参数 \(\bm \pi \) 包含了所有无人机的DNN参数 \( \bm \pi_i \)和载荷的DNN参数 \( \bm \pi_l \)，
+其中，$L_l $和 $L_i$分别表示载荷和第 \(i\) 个无人机的代价函数，分别通过超参数\(\bm{\theta}_l\)与\(\bm{\theta}_i\)实现动态权重分配，基于它们在给定预测时间范围 \( N \in \mathbb{R}^+ \) 内的状态变化计算。参数 \(\bm \pi \) 包含了所有无人机的DNN参数 \( \bm \pi_i \)和载荷的DNN参数 \( \bm \pi_l \)，
 第 \(i\) 个无人机的模型预测控制器在超参数\( \boldsymbol{\theta}_i \)下于时刻 \(k\) 生成的最优控制输入记为 \( \boldsymbol{u}^*_{i,{k}} \) ，载荷的模型预测控制器在超参数\( \boldsymbol{\theta}_l \)下于时刻 \(k\) 生成的最优控制输入记为\( \boldsymbol{u}^*_{l,{k}} \)。
+
+
+
+
+%其中，代价函数\( L_l(\bm{\theta}_l) \)和\( L_i(\bm{\theta}_i) \)分别通过超参数\(\bm{\theta}_l\)与\(\bm{\theta}_i\)实现动态权重分配。具体而言：
+%\begin{itemize}
+%	\item 无人机代价函数\( L_i(\bm{\theta}_i) \)包含跟踪误差项\(\|\bm{x}_i - \bm{x}_i^{\text{ref}}\|_{\bm{Q}_i}^2\)与控制量惩罚项\(\|\bm{u}_i\|_{\bm{R}_i}^2\)，其中权重矩阵\(\bm{Q}_i, \bm{R}_i\)由\(\bm{\theta}_i\)在线更新
+%	\item 载荷代价函数\( L_l(\bm{\theta}_l) \)考虑负载摆角抑制\(\|\alpha_l\|_{q_l}^2\)与能量消耗\(\|\bm{u}_l\|_{r_l}^2\)，其权重系数\( q_l, r_l \)通过\(\bm{\theta}_l\)自适应调整
+%\end{itemize}
+
+%\textbf{关键改进}：通过将超参数\(\bm{\theta}\)嵌入代价函数结构，原有人工设定的固定权值比例被转化为可学习参数的空间映射问题。具体表现为：
+%\begin{itemize}
+%	\item 权重自主调节：超参数\(\bm{\theta}_i\)与\(\bm{\theta}_l\)通过梯度下降更新，使得\( L_i \)与\( L_l \)的相对重要性随系统动态变化自动平衡
+%	\item 耦合关系解耦：无人机-载荷交互作用被编码在状态约束\( f_{i,k}, f_{l,k} \)中，而代价函数权重通过\(\bm{\theta}\)的独立参数化实现分布式优化
+%	\item 数值鲁棒性提升：基于第3.2节的参数化方法，\(\bm{\theta}\)的可行域约束保证权重系数始终处于正定且物理合理的范围
+%\end{itemize}
 
 
 % 在本节中，提出了一种分布式策略梯度学习算法，结合分布式灵敏度传播，用于实现自动多机提升系统（Auto-Multilift）。该算法使深度神经网络（DNN）参数 $\bm \pi$ 能够在分布式闭环环境中高效训练。
@@ -1584,7 +1594,9 @@ $$\bm{U}_{i,k} = \frac{\partial \bm{u}_{i0}^*}{\partial \bm{\theta}_i}, \quad \b
 
 \autoref{meanloss} 比较了Autotune与开环训练方法在多无人机绳系吊运系统的平均损失。为了公平比较，图中显示的所有平均损失均使用相同的损失函数。对于具有较重载荷的多无人机绳系吊运系统，开环训练方法没有考虑系统中的强耦合项，导致训练不稳定，平均损失呈发散趋势。相比之下，Autotune的平均损失均能稳定在更小的值，体现了稳定学习和更佳跟踪性能的优势。
 
-\autoref{cjb} 以3D图的方式展示了训练过程。Autotune在训练周期中提高了跟踪性能，同时逐渐将载荷的姿态稳定在期望的水平位置。相较于开环训练的MPC方法，Autotune-MPC的优势主要源于直接在实际系统动力学的闭环系统状态上进行训练，而前者依赖于名义动力学中预测得到的开环状态。如\autoref{cjb1} 所示，MPC计算的拉力比实际拉力平滑得多，在Autotune-MPC中，使用MPC计算的得到的拉力代替实际拉力，解决了实际拉力和MPC计算拉力之间的差异。
+\autoref{cjb} 以3D图的方式展示了吊运载荷的轨迹跟踪过程。相较于开环训练的MPC方法，Autotune-MPC在收敛速度方面表现出显著优势，实验数据显示，Autotune-MPC在训练周期内将x轴和y轴上载荷的轨迹跟踪均方根误差（RMSE）从0.038 m和0.196 m降低至0.026m和0.041 m，最大跟踪误差减少13.6\%。通过实时校正动力学模型偏差，Autotune-MPC在Z轴方向的载荷轨迹跟踪均方根误差为0.002 m，较开环MPC方法有了显著的提升。这种性能优势主要源于Autotune-MPC直接在实际系统动力学的闭环系统状态上进行训练的特征，而传统方法依赖于名义动力学中预测得到的开环状态。
+
+从\autoref{cjb1} 中可以看出，MPC计算的拉力比实际拉力平滑得多，在Autotune-MPC中，使用MPC计算的得到的拉力代替实际拉力，解决了实际拉力和MPC计算拉力之间的差异。
 尽管这两种方法都通过对MPC进行自适应调参以提高鲁棒性，但基于闭环数据进行训练的Autotune-MPC方法提供了一种更加稳健和高效的途径来提升跟踪性能。在16
 秒左右，系绳上的实际拉力存在高频波动，Autotune-MPC能够有效计算出适当的梯度来稳定训练，而开环训练方法则导致了不稳定。
 % \begin{figure}[hbt!]
@@ -2210,7 +2222,7 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 在多无人机协同吊运场景下，本文提出了一种自适应超参数调参方法。结合分布式模型预测控制和灵敏度传播方法，使用分布式策略梯度学习生成自适应超参数并集成到模型预测控制中。该方法利用多层感知网络实现超参数自适应归一化，从而提高系统的协同稳定性与容错能力。
 
 (4)仿真与试验验证：
-为验证所提算法的有效性，本文搭建了无人机绳系吊运系统的物理引擎仿真平台，选用Drake、Gazebo和MuJoCo等开源物理引擎对无人机吊运系统进行建模与仿真。结果表明，所提数据驱动控制方法能够有效跟踪期望轨迹，并在复杂环境中保持系统稳定性。此外，本文进一步搭建了无人机吊运系统的飞行试验平台，通过实地试验验证了算法在实际应用中的可行性与鲁棒性。
+为验证所提算法的有效性，本文搭建了无人机绳系吊运系统的物理引擎仿真平台，选用Drake、Gazebo和MuJoCo等开源物理引擎对无人机吊运系统进行建模与仿真。结果表明，所提出的数据驱动控制方法能够有效跟踪期望轨迹，并在复杂环境中保持系统稳定性。此外，本文进一步搭建了无人机吊运系统的飞行试验平台，通过实物试验验证了算法在实际应用中的可行性与鲁棒性。
 
 \section{未来工作展望}
 在协同空中操控领域，无人机绳系吊运系统展现了极大的应用潜力。本文在基于数据驱动无人机绳系吊运系统控制算法方面取得了一定成果然而，现阶段的研究多在理想化环境下进行，通过假设、简化和近似，逐步迈向实际应用。基于上述内容，未来研究可重点关注以下方向：
@@ -2265,8 +2277,8 @@ QGC地面站提供数据监控和指令功能，用于监控数据以及申请�
 \begin{accomplishments}                                     % 参加科研情况开始
 	论文发表情况：
 	\begin{enumerate}
-		\item \blackbox{Ao Jin}, \blackbox{Chenhao Li}, \blackbox{Ya Liu}， \blackbox{Panfeng Huang} and \blackbox{Fan Zhang}. Neural Predictor for Flight Control with Payload [J].  IEEE Robotics
-		and Automation Letters, 2024（中科院SCI 计算机科学类2 区， IF=4.6）
+		\item \blackbox{Ao Jin}, \blackbox{Chenhao Li}, \blackbox{Ya Liu}， \blackbox{Panfeng Huang} and \blackbox{Fan Zhang}. Neural Predictor for Flight Control with Payload. 
+		arXiv preprint arXiv:2410.15946, 2024.
 	\end{enumerate}
 
     专利申请情况：
